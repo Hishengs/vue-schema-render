@@ -1,0 +1,308 @@
+{
+  "mode": "development",
+  "bail": false,
+  "devtool": "#cheap-module-source-map",
+  "entry": [
+    "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/core/dist/server/common/polyfills.js",
+    "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/core/dist/server/preview/globals.js",
+    "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/addon-docs/dist/frameworks/common/../../../vue/config.js",
+    "/Users/hisheng/CodeSpace/vue-schema-render/.storybook/config.js",
+    "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/webpack-hot-middleware/client.js?reload=true&quiet=true"
+  ],
+  "output": {
+    "path": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/core/dist/public",
+    "filename": "[name].[hash].bundle.js",
+    "publicPath": ""
+  },
+  "plugins": [
+    {
+      "options": {
+        "template": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/core/dist/server/templates/index.ejs",
+        "templateContent": false,
+        "filename": "iframe.html",
+        "hash": false,
+        "inject": false,
+        "compile": true,
+        "favicon": false,
+        "minify": "auto",
+        "cache": true,
+        "showErrors": true,
+        "chunks": "all",
+        "excludeChunks": [],
+        "chunksSortMode": "none",
+        "meta": {},
+        "base": false,
+        "title": "Webpack App",
+        "xhtml": false,
+        "alwaysWriteToDisk": true
+      },
+      "version": 4
+    },
+    {
+      "definitions": {
+        "process.env": {
+          "NODE_ENV": "\"development\"",
+          "NODE_PATH": "\"\"",
+          "PUBLIC_URL": "\".\""
+        },
+        "NODE_ENV": "\"development\""
+      }
+    },
+    {
+      "nodeModulesPath": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules"
+    },
+    {
+      "options": {},
+      "fullBuildTimeout": 200,
+      "requestTimeout": 10000
+    },
+    {
+      "options": {},
+      "pathCache": {},
+      "fsOperations": 0,
+      "primed": false
+    },
+    {
+      "profile": false,
+      "modulesCount": 500,
+      "showEntries": false,
+      "showModules": true,
+      "showActiveModules": true
+    },
+    {
+      "definitions": {}
+    },
+    {
+      "resourceRegExp": {}
+    },
+    {}
+  ],
+  "module": {
+    "rules": [
+      {
+        "test": {},
+        "use": [
+          {
+            "loader": "babel-loader",
+            "options": {
+              "cacheDirectory": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/.cache/storybook",
+              "presets": [
+                [
+                  "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/preset-env/lib/index.js",
+                  {
+                    "shippedProposals": true,
+                    "useBuiltIns": "usage",
+                    "corejs": "3"
+                  }
+                ],
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-preset-vue/dist/babel-preset-vue.cjs.js"
+              ],
+              "plugins": [
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-proposal-object-rest-spread/lib/index.js",
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-proposal-class-properties/lib/index.js",
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-syntax-dynamic-import/lib/index.js",
+                [
+                  "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-plugin-emotion/dist/babel-plugin-emotion.cjs.js",
+                  {
+                    "sourceMap": true,
+                    "autoLabel": true
+                  }
+                ],
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-plugin-macros/dist/index.js"
+              ]
+            }
+          }
+        ],
+        "include": [
+          "/Users/hisheng/CodeSpace/vue-schema-render"
+        ],
+        "exclude": [
+          "/Users/hisheng/CodeSpace/vue-schema-render/node_modules"
+        ]
+      },
+      {
+        "test": {},
+        "use": [
+          {
+            "loader": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/raw-loader/dist/cjs.js"
+          }
+        ]
+      },
+      {
+        "test": {},
+        "loader": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/vue-loader/lib/index.js",
+        "options": {}
+      },
+      {
+        "test": {},
+        "use": [
+          {
+            "loader": "babel-loader",
+            "options": {
+              "cacheDirectory": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/.cache/storybook",
+              "presets": [
+                [
+                  "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/preset-env/lib/index.js",
+                  {
+                    "shippedProposals": true,
+                    "useBuiltIns": "usage",
+                    "corejs": "3"
+                  }
+                ],
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-preset-vue/dist/babel-preset-vue.cjs.js"
+              ],
+              "plugins": [
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-proposal-object-rest-spread/lib/index.js",
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-proposal-class-properties/lib/index.js",
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-syntax-dynamic-import/lib/index.js",
+                [
+                  "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-plugin-emotion/dist/babel-plugin-emotion.cjs.js",
+                  {
+                    "sourceMap": true,
+                    "autoLabel": true
+                  }
+                ],
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-plugin-macros/dist/index.js",
+                "@babel/plugin-transform-react-jsx"
+              ]
+            }
+          },
+          {
+            "loader": "@mdx-js/loader",
+            "options": {
+              "compilers": [
+                null
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "test": {},
+        "exclude": {},
+        "use": [
+          {
+            "loader": "babel-loader",
+            "options": {
+              "cacheDirectory": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/.cache/storybook",
+              "presets": [
+                [
+                  "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/preset-env/lib/index.js",
+                  {
+                    "shippedProposals": true,
+                    "useBuiltIns": "usage",
+                    "corejs": "3"
+                  }
+                ],
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-preset-vue/dist/babel-preset-vue.cjs.js"
+              ],
+              "plugins": [
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-proposal-object-rest-spread/lib/index.js",
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-proposal-class-properties/lib/index.js",
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-syntax-dynamic-import/lib/index.js",
+                [
+                  "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-plugin-emotion/dist/babel-plugin-emotion.cjs.js",
+                  {
+                    "sourceMap": true,
+                    "autoLabel": true
+                  }
+                ],
+                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-plugin-macros/dist/index.js",
+                "@babel/plugin-transform-react-jsx"
+              ]
+            }
+          },
+          {
+            "loader": "@mdx-js/loader"
+          }
+        ]
+      },
+      {
+        "test": {},
+        "loader": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/source-loader/dist/server/index.js",
+        "options": {},
+        "enforce": "pre"
+      },
+      {
+        "test": {},
+        "sideEffects": true,
+        "use": [
+          "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/core/node_modules/style-loader/index.js",
+          {
+            "loader": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/css-loader/dist/cjs.js",
+            "options": {
+              "importLoaders": 1
+            }
+          },
+          {
+            "loader": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/postcss-loader/src/index.js",
+            "options": {
+              "ident": "postcss",
+              "postcss": {}
+            }
+          }
+        ]
+      },
+      {
+        "test": {},
+        "loader": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/core/node_modules/file-loader/dist/cjs.js",
+        "query": {
+          "name": "static/media/[name].[hash:8].[ext]"
+        }
+      },
+      {
+        "test": {},
+        "loader": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/core/node_modules/url-loader/dist/cjs.js",
+        "query": {
+          "limit": 10000,
+          "name": "static/media/[name].[hash:8].[ext]"
+        }
+      }
+    ]
+  },
+  "resolve": {
+    "extensions": [
+      ".mjs",
+      ".js",
+      ".jsx",
+      ".json",
+      ".vue"
+    ],
+    "modules": [
+      "node_modules"
+    ],
+    "alias": {
+      "babel-runtime/core-js/object/assign": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/core-js/es/object/assign.js",
+      "react": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/react",
+      "react-dom": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/react-dom",
+      "vue$": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/vue/dist/vue.esm.js"
+    }
+  },
+  "optimization": {
+    "splitChunks": {
+      "chunks": "all"
+    },
+    "runtimeChunk": true,
+    "minimizer": [
+      {
+        "options": {
+          "test": {},
+          "extractComments": false,
+          "sourceMap": true,
+          "cache": true,
+          "parallel": true,
+          "terserOptions": {
+            "output": {
+              "comments": {}
+            },
+            "mangle": false,
+            "keep_fnames": true
+          }
+        }
+      }
+    ]
+  },
+  "performance": {
+    "hints": false
+  }
+}

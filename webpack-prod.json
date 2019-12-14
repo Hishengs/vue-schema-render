@@ -1,0 +1,122 @@
+{
+  "mode": "production",
+  "devtool": "source-map",
+  "entry": {
+    "app": [
+      "./libs/index.ts"
+    ]
+  },
+  "output": {
+    "path": "/Users/hisheng/CodeSpace/vue-schema-render/dist",
+    "filename": "vue-schema-render.common.js",
+    "library": "SchemaRender",
+    "libraryTarget": "commonjs2"
+  },
+  "resolve": {
+    "extensions": [
+      ".js",
+      ".jsx",
+      ".vue",
+      ".ts",
+      ".tsx",
+      ".json"
+    ],
+    "alias": {
+      "cloudinary": "/Users/hisheng/CodeSpace/vue-schema-render/libs/cloudinary-v2.0.min.js",
+      "@": "/Users/hisheng/CodeSpace/vue-schema-render/libs"
+    },
+    "modules": [
+      "node_modules"
+    ]
+  },
+  "module": {
+    "rules": [
+      {
+        "test": {},
+        "include": "/Users/hisheng/CodeSpace/vue-schema-render",
+        "exclude": {},
+        "loader": "babel-loader"
+      },
+      {
+        "test": {},
+        "loader": "ts-loader",
+        "exclude": {},
+        "options": {
+          "appendTsSuffixTo": [
+            {}
+          ]
+        }
+      },
+      {
+        "test": {},
+        "loader": "vue-loader",
+        "options": {
+          "compilerOptions": {
+            "preserveWhitespace": false
+          }
+        }
+      },
+      {
+        "test": {},
+        "loaders": [
+          "style-loader",
+          "css-loader"
+        ]
+      },
+      {
+        "test": {},
+        "loaders": [
+          "style-loader",
+          "css-loader",
+          "postcss-loader",
+          "sass-loader"
+        ]
+      },
+      {
+        "test": {},
+        "loader": "url-loader",
+        "query": {
+          "limit": 10000
+        }
+      }
+    ]
+  },
+  "plugins": [
+    {
+      "dangerouslyAllowCleanPatternsOutsideProject": false,
+      "dry": false,
+      "verbose": false,
+      "cleanStaleWebpackAssets": true,
+      "protectWebpackAssets": true,
+      "cleanAfterEveryBuildPatterns": [],
+      "cleanOnceBeforeBuildPatterns": [
+        "**/*"
+      ],
+      "currentAssets": [],
+      "initialClean": false,
+      "outputPath": ""
+    },
+    {
+      "profile": false,
+      "modulesCount": 500,
+      "showEntries": false,
+      "showModules": true,
+      "showActiveModules": true
+    },
+    {},
+    {
+      "options": {
+        "maxChunks": 1
+      }
+    }
+  ],
+  "performance": {
+    "hints": false
+  },
+  "stats": {
+    "children": false
+  },
+  "optimization": {
+    "minimize": false
+  }
+}
