@@ -1,4 +1,23 @@
-export default {
+<template>
+  <div class="form-modal">
+    <el-button type="primary" @click="show=true">填写表单</el-button>
+    <el-dialog title="表单弹窗" :visible.sync="show">
+      <schema-render
+        :schema="schema"
+        ref="schemaRender"
+      ></schema-render>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import Vue from 'vue';
+import { Dialog } from 'element-ui';
+import { SchemaRender } from 'vue-schema-render';
+
+Vue.use(Dialog);
+
+const schema = {
   title: '',
   components: [
     {
@@ -54,3 +73,24 @@ export default {
     }
   ]
 };
+
+export default {
+  name: 'form-modal',
+  components: {
+    SchemaRender,
+  },
+  data () {
+    return {
+      show: false,
+      schema,
+    };
+  },
+  methods: {
+    async genData () {
+      return await this.$refs.schemaRender
+        ? this.$refs.schemaRender.genData()
+        : null;
+    }
+  }
+};
+</script>

@@ -30,7 +30,7 @@ export default {
   created () {
     setTimeout(() => {
       this.loading = false;
-    }, 3000);
+    }, 1000);
   },
   methods: {
     async genData () {

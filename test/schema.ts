@@ -4,8 +4,7 @@
  * 与需求原型相映射的 UI 描述文件，称之为 schema 描述文件，
  * 可以通过描述文件将对应的 UI 界面渲染出来供外部人员操作，从而得到数据
  */
-import cloneDeep from 'lodash/cloneDeep';
-import { Schema } from '@/types';
+import { Schema, Component } from '@/types';
 import localTimePicker from "./local-time-picker.vue";
 import { layout } from '@/index';
 
@@ -36,74 +35,27 @@ const checkDate = {
   trigger: "change"
 };
 
-const dragableList = {
-  type: 'list',
-  title: '拖拽测试',
-  key: 'drag',
-  value: [],
-  component: {
-    type: 'text',
-    title: '拖拽项',
-    key: 'dragItem',
-    value: '拖拽项',
-  },
-  maxHeight: '500px'
-};
+function getDragableList (key: string): Component.Comp {
+  return {
+    type: 'list',
+    title: '列表组件',
+    key: key,
+    value: [],
+    component: {
+      type: 'text',
+      title: '拖拽项',
+      key: 'dragItem',
+      value: '拖拽项',
+    },
+    maxHeight: '500px'
+  };
+}
 
-const schema: Schema = {
-  title: "Campaign Page Settings",
+const formComp: Component.Comp = {
+  type: 'form',
+  title: '嵌套子表单',
+  key: 'form',
   components: [
-    layout.Row([
-      layout.Col({
-        type: 'text',
-        title: '单行文本1',
-        key: 'col1',
-        value: 'This is Col1',
-        multiLanguage: true
-      }, 18),
-      layout.Col({
-        type: 'text',
-        title: '单行文本2',
-        key: 'col2',
-        value: 'This is Col2',
-        multiLanguage: true
-      }, 6)
-    ]),
-    layout.Row([
-      layout.Col({
-        type: 'slider',
-        title: 'Progress',
-        key: 'progress',
-        value: 20,
-      }, 10),
-      layout.Col({
-        type: 'text',
-        title: 'Col4',
-        key: 'col4',
-        value: '',
-        props: {
-          placeholder: '自定义的 placeholder'
-        }
-      }, 14)
-    ]),
-    layout.Row([
-      layout.Col(cloneDeep(dragableList), 14),
-      layout.Col(cloneDeep(dragableList), 10),
-    ]),
-    {
-      type: 'slider',
-      title: 'Progress',
-      key: 'progress',
-      value: 20,
-    },
-    {
-      type: "text",
-      title: "Page Title",
-      key: "page_title",
-      value: "",
-      multiLanguage: true,
-      rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
-    },
     // promo code
     {
       type: "text",
@@ -129,6 +81,72 @@ const schema: Schema = {
         { label: "Solid Black", value: "solidBlack" }
       ]
     },
+  ]
+};
+
+const schema: Schema = {
+  title: "Campaign Page Settings",
+  components: [
+    layout.Row([
+      layout.Col({
+        type: 'text',
+        title: '单行文本1（放个提示看看）',
+        key: 'text1',
+        value: 'This is Text',
+        multiLanguage: true,
+        on: {
+          input (val: any) {
+            console.log('>>> on.input', val);
+          },
+          change (val: any) {
+            console.log('>>> on.change', val);
+          }
+        }
+      }, 18),
+      layout.Col({
+        type: 'text',
+        title: '单行文本2',
+        key: 'text2',
+        value: 'This is Text2',
+        multiLanguage: true
+      }, 6)
+    ]),
+    layout.Row([
+      layout.Col({
+        type: 'slider',
+        title: 'Slider1',
+        key: 'slider1',
+        value: 20,
+      }, 10),
+      layout.Col({
+        type: 'text',
+        title: '单行文本3',
+        key: 'text3',
+        value: '',
+        props: {
+          placeholder: '自定义的 placeholder'
+        }
+      }, 14)
+    ]),
+    layout.Row([
+      layout.Col(getDragableList('list1'), 14),
+      layout.Col(getDragableList('list2'), 10),
+    ]),
+    {
+      type: 'slider',
+      title: 'Slider2',
+      key: 'slider2',
+      value: 20,
+    },
+    {
+      type: "text",
+      title: "Page Title",
+      key: "page_title",
+      value: "",
+      multiLanguage: true,
+      rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
+    },
+    formComp,
     // show guide
     {
       type: "switch",
@@ -708,7 +726,7 @@ const schema: Schema = {
     }
   ],
   onChange({ component }: any) {
-    // console.log("onComponentChange", component, component.key);
+    console.log("onComponentChange", component, component.key);
 
     function onCommonVisibleControl(comp: any, relativeComp: any) {
       relativeComp.visible = comp.value;

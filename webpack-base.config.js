@@ -24,7 +24,6 @@ module.exports = {
     modules: ['node_modules']
   },
   module: {
-    // noParse: /cloudinary/,
     rules: [
       {
         test: /\.jsx?$/,

@@ -2,7 +2,12 @@ import merge from 'lodash/merge';
 
 import { Component } from './types';
 
+export function getUID () {
+  return Date.now().toString().slice(7) + '_' + Math.random().toString().slice(2, 8);
+}
+
 export function initComponent(component: Component.Comp) {
+  component._uid = `${component.type}_${getUID()}`;
   // which is Component.Base
   if ('key' in component) {
     // set default value
@@ -45,7 +50,11 @@ export function initComponent(component: Component.Comp) {
 }
 
 export function isBasicComponent(component: Component.Comp): boolean {
-  return !["form", "list", "custom", "row", "col"].includes(component.type);
+  return !["form", "list", "custom"].includes(component.type) && !isLayoutComponent(component);
+}
+
+export function isLayoutComponent(component: Component.Comp): boolean {
+  return ["row", "col"].includes(component.type);
 }
 
 export const querystring = {

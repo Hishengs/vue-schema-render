@@ -3,6 +3,7 @@
     <!-- 文本框 -->
     <template v-if="['text', 'textarea'].includes(component.type)">
       <el-input
+        ref="component"
         v-model="component.value"
         @change="onChange(component)"
         :type="component.type"
@@ -20,14 +21,25 @@
       ></el-input>
     </template>
     <!-- 下拉框 -->
-    <vsr-select
+    <el-select
       v-if="component.type === 'select'"
-      :component="component"
-      @change="onChange(component)"
-    ></vsr-select>
+      ref="component"
+      v-model="component.value"
+      @change="onChange(component, /* nextTick */ true)"
+      v-bind="component.props"
+    >
+      <el-option
+        v-for="(item, i) in component.options"
+        :key="i"
+        :label="item.label !== undefined ? item.label : item"
+        :value="item.value !== undefined ? item.value : item"
+      >
+      </el-option>
+    </el-select>
     <!-- 开关 -->
     <el-switch
       v-if="component.type === 'switch'"
+      ref="component"
       v-model="component.value"
       @change="onChange(component, /* nextTick */ true)"
       v-bind="component.props"
@@ -35,6 +47,7 @@
     <!-- 单选框 -->
     <el-radio-group
       v-if="component.type === 'radio'"
+      ref="component"
       v-model="component.value"
       @change="onChange(component, /* nextTick */ true)"
       v-bind="component.props"
@@ -50,6 +63,7 @@
     <!-- 多选框 -->
     <el-checkbox-group
       v-if="component.type === 'checkbox'"
+      ref="component"
       v-model="component.value"
       @change="onChange(component, /* nextTick */ true)"
       v-bind="component.props"
@@ -65,6 +79,7 @@
     <!-- slider -->
     <el-slider
       v-if="component.type === 'slider'"
+      ref="component"
       v-model="component.value"
       @change="onChange(component, /* nextTick */ true)"
       v-bind="component.props"
@@ -85,7 +100,6 @@
 </template>
 
 <script>
-import select from "./select.vue";
 import upload from "./upload.vue";
 import markdown from "./markdown.vue";
 import baseMixin from "./base.mixin.js";
@@ -96,13 +110,25 @@ export default {
   mixins: [baseMixin],
   components: {
     /* eslint-disable vue/no-unused-components */
-    [select.name]: select,
     [upload.name]: upload,
     [markdown.name]: markdown
   },
   mounted() {
     // manually trigger change for first time
     this.onChange(this.component, true);
+    // 绑定自定义监听事件
+    if (this.component.on) {
+      const keys = Object.keys(this.component.on);
+      for (const key of keys) {
+        this.$refs.component.$on(key, this.component.on[key]);
+      }
+    }
+  },
+  methods: {
+    genData () {
+      return this.component.value;
+    },
+    validate () {},
   }
 };
 </script>

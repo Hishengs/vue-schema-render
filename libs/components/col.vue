@@ -5,7 +5,9 @@
       v-if="component.component.visible"
     >
       <vsr-dispatcher
+        ref="comp"
         :component="component.component"
+        @change="onChange"
       ></vsr-dispatcher>
     </el-form-item>
   </el-col>
@@ -23,6 +25,11 @@ export default {
   },
   props: {
     span: Number,
+  },
+  methods: {
+    async genData () {
+      return await this.$refs.comp.genData();
+    }
   }
 };
 </script>

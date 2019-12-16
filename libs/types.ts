@@ -34,6 +34,7 @@ export namespace Component {
     | 'col';
 
   interface Common {
+    _uid?: string;
     type: CompType;
     visible?: Boolean;
     dragable?: Boolean;
@@ -56,6 +57,9 @@ export namespace Component {
     rules?: Array<any>;
     props?: any;
     onChange?: Event.onChange;
+    on?: {
+      [key: string]: Function;
+    }
   };
 
   export interface MultiLanComp extends Base {

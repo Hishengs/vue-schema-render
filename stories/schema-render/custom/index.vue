@@ -15,6 +15,7 @@
 <script>
 import { SchemaRender } from 'vue-schema-render';
 import schema from './schema.js';
+import { action } from '@storybook/addon-actions';
 
 export default {
   components: {
@@ -24,6 +25,7 @@ export default {
     return {
       schema,
       loading: true,
+      showModal: false,
     };
   },
   created () {
@@ -34,7 +36,7 @@ export default {
   methods: {
     async genData () {
       const data = await this.$refs.schemaRender.genData();
-      console.log('>>> genData', data);
+      action('生成数据')(data);
     }
   }
 };

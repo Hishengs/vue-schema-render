@@ -3,6 +3,7 @@
     <h3>Vue Schema Render - 基础组件</h3>
     <el-divider></el-divider>
     <schema-render
+      class="schema-render"
       v-loading="loading"
       :schema="schema"
       label-position="top"
@@ -46,5 +47,8 @@ export default {
 <style lang="css">
 .schema-render-demo {
   padding: 20px;
+}
+.schema-render-demo .schema-render {
+  max-width: 600px;
 }
 </style>

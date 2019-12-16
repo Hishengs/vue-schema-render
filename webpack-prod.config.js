@@ -19,11 +19,11 @@ const prodConfig = merge(baseConfig, {
     children: false
   },
   externals: {
-    vue: 'vue'
+    vue: 'vue',
   },
-  /* optimization: {
-    minimize: false
-  }, */
+  optimization: {
+    minimize: false,
+  },
 });
 
 prodConfig.plugins = [

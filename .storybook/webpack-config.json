@@ -5,7 +5,6 @@
   "entry": [
     "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/core/dist/server/common/polyfills.js",
     "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/core/dist/server/preview/globals.js",
-    "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/addon-docs/dist/frameworks/common/../../../vue/config.js",
     "/Users/hisheng/CodeSpace/vue-schema-render/.storybook/config.js",
     "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/webpack-hot-middleware/client.js?reload=true&quiet=true"
   ],
@@ -132,96 +131,6 @@
         "test": {},
         "loader": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/vue-loader/lib/index.js",
         "options": {}
-      },
-      {
-        "test": {},
-        "use": [
-          {
-            "loader": "babel-loader",
-            "options": {
-              "cacheDirectory": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/.cache/storybook",
-              "presets": [
-                [
-                  "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/preset-env/lib/index.js",
-                  {
-                    "shippedProposals": true,
-                    "useBuiltIns": "usage",
-                    "corejs": "3"
-                  }
-                ],
-                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-preset-vue/dist/babel-preset-vue.cjs.js"
-              ],
-              "plugins": [
-                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-proposal-object-rest-spread/lib/index.js",
-                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-proposal-class-properties/lib/index.js",
-                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-syntax-dynamic-import/lib/index.js",
-                [
-                  "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-plugin-emotion/dist/babel-plugin-emotion.cjs.js",
-                  {
-                    "sourceMap": true,
-                    "autoLabel": true
-                  }
-                ],
-                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-plugin-macros/dist/index.js",
-                "@babel/plugin-transform-react-jsx"
-              ]
-            }
-          },
-          {
-            "loader": "@mdx-js/loader",
-            "options": {
-              "compilers": [
-                null
-              ]
-            }
-          }
-        ]
-      },
-      {
-        "test": {},
-        "exclude": {},
-        "use": [
-          {
-            "loader": "babel-loader",
-            "options": {
-              "cacheDirectory": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/.cache/storybook",
-              "presets": [
-                [
-                  "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/preset-env/lib/index.js",
-                  {
-                    "shippedProposals": true,
-                    "useBuiltIns": "usage",
-                    "corejs": "3"
-                  }
-                ],
-                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-preset-vue/dist/babel-preset-vue.cjs.js"
-              ],
-              "plugins": [
-                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-proposal-object-rest-spread/lib/index.js",
-                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-proposal-class-properties/lib/index.js",
-                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@babel/plugin-syntax-dynamic-import/lib/index.js",
-                [
-                  "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-plugin-emotion/dist/babel-plugin-emotion.cjs.js",
-                  {
-                    "sourceMap": true,
-                    "autoLabel": true
-                  }
-                ],
-                "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/babel-plugin-macros/dist/index.js",
-                "@babel/plugin-transform-react-jsx"
-              ]
-            }
-          },
-          {
-            "loader": "@mdx-js/loader"
-          }
-        ]
-      },
-      {
-        "test": {},
-        "loader": "/Users/hisheng/CodeSpace/vue-schema-render/node_modules/@storybook/source-loader/dist/server/index.js",
-        "options": {},
-        "enforce": "pre"
       },
       {
         "test": {},

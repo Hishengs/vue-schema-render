@@ -1,23 +1,8 @@
-template:
-
-```jsx
-<schema-render
-  v-loading="loading"
-  :schema="schema"
-  label-position="top"
-  ref="schemaRender"
-></schema-render>
-```
-
-`schema.js`
-
-```js
 import { layout } from 'vue-schema-render';
 
 export default {
   title: '',
   components: [
-    // 使用布局组件对组件进行自定义布局
     layout.Row([
       layout.Col({
         type: 'text',
@@ -75,4 +60,3 @@ export default {
     ])
   ]
 };
-```

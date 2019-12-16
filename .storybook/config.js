@@ -2,7 +2,7 @@ import { configure, addParameters } from '@storybook/vue';
 import { create } from '@storybook/theming/create';
 
 // automatically import all files ending in *.stories.js
-configure(require.context('../stories', true, /\.stories\.js$/), module);
+configure(require.context('../stories', true, /\.stories\.(js|mdx)$/), module);
 
 const customTheme = create({
   base: 'light',
@@ -12,5 +12,6 @@ const customTheme = create({
 addParameters({
   options: {
     theme: customTheme,
+    panelPosition: 'right'
   }
 });

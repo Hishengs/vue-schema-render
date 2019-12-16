@@ -1,4 +1,4 @@
-template:
+`template`
 
 ```jsx
 <schema-render

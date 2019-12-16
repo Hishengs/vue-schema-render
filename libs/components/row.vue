@@ -6,6 +6,8 @@
         :key="i"
         :component="col"
         :span="span"
+        @change="onChange"
+        :ref="col._uid"
       ></vsr-col>
     </el-row>
   </div>
@@ -38,6 +40,16 @@ export default {
     span () {
       const num = this.component.cols.length;
       return num ? 24 / num : 24;
+    }
+  },
+  methods: {
+    async genData () {
+      const data = {};
+      for (const colComp of this.component.cols) {
+        const [refColComp] = this.$refs[colComp._uid];
+        data[colComp.component.key] = await refColComp.genData();
+      }
+      return data;
     }
   }
 };

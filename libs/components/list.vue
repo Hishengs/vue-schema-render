@@ -41,33 +41,12 @@
                     ></el-button>
                   </div>
                 </div>
-                <!-- form -->
-                <vsr-form
+                <vsr-dispatcher
                   :ref="item.uid"
                   :component="item.component"
                   @change="onChange"
-                  v-if="item.component.type === 'form'"
-                ></vsr-form>
-                <!-- list -->
-                <vsr-list
-                  :ref="item.uid"
-                  :component="item.component"
-                  @change="onChange"
-                  v-else-if="item.component.type === 'list'"
-                ></vsr-list>
-                <!-- custom -->
-                <vsr-custom
-                  :ref="item.uid"
-                  :component="item.component"
-                  @change="onChange"
-                  v-else-if="item.component.type === 'custom'"
-                ></vsr-custom>
-                <!-- 普通组件 -->
-                <vsr-basic
-                  :component="item.component"
-                  @change="onChange"
-                  v-else
-                ></vsr-basic>
+                >
+                </vsr-dispatcher>
               </el-card>
             </el-form-item>
           </el-form>
@@ -86,21 +65,14 @@
 import _cloneDeep from 'lodash/cloneDeep';
 import _merge from 'lodash/merge';
 import draggable from 'vuedraggable';
-import form from "./form.vue";
-import custom from "./custom.vue";
-import basic from "./basic.vue";
 import baseMixin from "./base.mixin.js";
-import { COMP_PREFIX, initComponent, isBasicComponent } from "../utils.ts";
+import { COMP_PREFIX, initComponent, isBasicComponent, getUID } from "../utils.ts";
 
 export default {
   name: `${COMP_PREFIX}-list`,
   mixins: [baseMixin],
   components: {
-    /* eslint-disable vue/no-unused-components */
-    [form.name]: form,
-    // [`${COMP_PREFIX}-form`]: () => import('./form.vue'),
-    [custom.name]: custom,
-    [basic.name]: basic,
+    [`${COMP_PREFIX}-dispatcher`]: () => import('./dispatcher.vue'),
     draggable
   },
   data() {
@@ -168,7 +140,7 @@ export default {
         ),
         component,
         // gen a uid for list item
-        uid: new Date().getTime() + "_" + Math.random().toString().slice(2, 8)
+        uid: getUID()
       });
       this.$nextTick(() => {
         this.$refs.listContainer && this.$refs.listContainer.scrollTo({
@@ -204,8 +176,6 @@ export default {
     },
     async genData() {
       const data = [];
-      const lanData = [];
-      // const refComponents = this.$refs.component || [];
       // fix: bug 1009692
       // should keep the order when list item swap
       const refComponents = this.list
@@ -218,23 +188,13 @@ export default {
             : undefined;
         })
         .filter(ref => ref !== undefined);
-      const { component } = this.component;
-      if (!isBasicComponent(component)) {
-        for (const comp of refComponents || []) {
-          const [_data, _lanData] = await comp.genData();
-          data.push(_data);
-          lanData.push(_lanData);
-        }
-      } else {
-        for (const item of this.list) {
-          if (item.component.multiLanguage) {
-            lanData.push(item.component.value);
-          } else {
-            data.push(item.component.value);
-          }
-        }
+
+      for (const refComp of refComponents) {
+        const compData = await refComp.genData();
+        data.push(compData);
       }
-      return [data, lanData];
+
+      return data;
     },
     validateForm(form) {
       return new Promise((resolve, reject) => {
@@ -275,6 +235,8 @@ export default {
 
 <style lang="scss">
 .vsr_component_list {
+  /* box-shadow: 0 5px 10px rgba(0,0,0,.1);
+  padding: 10px; */
   .el-form {
     .el-form-item:last-child {
       margin-bottom: 0;

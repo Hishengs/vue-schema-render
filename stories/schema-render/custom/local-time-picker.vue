@@ -207,7 +207,7 @@ export default {
       });
     },
     genData() {
-      return [this.getValue(), undefined];
+      return this.getValue();
     }
   }
 };

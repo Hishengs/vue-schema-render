@@ -1,6 +1,6 @@
 <template>
   <div class="schema-render-demo">
-    <h3>Vue Schema Render - 列表组件</h3>
+    <h3>Vue Schema Render - 表单组件</h3>
     <el-divider></el-divider>
     <schema-render
       :schema="schema"
@@ -15,7 +15,6 @@
 <script>
 import { SchemaRender } from 'vue-schema-render';
 import schema from './schema.js';
-import { action } from '@storybook/addon-actions';
 
 export default {
   components: {
@@ -35,7 +34,7 @@ export default {
   methods: {
     async genData () {
       const data = await this.$refs.schemaRender.genData();
-      action('生成数据')(data);
+      console.log('>>> genData', data);
     }
   }
 };

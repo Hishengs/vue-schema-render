@@ -15,5 +15,7 @@ A Form Render Based on JSON Schema for Vue
 
 ## TODO
 
-- [ ] 支持更自由的布局
-- [ ] 支持列表组件项拖拽
+- [x] 支持更自由的布局
+- [x] 支持列表组件项拖拽
+- [ ] ElementUI 按需引入
+- [ ] 监听自定义事件

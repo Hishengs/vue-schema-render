@@ -1,8 +1,9 @@
 <template>
   <div class="schema-render-demo">
-    <h3>Vue Schema Render - 列表组件</h3>
+    <h3>Vue Schema Render - 表单嵌套</h3>
     <el-divider></el-divider>
     <schema-render
+      v-loading="loading"
       :schema="schema"
       label-position="top"
       ref="schemaRender"
@@ -30,11 +31,12 @@ export default {
   created () {
     setTimeout(() => {
       this.loading = false;
-    }, 3000);
+    }, 1500);
   },
   methods: {
     async genData () {
       const data = await this.$refs.schemaRender.genData();
+      // console.log('>>> genData', data);
       action('生成数据')(data);
     }
   }

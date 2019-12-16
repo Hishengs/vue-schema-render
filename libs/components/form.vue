@@ -5,8 +5,8 @@
       ref="form"
       :model="form"
       :rules="rules"
-      :label-width="labelWidth"
-      :label-position="labelPosition"
+      :label-width="component.labelWidth || '100px'"
+      :label-position="component.labelPosition || 'top'"
       :inline="inlineForm"
     >
       <template v-for="component in component.components">
@@ -16,7 +16,11 @@
           :label="component.title"
           v-if="component.visible"
         >
-          <vsr-dispatcher :component="component" :ref="component.key" @change="onChange">
+          <vsr-dispatcher
+            :component="component"
+            :ref="component._uid"
+            @change="onChange"
+          >
           </vsr-dispatcher>
         </el-form-item>
       </template>
@@ -38,18 +42,6 @@ export default {
     [`${COMP_PREFIX}-dispatcher`]: () => import('./dispatcher.vue')
   },
   props: {
-    // extended from el-form
-    labelPosition: {
-      type: String,
-      validator(type) {
-        return ["left", "right", "top"].includes(type);
-      },
-      default: "right"
-    },
-    labelWidth: {
-      type: String,
-      default: "176px"
-    },
     inlineForm: {
       type: Boolean,
       default: false
@@ -110,27 +102,21 @@ export default {
       }
     },
     // generate data of current component, including common data and language relative data
-    async genData() {
-      const data = {};
-      const lanData = {};
+    async genData () {
+      let data = {};
       for (const comp of this.component.components) {
-        const refComps = this.$refs[comp.key];
-        if (isBasicComponent(comp)) {
-          if (comp.multiLanguage) {
-            lanData[comp.key] = comp.value;
-          } else data[comp.key] = comp.value;
-        } else {
-          if (refComps && refComps.length) {
-            const [refComp] = refComps;
-            if (refComp) {
-              const [_data, _lanData] = await refComp.genData();
-              data[comp.key] = _data;
-              lanData[comp.key] = _lanData;
-            }
-          }
-        }
+        const { _uid, type, key, visible } = comp;
+        if (!visible) continue;
+        const [refComp] = this.$refs[_uid];
+        const compData = await refComp.genData();
+        if (type === 'row') {
+          data = {
+            ...data,
+            ...compData
+          };
+        } else data[key] = compData;
       }
-      return [data, lanData];
+      return data;
     },
     // 表单校验
     async validate() {
@@ -141,7 +127,7 @@ export default {
           // validate higher components
           for (const comp of this.component.components) {
             if (!isBasicComponent(comp)) {
-              const [compRef] = this.$refs[comp.key] || [];
+              const [compRef] = this.$refs[comp._uid] || [];
               if (compRef) {
                 const isValid = await compRef.validate();
                 if (!isValid) {

@@ -1,39 +1,46 @@
 <template>
-  <div class="vsr-dispatcher">
+  <div class="vsr-dispatcher" :class="{'is-sub-form': component.type === 'form'}">
     <!-- form -->
     <vsr-form
       v-if="component.type === 'form'"
       :component="component"
       @change="onChange"
+      ref="comp"
     ></vsr-form>
     <!-- list -->
     <vsr-list
       v-else-if="component.type === 'list'"
       :component="component"
       @change="onChange"
+      ref="comp"
     ></vsr-list>
     <!-- custom -->
     <vsr-custom
       v-else-if="component.type === 'custom'"
       :component="component"
       @change="onChange"
+      ref="comp"
     ></vsr-custom>
     <!-- row -->
     <vsr-row
       v-else-if="component.type === 'row'"
       :component="component"
       @change="onChange"
+      ref="comp"
     ></vsr-row>
     <!-- basic components -->
     <vsr-basic
       v-else-if="isBasicComponent(component)"
       :component="component"
       @change="onChange"
+      ref="comp"
     ></vsr-basic>
+    <div class="validate-error" v-if="showError">{{ errorMsg }}</div>
   </div>
 </template>
 
 <script>
+import AsyncValidateSchema from 'async-validator';
 import row from "./row.vue";
 import basic from "./basic.vue";
 import list from "./list.vue";
@@ -52,8 +59,51 @@ export default {
     [custom.name]: custom,
   },
   mixins: [baseMixin],
+  data () {
+    return {
+      hasError: true,
+      errorMsg: '军机大臣，俗称“大军机”，又称“枢臣”，是军机处的长官。',
+    };
+  },
+  computed: {
+    showError () {
+      return this.hasError && !['row', 'form'].includes(this.component.type);
+    }
+  },
   methods: {
     isBasicComponent,
+    async genData () {
+      return await this.$refs.comp.genData();
+    },
+    validate () {
+      const { type, key, rules = [], value } = this.component;
+      const validator = new AsyncValidateSchema({
+        [key]: rules
+      });
+      validator.validate({
+        [key]: value
+      }).then(() => {
+        this.hasError = false;
+      }).catch(({ errors, fields }) => {
+        this.hasError = true;
+        // this.errorMsg = '';
+      });
+    },
   }
 };
 </script>
+
+<style lang="scss">
+.vsr-dispatcher {
+  &.is-sub-form {
+    border: 1px solid #eee;
+    padding: 0 20px;
+  }
+  .validate-error {
+    font-size: 13px;
+    margin-top: 5px;
+    color: #F56C6C;
+    line-height: 1.5;
+  }
+}
+</style>
