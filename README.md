@@ -13,6 +13,12 @@ A Form Render Based on JSON Schema for Vue
 - 支持组件联动
 - 详尽的文档及示例
 
+
+## 预览
+
+![](./demo.png)
+
+
 ## TODO
 
 - [x] 支持更自由的布局
