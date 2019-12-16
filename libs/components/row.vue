@@ -50,6 +50,18 @@ export default {
         data[colComp.component.key] = await refColComp.genData();
       }
       return data;
+    },
+    async validate () {
+      // console.log('>>> row.validate', this.component.cols);
+      let invalid = false;
+      for (const colComp of this.component.cols) {
+        const [refColComp] = this.$refs[colComp._uid];
+        const isValid = await refColComp.validate();
+        if (!isValid) {
+          invalid = true;
+        }
+      }
+      return !invalid; 
     }
   }
 };

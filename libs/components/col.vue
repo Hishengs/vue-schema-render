@@ -29,6 +29,10 @@ export default {
   methods: {
     async genData () {
       return await this.$refs.comp.genData();
+    },
+    async validate () {
+      // console.log('>>> col.validate', this.component.component);
+      return await this.$refs.comp.validate();
     }
   }
 };

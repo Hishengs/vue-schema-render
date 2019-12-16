@@ -40,14 +40,14 @@
 </template>
 
 <script>
-import AsyncValidateSchema from 'async-validator';
+import AsyncValidator from 'async-validator';
 import row from "./row.vue";
 import basic from "./basic.vue";
 import list from "./list.vue";
 import form from "./form.vue";
 import custom from "./custom.vue";
 import baseMixin from "./base.mixin.js";
-import { COMP_PREFIX, isBasicComponent } from "../utils.ts";
+import { COMP_PREFIX, isBasicComponent, isLayoutComponent } from "../utils.ts";
 
 export default {
   name: `${COMP_PREFIX}-dispatcher`,
@@ -61,7 +61,7 @@ export default {
   mixins: [baseMixin],
   data () {
     return {
-      hasError: true,
+      hasError: false,
       errorMsg: '军机大臣，俗称“大军机”，又称“枢臣”，是军机处的长官。',
     };
   },
@@ -75,19 +75,30 @@ export default {
     async genData () {
       return await this.$refs.comp.genData();
     },
-    validate () {
-      const { type, key, rules = [], value } = this.component;
-      const validator = new AsyncValidateSchema({
-        [key]: rules
-      });
-      validator.validate({
-        [key]: value
-      }).then(() => {
-        this.hasError = false;
-      }).catch(({ errors, fields }) => {
-        this.hasError = true;
-        // this.errorMsg = '';
-      });
+    async validate () {
+      this.hasError = false;
+      this.errorMsg = '';
+      // console.log('>>> dispatcher.validate', this.component);
+      if (isBasicComponent(this.component)) {
+        const { key, rules = [], value } = this.component;
+        if (rules.length) {
+          const validator = new AsyncValidator({
+            [key]: rules
+          });
+          await validator.validate({
+            [key]: value
+          }).catch(({ errors, fields }) => {
+            this.hasError = true;
+            // console.log('hasError', { errors, fields });
+            this.errorMsg = errors[0].message;
+          });
+        }
+      } else {
+        const valid = await this.$refs.comp.validate();
+        this.hasError = !valid;
+      }
+      // console.log('>>> dispatcher.validate: hasError', this.hasError);
+      return !this.hasError;
     },
   }
 };

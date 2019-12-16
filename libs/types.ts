@@ -97,7 +97,7 @@ export namespace Component {
   };
 
   export interface ListComp extends Base {
-    component: Comp;
+    component: Function;
     maxHeight?: string;
   };
 

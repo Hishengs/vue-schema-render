@@ -9,6 +9,7 @@
       ref="schemaRender"
     ></schema-render>
     <el-divider></el-divider>
+    <el-button @click="validate">校验数据</el-button>
     <el-button type="primary" @click="genData">生成数据</el-button>
   </div>
 </template>
@@ -36,6 +37,10 @@ export default {
     async genData () {
       const data = await this.$refs.schemaRender.genData();
       console.log('>>> genData', data);
+    },
+    async validate () {
+      const valid = await this.$refs.schemaRender.validate();
+      console.log('>>> validate', valid);
     }
   }
 };

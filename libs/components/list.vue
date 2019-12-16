@@ -1,24 +1,21 @@
 <template>
   <div class="vsr_component_list">
-    <div v-if="list.length" :style="scrollAreaStyle" ref="listContainer">
-      <draggable v-model="list" handle=".draggable-handle">
+    <div v-if="components.length" :style="scrollAreaStyle" ref="listContainer">
+      <draggable v-model="components" handle=".draggable-handle">
         <transition-group>
           <!-- 一个列表项一个表单（方便验证） -->
           <el-form
-            v-for="(item, i) in list"
-            ref="listItemForm"
-            :model="item.formProxy"
-            :rules="formRules"
+            v-for="(comp, i) in components"
             label-width="0px"
-            :id="item.uid"
-            :key="item.uid"
+            :id="comp._uid"
+            :key="comp._uid"
           >
-            <el-form-item label="" prop="listItem">
+            <el-form-item label="">
               <el-card>
                 <div slot="header" class="header draggable-handle">
                   <span class="title">
                     {{ `# ${i + 1}` }}
-                    {{ item.component.title ? item.component.title : "" }}
+                    {{ comp.title ? comp.title : "" }}
                   </span>
                   <div class="actions">
                     <el-button
@@ -31,7 +28,7 @@
                       class="el-icon-arrow-down"
                       size="small"
                       @click="down(i)"
-                      :disabled="i === list.length - 1"
+                      :disabled="i === components.length - 1"
                     ></el-button>
                     <el-button
                       class="el-icon-delete"
@@ -42,8 +39,8 @@
                   </div>
                 </div>
                 <vsr-dispatcher
-                  :ref="item.uid"
-                  :component="item.component"
+                  :ref="comp._uid"
+                  :component="comp"
                   @change="onChange"
                 >
                 </vsr-dispatcher>
@@ -62,8 +59,6 @@
 </template>
 
 <script>
-import _cloneDeep from 'lodash/cloneDeep';
-import _merge from 'lodash/merge';
 import draggable from 'vuedraggable';
 import baseMixin from "./base.mixin.js";
 import { COMP_PREFIX, initComponent, isBasicComponent, getUID } from "../utils.ts";
@@ -77,15 +72,10 @@ export default {
   },
   data() {
     return {
-      list: []
+      components: []
     };
   },
   computed: {
-    formRules() {
-      return {
-        listItem: this.component.component.rules || []
-      };
-    },
     scrollAreaStyle () {
       return this.component.maxHeight ? {
         maxHeight: this.component.maxHeight,
@@ -94,8 +84,7 @@ export default {
     }
   },
   watch: {
-    async list(newVal, oldVal) {
-      // console.info("list watch list", newVal, oldVal);
+    async components(newVal, oldVal) {
       // Do not sync data at once
       setTimeout(async () => {
         await this.syncData();
@@ -108,7 +97,7 @@ export default {
   },
   methods: {
     getNewComponent() {
-      const comp = _cloneDeep(this.component.component);
+      const comp = this.component.component();
       initComponent(comp);
       return comp;
     },
@@ -126,22 +115,8 @@ export default {
     },
     add(comp) {
       const component = comp || this.getNewComponent();
-      this.list.push({
-        formProxy: Object.freeze(
-          new Proxy(
-            {},
-            {
-              get(target, key, receiver) {
-                if (key === "listItem") return component.value;
-                else return undefined;
-              }
-            }
-          )
-        ),
-        component,
-        // gen a uid for list item
-        uid: getUID()
-      });
+      this.components.push(component);
+      // 自动滑到底部
       this.$nextTick(() => {
         this.$refs.listContainer && this.$refs.listContainer.scrollTo({
           top: this.$refs.listContainer.scrollHeight,
@@ -150,16 +125,16 @@ export default {
       });
     },
     remove(index) {
-      this.list.splice(index, 1);
+      this.components.splice(index, 1);
     },
     move(index, offset) {
-      const item = this.list[index];
-      const other = this.list[index + offset];
-      this.list[index] = other;
-      this.list[index + offset] = item;
+      const item = this.components[index];
+      const other = this.components[index + offset];
+      this.components[index] = other;
+      this.components[index + offset] = item;
       // fix array change problem of Vue
       // this.$forceUpdate();
-      this.list = this.list.slice(0);
+      this.components = this.components.slice(0);
     },
     up(index) {
       this.move(index, -1);
@@ -169,23 +144,18 @@ export default {
     },
     // gen data from ui components
     async syncData() {
-      const [data, lanData] = await this.genData();
-      const value = _merge(data, lanData);
-      this.component.value = value;
-      return value;
+      const data = await this.genData();
+      this.component.value = data;
+      return data;
     },
     async genData() {
       const data = [];
       // fix: bug 1009692
       // should keep the order when list item swap
-      const refComponents = this.list
-        .map(item => {
-          const itemComps = this.$refs[item.uid];
-          return itemComps
-            ? Array.isArray(itemComps)
-              ? itemComps[0]
-              : itemComps
-            : undefined;
+      const refComponents = this.components
+        .map(comp => {
+          const [refComp] = this.$refs[comp._uid];
+          return refComp;
         })
         .filter(ref => ref !== undefined);
 
@@ -196,38 +166,21 @@ export default {
 
       return data;
     },
-    validateForm(form) {
-      return new Promise((resolve, reject) => {
-        try {
-          form.validate(valid => {
-            resolve(valid);
-          });
-        } catch (err) {
-          reject(err);
-        }
-      });
-    },
-    async validate() {
-      let _valid = true;
-      const refComponents = this.$refs.component || [];
-      const { component } = this.component;
-      if (!isBasicComponent(component)) {
-        for (const comp of refComponents) {
-          const isValid = await comp.validate(false);
-          if (!isValid) {
-            _valid = false;
-            break;
+    async validate () {
+      let hasError = false;
+      if (this.components.length) {
+        const { key, rules = [] } = this.components[0];
+        if (rules.length) {
+          for (const comp of this.components) {
+            const [refComp] = this.$refs[comp._uid];
+            const valid = await refComp.validate();
+            if (!valid) {
+              hasError = true;
+            }
           }
         }
-      } else {
-        // 基础组件验证
-        const forms = this.$refs.listItemForm || [];
-        for (const form of forms) {
-          _valid = await this.validateForm(form);
-          if (!_valid) break;
-        }
       }
-      return _valid;
+      return !hasError;
     }
   }
 };

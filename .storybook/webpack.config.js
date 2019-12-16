@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+// const path = require('path');
 // const projectBaseConfig = require('../webpack-base.config');
 
 module.exports = async ({ config }) => {
@@ -17,7 +17,7 @@ module.exports = async ({ config }) => {
   //   ...projectBaseConfig.module.rules,
   // ];
 
-  fs.writeFileSync(path.join(__dirname, './webpack-config.json'), JSON.stringify(config, null, 2));
+  // fs.writeFileSync(path.join(__dirname, './webpack-config.json'), JSON.stringify(config, null, 2));
 
   return config;
 };

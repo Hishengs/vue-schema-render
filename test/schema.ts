@@ -41,11 +41,18 @@ function getDragableList (key: string): Component.Comp {
     title: '列表组件',
     key: key,
     value: [],
-    component: {
-      type: 'text',
-      title: '拖拽项',
-      key: 'dragItem',
-      value: '拖拽项',
+    component () {
+      return {
+        type: 'text',
+        title: '拖拽项',
+        key: 'dragItem',
+        value: '拖拽项',
+        on: {
+          change (val: string) {
+            console.log('监听到了：', val);
+          }
+        }
+      };
     },
     maxHeight: '500px'
   };
@@ -101,7 +108,10 @@ const schema: Schema = {
           change (val: any) {
             console.log('>>> on.change', val);
           }
-        }
+        },
+        rules: [
+          { required: true, trigger: 'blur' }
+        ]
       }, 18),
       layout.Col({
         type: 'text',
@@ -470,20 +480,22 @@ const schema: Schema = {
       type: "list",
       title: "Banner List",
       key: "regular_banner",
-      component: {
-        type: "upload",
-        title: "Banner(1000 * 666)",
-        key: "banner",
-        value: "",
-        multiLanguage: true,
-        rules: [
-          {
-            type: "string",
-            required: true,
-            message: INVALID_MSG,
-            trigger: "change"
-          }
-        ]
+      component () {
+        return {
+          type: "upload",
+          title: "Banner(1000 * 666)",
+          key: "banner",
+          value: "",
+          multiLanguage: true,
+          rules: [
+            {
+              type: "string",
+              required: true,
+              message: INVALID_MSG,
+              trigger: "change"
+            }
+          ]
+        };
       },
       value: [],
       rules: [
@@ -525,202 +537,218 @@ const schema: Schema = {
       type: "list",
       title: "Section List",
       key: "section_list",
-      component: {
-        title: "Activity",
-        type: "form",
-        components: [
-          {
-            type: "text",
-            title: "Title",
-            key: "title",
-            value: "",
-            multiLanguage: true,
-            rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
-          },
-          {
-            type: "text",
-            title: "Subtitle",
-            key: "sub_title",
-            value: "",
-            multiLanguage: true
-          },
-          {
-            type: "text",
-            title: "Anchor Link Text",
-            key: "anchor_link_text",
-            value: ""
-          },
-          {
-            type: "select",
-            title: "Section Type",
-            key: "section_type",
-            value: "regular_activity_display",
-            options: [
-              {
-                value: "regular_activity_display",
-                label: "Regular Activity Display"
+      component () {
+        return {
+          title: "Activity",
+          type: "form",
+          components: [
+            {
+              type: "text",
+              title: "Title",
+              key: "title",
+              value: "",
+              multiLanguage: true,
+              rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
+            },
+            {
+              type: "text",
+              title: "Subtitle",
+              key: "sub_title",
+              value: "",
+              multiLanguage: true
+            },
+            {
+              type: "text",
+              title: "Anchor Link Text",
+              key: "anchor_link_text",
+              value: ""
+            },
+            {
+              type: "select",
+              title: "Section Type",
+              key: "section_type",
+              value: "regular_activity_display",
+              options: [
+                {
+                  value: "regular_activity_display",
+                  label: "Regular Activity Display"
+                },
+                {
+                  value: "small_activity_display",
+                  label: "Small Activity Display"
+                },
+                {
+                  value: "sub_section_activity_display",
+                  label: "Sub Section Activity Display"
+                },
+                {
+                  value: "article_and_activity_display",
+                  label: "Article & Activity Display"
+                },
+                {
+                  value: "small_article_display",
+                  label: "Small Article Display"
+                },
+                {
+                  value: "small_photo_display",
+                  label: "Small Photo Display"
+                },
+                {
+                  value: "discount_code_redemption_box",
+                  label: "Discount Code Redemption Box"
+                }
+              ],
+              rules: [{ required: true, message: INVALID_MSG, trigger: "change" }]
+            },
+            // regularActivityDisplay
+            {
+              type: "list",
+              title: "Regular Activity Display",
+              key: "regular_activity_display",
+              component () {
+                return regularActivitySchema;
               },
-              {
-                value: "small_activity_display",
-                label: "Small Activity Display"
+              value: null,
+              rules: [
+                {
+                  type: "array",
+                  required: true,
+                  message: "请至少添加一个",
+                  trigger: "change"
+                }
+              ],
+              visible: true
+            },
+            // smallActivityDisplay
+            {
+              type: "list",
+              title: "Small Activity Display(No less than four)",
+              key: "small_activity_display",
+              component () {
+                return smallActivitySchema;
               },
-              {
-                value: "sub_section_activity_display",
-                label: "Sub Section Activity Display"
+              value: null,
+              rules: [
+                {
+                  type: "array",
+                  required: true,
+                  min: 4,
+                  message: "请至少提供4个或以上活动",
+                  trigger: "change"
+                }
+              ],
+              visible: false
+            },
+            // subSectionActivityDisplay
+            {
+              type: "list",
+              title: "Sub Section Activity Display",
+              key: "sub_section_activity_display",
+              component () {
+                return subSectionActivitySchema;
               },
-              {
-                value: "article_and_activity_display",
-                label: "Article & Activity Display"
+              value: null,
+              rules: [
+                {
+                  type: "array",
+                  required: true,
+                  message: INVALID_MSG,
+                  trigger: "change"
+                }
+              ],
+              visible: false
+            },
+            // articleAndActivityDisplay
+            {
+              type: "list",
+              title: "Article & Activity Display",
+              key: "article_and_activity_display",
+              component () {
+                return articleAndActivitySchema;
               },
-              {
-                value: "small_article_display",
-                label: "Small Article Display"
+              value: null,
+              rules: [
+                {
+                  type: "array",
+                  required: true,
+                  message: INVALID_MSG,
+                  trigger: "change"
+                }
+              ],
+              visible: false
+            },
+            // smallArticleDisplay
+            {
+              type: "list",
+              title: "Small Article Display",
+              key: "small_article_display",
+              component () {
+                return smallArticleSchema;
               },
-              {
-                value: "small_photo_display",
-                label: "Small Photo Display"
+              value: null,
+              rules: [
+                {
+                  type: "array",
+                  required: true,
+                  message: INVALID_MSG,
+                  trigger: "change"
+                }
+              ],
+              visible: false
+            },
+            // smallPhotoDisplay
+            {
+              type: "list",
+              title: "Small Photo Display",
+              key: "small_photo_display",
+              component () {
+                return smallPhotoSchema;
               },
-              {
-                value: "discount_code_redemption_box",
-                label: "Discount Code Redemption Box"
-              }
-            ],
-            rules: [{ required: true, message: INVALID_MSG, trigger: "change" }]
-          },
-          // regularActivityDisplay
-          {
-            type: "list",
-            title: "Regular Activity Display",
-            key: "regular_activity_display",
-            component: regularActivitySchema,
-            value: null,
-            rules: [
-              {
-                type: "array",
-                required: true,
-                message: "请至少添加一个",
-                trigger: "change"
-              }
-            ],
-            visible: true
-          },
-          // smallActivityDisplay
-          {
-            type: "list",
-            title: "Small Activity Display(No less than four)",
-            key: "small_activity_display",
-            component: smallActivitySchema,
-            value: null,
-            rules: [
-              {
-                type: "array",
-                required: true,
-                min: 4,
-                message: "请至少提供4个或以上活动",
-                trigger: "change"
-              }
-            ],
-            visible: false
-          },
-          // subSectionActivityDisplay
-          {
-            type: "list",
-            title: "Sub Section Activity Display",
-            key: "sub_section_activity_display",
-            component: subSectionActivitySchema,
-            value: null,
-            rules: [
-              {
-                type: "array",
-                required: true,
-                message: INVALID_MSG,
-                trigger: "change"
-              }
-            ],
-            visible: false
-          },
-          // articleAndActivityDisplay
-          {
-            type: "list",
-            title: "Article & Activity Display",
-            key: "article_and_activity_display",
-            component: articleAndActivitySchema,
-            value: null,
-            rules: [
-              {
-                type: "array",
-                required: true,
-                message: INVALID_MSG,
-                trigger: "change"
-              }
-            ],
-            visible: false
-          },
-          // smallArticleDisplay
-          {
-            type: "list",
-            title: "Small Article Display",
-            key: "small_article_display",
-            component: smallArticleSchema,
-            value: null,
-            rules: [
-              {
-                type: "array",
-                required: true,
-                message: INVALID_MSG,
-                trigger: "change"
-              }
-            ],
-            visible: false
-          },
-          // smallPhotoDisplay
-          {
-            type: "list",
-            title: "Small Photo Display",
-            key: "small_photo_display",
-            component: smallPhotoSchema,
-            value: null,
-            rules: [
-              {
-                type: "array",
-                required: true,
-                message: INVALID_MSG,
-                trigger: "change"
-              }
-            ],
-            visible: false
-          },
-          // discountCodeRedemptionBox
-          {
-            type: "list",
-            title: "Discount Code Redemption Box",
-            key: "discount_code_redemption_box",
-            component: discountCodeRedemptionBoxSchema,
-            value: null,
-            rules: [
-              {
-                type: "array",
-                required: true,
-                message: INVALID_MSG,
-                trigger: "change"
-              }
-            ],
-            visible: false
-          }
-        ],
-        onChange({ component }: any) {
-          if (component.type === "select" && component.key === "section_type") {
-            const selectedOption = component.options.find(
-              (item: any) => item.value === component.value
-            );
-            this.title = selectedOption ? selectedOption.label : this.title;
-            for (const comp of this.components) {
-              if (comp.type === "array") {
-                comp.visible = (comp.key === component.value);
+              value: null,
+              rules: [
+                {
+                  type: "array",
+                  required: true,
+                  message: INVALID_MSG,
+                  trigger: "change"
+                }
+              ],
+              visible: false
+            },
+            // discountCodeRedemptionBox
+            {
+              type: "list",
+              title: "Discount Code Redemption Box",
+              key: "discount_code_redemption_box",
+              component () {
+                return discountCodeRedemptionBoxSchema;
+              },
+              value: null,
+              rules: [
+                {
+                  type: "array",
+                  required: true,
+                  message: INVALID_MSG,
+                  trigger: "change"
+                }
+              ],
+              visible: false
+            }
+          ],
+          onChange({ component }: any) {
+            if (component.type === "select" && component.key === "section_type") {
+              const selectedOption = component.options.find(
+                (item: any) => item.value === component.value
+              );
+              this.title = selectedOption ? selectedOption.label : this.title;
+              for (const comp of this.components) {
+                if (comp.type === "array") {
+                  comp.visible = (comp.key === component.value);
+                }
               }
             }
           }
-        }
+        };
       },
       value: null
     }

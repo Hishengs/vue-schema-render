@@ -216,7 +216,9 @@ export const articleAndActivitySchema = {
       type: "list",
       title: "Activity List",
       key: "list",
-      component: regularActivitySchema
+      component () {
+        return regularActivitySchema;
+      }
     }
   ]
 };
@@ -237,7 +239,9 @@ export const subSectionActivitySchema = {
       type: "list",
       title: "Sub Category Activity List",
       key: "list",
-      component: regularActivitySchema
+      component () {
+        return regularActivitySchema;
+      }
     }
   ]
 };

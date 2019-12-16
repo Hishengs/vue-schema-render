@@ -1,10 +1,7 @@
 <template>
   <div class="vsr_component_form">
     <el-form
-      v-if="form"
       ref="form"
-      :model="form"
-      :rules="rules"
       :label-width="component.labelWidth || '100px'"
       :label-position="component.labelPosition || 'top'"
       :inline="inlineForm"
@@ -47,49 +44,14 @@ export default {
       default: false
     }
   },
-  data() {
-    return {
-      form: null
-    };
-  },
-  computed: {
-    // collect components rules for ElementUI's async-validator
-    rules() {
-      return this.component.components.reduce((rules, comp) => {
-        if (!comp.visible) return rules;
-        rules[comp.key] = (rules[comp.key] || []).concat(comp.rules || []);
-        return rules;
-      }, {});
-    }
-  },
   created() {
     // init components
     for (const component of this.component.components) {
       initComponent(component);
     }
-    // fix the limitation of ElementUI's async-validator
-    this.setFormProxy();
     this.initData();
   },
   methods: {
-    // fix the limitation of ElementUI's async-validator
-    setFormProxy() {
-      this.form = Object.freeze(
-        new Proxy(
-          {},
-          {
-            get: (target, key, receiver) => {
-              const comp = this.component.components.find(cp => cp.key === key);
-              return comp ? comp.value : undefined;
-            },
-            set: (target, key, value, receiver) => {
-              const comp = this.component.components.find(cp => cp.key === key);
-              if (comp) comp.value = value;
-            }
-          }
-        )
-      );
-    },
     // set data of current component
     initData() {
       const { value, _refValue, components } = this.component;
@@ -120,40 +82,16 @@ export default {
     },
     // 表单校验
     async validate() {
-      return new Promise(async (resolve, reject) => {
-        try {
-          let _valid = true;
-          if (!this.$refs.form) resolve(false);
-          // validate higher components
-          for (const comp of this.component.components) {
-            if (!isBasicComponent(comp)) {
-              const [compRef] = this.$refs[comp._uid] || [];
-              if (compRef) {
-                const isValid = await compRef.validate();
-                if (!isValid) {
-                  _valid = false;
-                  break;
-                } else {
-                  // update component value
-                  const [data, lanData] = await compRef.genData();
-                  comp.value = _merge(data, lanData);
-                }
-              }
-            }
-          }
-          if (!_valid) {
-            resolve(_valid);
-            return;
-          }
-          // validate form
-          this.$refs.form.validate(async valid => {
-            const _valid = valid;
-            resolve(_valid);
-          });
-        } catch (e) {
-          reject(e);
-        }
-      });
+      let valid = true;
+      for (const comp of this.component.components) {
+        console.log('>>> form.validate', comp);
+        const { _uid, type, key, visible } = comp;
+        const [refComp] = this.$refs[_uid];
+        valid = await refComp.validate();
+        console.log('>>> form.validate: valid', valid);
+        if (!valid) break;
+      }
+      return valid;
     }
   }
 };
