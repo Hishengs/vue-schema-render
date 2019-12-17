@@ -8,11 +8,17 @@
     >
       <template v-for="component in component.components">
         <el-form-item
+          :class="component.type"
           :key="component.key"
           :prop="component.key"
-          :label="component.title"
           v-if="component.visible"
         >
+          <span slot="label" v-if="component.label">
+            {{ component.label }}
+            <el-tooltip effect="dark" :content="component.labelTooltip" placement="right" v-if="component.labelTooltip">
+              <el-button type="text" icon="el-icon-info" size="medium"></el-button>
+            </el-tooltip>
+          </span>
           <vsr-dispatcher
             :component="component"
             :ref="component._uid"
@@ -121,16 +127,16 @@ export default {
 }
 </style>
 
-<style lang="scss" scoped>
-// TODO: 解决 el-from 嵌套适用时的样式问题
-// .vsr_component_form {
-//   /deep/ .el-form {
-//     .el-form-item input {
-//       border-color: #c0ccda;
-//     }
-//     .el-form-item.is-error input {
-//       border-color: #ff4949;
-//     }
-//   }
-// }
+<style lang="scss">
+.vsr_component_form {
+  /* .el-form {
+    .el-form-item.text,
+    .el-form-item.select,
+    .el-form-item.checkbox,
+    .el-form-item.radio,
+    .el-form-item.switch {
+      max-width: 300px;
+    }
+  } */
+}
 </style>

@@ -1,15 +1,14 @@
 export default {
-  title: '',
   components: [
     {
       type: 'text',
-      title: '文本框',
+      label: '文本框',
       key: 'text',
       value: '',
     },
     {
       type: 'select',
-      title: '下拉框',
+      label: '下拉框',
       key: 'select',
       options: [
         { label: '清华大学', value: 'qsu' },
@@ -20,13 +19,13 @@ export default {
     },
     {
       type: 'slider',
-      title: '滑块',
+      label: '滑块',
       key: 'progress',
       value: 20,
     },
     {
       type: 'radio',
-      title: '单选框',
+      label: '单选框',
       key: 'radio',
       options: [
         { label: '清华大学', value: 'qsu' },
@@ -37,13 +36,13 @@ export default {
     },
     {
       type: 'switch',
-      title: '开关',
+      label: '开关',
       key: 'switch',
       value: false,
     },
     {
       type: 'checkbox',
-      title: '复选框',
+      label: '复选框',
       key: 'checkbox',
       options: [
         { label: '清华大学', value: 'qsu' },

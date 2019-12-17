@@ -14,6 +14,10 @@ A Form Render Based on JSON Schema for Vue
 - 详尽的文档及示例
 
 
+## 安装
+`npm install -S vue-schema-render`
+
+
 ## 预览
 
 ![](./demo.png)
@@ -24,4 +28,9 @@ A Form Render Based on JSON Schema for Vue
 - [x] 支持更自由的布局
 - [x] 支持列表组件项拖拽
 - [ ] ElementUI 按需引入
-- [ ] 监听自定义事件
+- [x] 监听自定义事件
+- [x] 表单填写进度
+- [x] 支持 label tooltip
+- [x] 支持 component tip
+- [ ] 支持添加内置组件
+- [ ] 支持组件 slot

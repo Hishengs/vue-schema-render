@@ -34,6 +34,7 @@ export namespace Component {
     | 'col';
 
   interface Common {
+    _vm?: Vue;
     _uid?: string;
     type: CompType;
     visible?: Boolean;
@@ -50,16 +51,21 @@ export namespace Component {
   };
 
   export interface Base extends Common {
-    title: string;
+    label: string;
+    labelTooltip?: string;
     key: string;
     value?: any;
     _refValue?: any;
     rules?: Array<any>;
     props?: any;
+    tip?: string;
     onChange?: Event.onChange;
     on?: {
       [key: string]: Function;
-    }
+    },
+    slot?: {
+      [key: string]: Function;
+    },
   };
 
   export interface MultiLanComp extends Base {

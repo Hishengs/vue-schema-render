@@ -1,9 +1,15 @@
 <template>
   <el-col class="vsr_component_col" :span="component.span || span">
     <el-form-item
-      :label="component.component.title"
       v-if="component.component.visible"
+      :class="component.component.type"
     >
+      <span slot="label" v-if="component.component.label">
+        {{ component.component.label }}
+        <el-tooltip effect="dark" :content="component.component.labelTooltip" placement="right" v-if="component.component.labelTooltip">
+          <el-button type="text" icon="el-icon-info" size="medium"></el-button>
+        </el-tooltip>
+      </span>
       <vsr-dispatcher
         ref="comp"
         :component="component.component"

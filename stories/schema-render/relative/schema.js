@@ -2,19 +2,18 @@
 const INVALID_MSG = "请输入一个有效值";
 
 export default {
-  title: '',
   components: [
     // show guide
     {
       type: "switch",
-      title: "Show Guide",
+      label: "Show Guide",
       key: "show_guide",
       value: false
     },
     // default open
     {
       type: "switch",
-      title: "Default Open",
+      label: "Default Open",
       key: "default_open",
       value: false,
       visible: false
@@ -22,7 +21,7 @@ export default {
     // Guide Description
     {
       type: "text",
-      title: "Guide Description",
+      label: "Guide Description",
       key: "guide_description",
       value: "",
       visible: false,
@@ -32,7 +31,7 @@ export default {
     // see how step1
     {
       type: "text",
-      title: "See How Step1",
+      label: "See How Step1",
       key: "see_how_step1",
       value: "",
       visible: false,
@@ -42,7 +41,7 @@ export default {
     // see how step2
     {
       type: "text",
-      title: "See How Step2",
+      label: "See How Step2",
       key: "see_how_step2",
       value: "",
       visible: false,
@@ -52,7 +51,7 @@ export default {
     // see how step3
     {
       type: "text",
-      title: "See How Step3",
+      label: "See How Step3",
       key: "see_how_step3",
       value: "",
       visible: false,

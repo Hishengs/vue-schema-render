@@ -1,5 +1,8 @@
 <template>
-  <div class="vsr-dispatcher" :class="{'is-sub-form': component.type === 'form'}">
+  <div class="vsr-dispatcher" :class="{
+    'is-sub-form': component.type === 'form',
+    'has-error': hasError
+  }">
     <!-- form -->
     <vsr-form
       v-if="component.type === 'form'"
@@ -34,7 +37,10 @@
       :component="component"
       @change="onChange"
       ref="comp"
-    ></vsr-basic>
+    >
+      <slot-render slot="component-prepend" :render="component.slot['component-prepend']"></slot-render>
+      <slot-render slot="component-append" :render="component.slot['component-append']"></slot-render>
+    </vsr-basic>
     <div class="validate-error" v-if="showError">{{ errorMsg }}</div>
   </div>
 </template>
@@ -49,6 +55,21 @@ import custom from "./custom.vue";
 import baseMixin from "./base.mixin.js";
 import { COMP_PREFIX, isBasicComponent, isLayoutComponent } from "../utils.ts";
 
+const SlotRender = {
+  name: 'slot-render',
+  functional: true,
+  props: {
+    render: Function
+  },
+  render (h, ctx) {
+    return (
+      <template>
+        { ctx.props.render ? ctx.props.render(h) : null }
+      </template>
+    );
+  }
+};
+
 export default {
   name: `${COMP_PREFIX}-dispatcher`,
   components: {
@@ -57,6 +78,7 @@ export default {
     [list.name]: list,
     [form.name]: form,
     [custom.name]: custom,
+    [SlotRender.name]: SlotRender,
   },
   mixins: [baseMixin],
   data () {
@@ -69,6 +91,9 @@ export default {
     showError () {
       return this.hasError && !['row', 'form'].includes(this.component.type);
     }
+  },
+  mounted () {
+    this.setTriggerValidate();
   },
   methods: {
     isBasicComponent,
@@ -100,6 +125,16 @@ export default {
       // console.log('>>> dispatcher.validate: hasError', this.hasError);
       return !this.hasError;
     },
+    setTriggerValidate () {
+      if (isBasicComponent(this.component)) {
+        // rules trigger
+        const rulesHasTrigger = (this.component.rules || []).filter(rule => rule.trigger !== undefined);
+        for (const rule of rulesHasTrigger) {
+          // TODO: 这种调用方式不优雅
+          this.$refs.comp.$refs.component.$on(rule.trigger, this.validate);
+        }
+      }
+    }
   }
 };
 </script>
@@ -115,6 +150,11 @@ export default {
     margin-top: 5px;
     color: #F56C6C;
     line-height: 1.5;
+  }
+  &.has-error {
+    .el-input > input {
+      border-color: #f5222d;
+    }
   }
 }
 </style>

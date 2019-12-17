@@ -18,7 +18,6 @@ import { SchemaRender } from 'vue-schema-render';
 Vue.use(Dialog);
 
 const schema = {
-  title: '',
   components: [
     {
       type: 'text',

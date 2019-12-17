@@ -9,6 +9,8 @@ import PropsAndEvent from './props-event/index.vue';
 import propsAndEventNote from './props-event/note.md';
 import Relative from './relative/index.vue';
 import Custom from './custom/index.vue';
+import Tip from './tip/index.vue';
+import tipNote from './tip/note.md';
 
 export default {
   title: 'vue schema render',
@@ -109,4 +111,18 @@ export const custom = () => ({
 
 custom.story = {
   name: '自定义组件',
+};
+
+// ===== 组件提示 =====
+export const tip = () => ({
+  render (h) {
+    return <Tip></Tip>;
+  }
+});
+
+tip.story = {
+  name: '组件提示',
+  parameters: {
+    notes: tipNote
+  }
 };

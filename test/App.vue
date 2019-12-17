@@ -1,7 +1,11 @@
 <template>
   <div class="schema-render-demo">
     <h3>Vue Schema Render</h3>
-    <el-divider></el-divider>
+    <!-- <el-divider></el-divider> -->
+    <div class="fill-progress">
+      <span>填写进度</span>
+      <el-progress :text-inside="true" :show-text="false" :percentage="50"></el-progress>
+    </div>
     <schema-render
       v-loading.fullscreen.lock="loading"
       :schema="schema"
@@ -45,3 +49,21 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.fill-progress {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  span {
+    flex-grow: 0;
+    margin-right: 10px;
+    font-size: 13px;
+    color: #666;
+    font-weight: normal;
+  }
+  .el-progress {
+    flex-grow: 1;
+  }
+}
+</style>

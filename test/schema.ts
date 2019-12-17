@@ -38,13 +38,13 @@ const checkDate = {
 function getDragableList (key: string): Component.Comp {
   return {
     type: 'list',
-    title: '列表组件',
+    label: '列表组件',
     key: key,
     value: [],
     component () {
       return {
         type: 'text',
-        title: '拖拽项',
+        label: '拖拽项',
         key: 'dragItem',
         value: '拖拽项',
         on: {
@@ -60,13 +60,13 @@ function getDragableList (key: string): Component.Comp {
 
 const formComp: Component.Comp = {
   type: 'form',
-  title: '嵌套子表单',
+  label: '嵌套子表单',
   key: 'form',
   components: [
     // promo code
     {
       type: "text",
-      title: "Promo Code",
+      label: "Promo Code",
       key: "promo_code",
       value: "",
       visible: true,
@@ -77,7 +77,7 @@ const formComp: Component.Comp = {
     // color tone
     {
       type: "select",
-      title: "Color Tone",
+      label: "Color Tone",
       key: "color_tone",
       value: null,
       options: [
@@ -92,12 +92,12 @@ const formComp: Component.Comp = {
 };
 
 const schema: Schema = {
-  title: "Campaign Page Settings",
   components: [
     layout.Row([
       layout.Col({
         type: 'text',
-        title: '单行文本1（放个提示看看）',
+        label: '单行文本1（放个提示看看）',
+        labelTooltip: '刘墉（1720年-1805年1月24日/25日 [1]  ），字崇如，号石庵，出生于山东诸城。清朝政治家、书法家。大学士刘统勋长子。',
         key: 'text1',
         value: 'This is Text',
         multiLanguage: true,
@@ -115,27 +115,50 @@ const schema: Schema = {
       }, 18),
       layout.Col({
         type: 'text',
-        title: '单行文本2',
+        label: '单行文本2',
         key: 'text2',
         value: 'This is Text2',
-        multiLanguage: true
+        multiLanguage: true,
+        slot: {
+          'component-prepend' (h: Function) {
+            return h('el-button', {
+              props: {
+                type: 'primary'
+              },
+              style: {
+                marginBottom: '10px'
+              }
+            }, '前面放一个按钮');
+          },
+          'component-append' (h: Function) {
+            return h('el-button', {
+              props: {
+                type: 'primary'
+              },
+              style: {
+                marginTop: '10px'
+              }
+            }, '后面放一个按钮');
+          }
+        },
       }, 6)
     ]),
     layout.Row([
       layout.Col({
         type: 'slider',
-        title: 'Slider1',
+        label: 'Slider1',
         key: 'slider1',
         value: 20,
       }, 10),
       layout.Col({
         type: 'text',
-        title: '单行文本3',
+        label: '单行文本3',
         key: 'text3',
         value: '',
         props: {
           placeholder: '自定义的 placeholder'
-        }
+        },
+        tip: '在这里放一个提示看看'
       }, 14)
     ]),
     layout.Row([
@@ -144,15 +167,16 @@ const schema: Schema = {
     ]),
     {
       type: 'slider',
-      title: 'Slider2',
+      label: 'Slider2',
       key: 'slider2',
       value: 20,
     },
     {
       type: "text",
-      title: "Page Title",
+      label: "Page Title",
       key: "page_title",
       value: "",
+      tip: '在这里放一个提示看看',
       multiLanguage: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
@@ -160,14 +184,14 @@ const schema: Schema = {
     // show guide
     {
       type: "switch",
-      title: "Show Guide",
+      label: "Show Guide",
       key: "show_guide",
       value: false
     },
     // default open
     {
       type: "switch",
-      title: "Default Open",
+      label: "Default Open",
       key: "default_open",
       value: false,
       visible: false
@@ -175,7 +199,7 @@ const schema: Schema = {
     // Guide Description
     {
       type: "text",
-      title: "Guide Description",
+      label: "Guide Description",
       key: "guide_description",
       value: "",
       visible: false,
@@ -185,7 +209,7 @@ const schema: Schema = {
     // see how step1
     {
       type: "text",
-      title: "See How Step1",
+      label: "See How Step1",
       key: "see_how_step1",
       value: "",
       visible: false,
@@ -195,7 +219,7 @@ const schema: Schema = {
     // see how step2
     {
       type: "text",
-      title: "See How Step2",
+      label: "See How Step2",
       key: "see_how_step2",
       value: "",
       visible: false,
@@ -205,7 +229,7 @@ const schema: Schema = {
     // see how step3
     {
       type: "text",
-      title: "See How Step3",
+      label: "See How Step3",
       key: "see_how_step3",
       value: "",
       visible: false,
@@ -215,7 +239,7 @@ const schema: Schema = {
     // step 1 icon
     {
       type: "upload",
-      title: "Step1 Icon (110 * 110)",
+      label: "Step1 Icon (110 * 110)",
       key: "step1_icon",
       value: "",
       visible: false
@@ -223,7 +247,7 @@ const schema: Schema = {
     // step 2 icon
     {
       type: "upload",
-      title: "Step2 Icon (110 * 110)",
+      label: "Step2 Icon (110 * 110)",
       key: "step2_icon",
       value: "",
       visible: false
@@ -231,7 +255,7 @@ const schema: Schema = {
     // step 3 icon
     {
       type: "upload",
-      title: "Step3 Icon (110 * 110)",
+      label: "Step3 Icon (110 * 110)",
       key: "step3_icon",
       value: "",
       visible: false
@@ -239,21 +263,21 @@ const schema: Schema = {
     // show price tag
     {
       type: "switch",
-      title: "Show Price Tag",
+      label: "Show Price Tag",
       key: "show_price_tag",
       value: false
     },
     // enable countdown clock
     {
       type: "switch",
-      title: "Enable Countdown Clock",
+      label: "Enable Countdown Clock",
       key: "enable_countdown_clock",
       value: false
     },
     // countdown clock start date
     {
       type: "custom",
-      title: "Countdown Clock Start Date",
+      label: "Countdown Clock Start Date",
       key: "countdown_clock_start_date",
       value: null,
       component: localTimePicker,
@@ -263,7 +287,7 @@ const schema: Schema = {
     // countdown clock end date
     {
       type: "custom",
-      title: "Countdown Clock End Date",
+      label: "Countdown Clock End Date",
       key: "countdown_clock_end_date",
       value: null,
       component: localTimePicker,
@@ -273,7 +297,7 @@ const schema: Schema = {
     // slogan
     {
       type: "text",
-      title: "Slogan",
+      label: "Slogan",
       key: "slogan",
       value: "",
       visible: false,
@@ -282,7 +306,7 @@ const schema: Schema = {
     // show hide clock
     {
       type: "radio",
-      title: "Show Hide Clock",
+      label: "Show Hide Clock",
       key: "show_hide_clock",
       options: [
         {
@@ -308,7 +332,7 @@ const schema: Schema = {
     // keep change banner
     {
       type: "radio",
-      title: "Keep Change Banner",
+      label: "Keep Change Banner",
       key: "keep_change_banner",
       options: [
         {
@@ -334,7 +358,7 @@ const schema: Schema = {
     // mobile countdown end banner
     {
       type: "upload",
-      title: "Mobile Countdown End Banner (1000 * 1000)",
+      label: "Mobile Countdown End Banner (1000 * 1000)",
       key: "mobile_countdown_end_banner",
       value: "",
       visible: false
@@ -342,28 +366,28 @@ const schema: Schema = {
     // show menu bar
     {
       type: "switch",
-      title: "Show Menu Bar",
+      label: "Show Menu Bar",
       key: "show_menu_bar",
       value: false
     },
     // show Coupon on activity
     {
       type: "switch",
-      title: "Show Coupon On Activity",
+      label: "Show Coupon On Activity",
       key: "show_coupon_on_activity",
       value: false
     },
     // show video on banner
     {
       type: "switch",
-      title: "Show Video On Banner",
+      label: "Show Video On Banner",
       key: "show_video_on_banner",
       value: false
     },
     // banner video
     {
       type: "upload",
-      title: "Banner Video",
+      label: "Banner Video",
       key: "banner_video",
       value: "",
       visible: false,
@@ -375,21 +399,21 @@ const schema: Schema = {
     // search bar on banner
     {
       type: "switch",
-      title: "Search Bar On Banner",
+      label: "Search Bar On Banner",
       key: "search_bar_on_banner",
       value: false
     },
     // show section banner
     {
       type: "switch",
-      title: "Show Section Banner",
+      label: "Show Section Banner",
       key: "show_section_banner",
       value: false
     },
     // mobile section banner
     {
       type: "upload",
-      title: "Mobile Section Banner (1000 * 428)",
+      label: "Mobile Section Banner (1000 * 428)",
       key: "mobile_section_banner",
       value: "",
       visible: false,
@@ -398,7 +422,7 @@ const schema: Schema = {
     // Section Banner Url
     {
       type: "text",
-      title: "Section Banner Url",
+      label: "Section Banner Url",
       key: "section_banner_url",
       value: "",
       visible: false,
@@ -408,14 +432,14 @@ const schema: Schema = {
     // show bottom banner
     {
       type: "switch",
-      title: "Show Bottom Banner",
+      label: "Show Bottom Banner",
       key: "show_bottom_banner",
       value: false
     },
     // mobile Bottom banner
     {
       type: "upload",
-      title: "Mobile Bottom Banner (1000 * 428)",
+      label: "Mobile Bottom Banner (1000 * 428)",
       key: "mobile_bottom_banner",
       value: "",
       visible: false,
@@ -424,7 +448,7 @@ const schema: Schema = {
     // Bottom Banner Url
     {
       type: "text",
-      title: "Bottom Banner Url",
+      label: "Bottom Banner Url",
       key: "bottom_banner_url",
       value: "",
       visible: false,
@@ -434,14 +458,14 @@ const schema: Schema = {
     // show logo
     {
       type: "switch",
-      title: "Show Logo",
+      label: "Show Logo",
       key: "show_logo",
       value: false
     },
     // mobile logo
     {
       type: "upload",
-      title: "Mobile Logo (510 * 66)",
+      label: "Mobile Logo (510 * 66)",
       key: "mobile_logo",
       value: "",
       visible: false,
@@ -450,14 +474,14 @@ const schema: Schema = {
     // show terms and conditions
     {
       type: "switch",
-      title: "Show Terms And Conditions",
+      label: "Show Terms And Conditions",
       key: "show_terms_and_conditions",
       value: false
     },
     // Terms And Conditions
     {
       type: "markdown",
-      title: "Terms And Conditions",
+      label: "Terms And Conditions",
       key: "terms_and_conditions",
       value: "",
       visible: false,
@@ -466,7 +490,7 @@ const schema: Schema = {
     // banner type
     {
       type: "select",
-      title: "Banner Type",
+      label: "Banner Type",
       key: "banner_type",
       value: "regular_banner",
       options: [
@@ -478,12 +502,12 @@ const schema: Schema = {
     // Regular Banner
     {
       type: "list",
-      title: "Banner List",
+      label: "Banner List",
       key: "regular_banner",
       component () {
         return {
           type: "upload",
-          title: "Banner(1000 * 666)",
+          label: "Banner(1000 * 666)",
           key: "banner",
           value: "",
           multiLanguage: true,
@@ -510,7 +534,7 @@ const schema: Schema = {
     // Whole Page Banner
     {
       type: "upload",
-      title: "Mobile Banner(1000 * 1000)",
+      label: "Mobile Banner(1000 * 1000)",
       key: "whole_page_banner",
       value: "",
       rules: [{ required: true, message: INVALID_MSG }],
@@ -519,7 +543,7 @@ const schema: Schema = {
     // Mobile Short Text
     {
       type: "text",
-      title: "Mobile Short Text",
+      label: "Mobile Short Text",
       key: "mobile_short_text",
       value: "",
       multiLanguage: true
@@ -527,7 +551,7 @@ const schema: Schema = {
     // Mobile Short Text
     {
       type: "text",
-      title: "Mobile Short Text Promocode",
+      label: "Mobile Short Text Promocode",
       key: "mobile_short_text_promo_code",
       value: "",
       multiLanguage: true
@@ -535,16 +559,16 @@ const schema: Schema = {
     // Section List
     {
       type: "list",
-      title: "Section List",
+      label: "Section List",
       key: "section_list",
       component () {
         return {
-          title: "Activity",
+          label: "Activity",
           type: "form",
           components: [
             {
               type: "text",
-              title: "Title",
+              label: "Title",
               key: "title",
               value: "",
               multiLanguage: true,
@@ -552,20 +576,20 @@ const schema: Schema = {
             },
             {
               type: "text",
-              title: "Subtitle",
+              label: "Subtitle",
               key: "sub_title",
               value: "",
               multiLanguage: true
             },
             {
               type: "text",
-              title: "Anchor Link Text",
+              label: "Anchor Link Text",
               key: "anchor_link_text",
               value: ""
             },
             {
               type: "select",
-              title: "Section Type",
+              label: "Section Type",
               key: "section_type",
               value: "regular_activity_display",
               options: [
@@ -603,7 +627,7 @@ const schema: Schema = {
             // regularActivityDisplay
             {
               type: "list",
-              title: "Regular Activity Display",
+              label: "Regular Activity Display",
               key: "regular_activity_display",
               component () {
                 return regularActivitySchema;
@@ -622,7 +646,7 @@ const schema: Schema = {
             // smallActivityDisplay
             {
               type: "list",
-              title: "Small Activity Display(No less than four)",
+              label: "Small Activity Display(No less than four)",
               key: "small_activity_display",
               component () {
                 return smallActivitySchema;
@@ -642,7 +666,7 @@ const schema: Schema = {
             // subSectionActivityDisplay
             {
               type: "list",
-              title: "Sub Section Activity Display",
+              label: "Sub Section Activity Display",
               key: "sub_section_activity_display",
               component () {
                 return subSectionActivitySchema;
@@ -661,7 +685,7 @@ const schema: Schema = {
             // articleAndActivityDisplay
             {
               type: "list",
-              title: "Article & Activity Display",
+              label: "Article & Activity Display",
               key: "article_and_activity_display",
               component () {
                 return articleAndActivitySchema;
@@ -680,7 +704,7 @@ const schema: Schema = {
             // smallArticleDisplay
             {
               type: "list",
-              title: "Small Article Display",
+              label: "Small Article Display",
               key: "small_article_display",
               component () {
                 return smallArticleSchema;
@@ -699,7 +723,7 @@ const schema: Schema = {
             // smallPhotoDisplay
             {
               type: "list",
-              title: "Small Photo Display",
+              label: "Small Photo Display",
               key: "small_photo_display",
               component () {
                 return smallPhotoSchema;
@@ -718,7 +742,7 @@ const schema: Schema = {
             // discountCodeRedemptionBox
             {
               type: "list",
-              title: "Discount Code Redemption Box",
+              label: "Discount Code Redemption Box",
               key: "discount_code_redemption_box",
               component () {
                 return discountCodeRedemptionBoxSchema;
@@ -740,7 +764,7 @@ const schema: Schema = {
               const selectedOption = component.options.find(
                 (item: any) => item.value === component.value
               );
-              this.title = selectedOption ? selectedOption.label : this.title;
+              this.label = selectedOption ? selectedOption.label : this.label;
               for (const comp of this.components) {
                 if (comp.type === "array") {
                   comp.visible = (comp.key === component.value);

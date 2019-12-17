@@ -6,15 +6,29 @@ export function getUID () {
   return Date.now().toString().slice(7) + '_' + Math.random().toString().slice(2, 8);
 }
 
-export function initComponent(component: Component.Comp) {
-  component._uid = `${component.type}_${getUID()}`;
+export function initComponent(component: Component.Comp, vm?: Vue) {
+  if (vm && !('_vm' in component)) {
+    Object.defineProperty(component, '_vm', {
+      value: vm,
+      configurable: false,
+      enumerable: false,
+    });
+  }
+  // set a unique id
+  if (!('_uid' in component)) {
+    Object.defineProperty(component, '_uid', {
+      value: `${component.type}_${getUID()}`,
+      configurable: false,
+      enumerable: false,
+    });
+  }
   // which is Component.Base
   if ('key' in component) {
     // set default value
     component.value = component.value === undefined ? null : component.value;
     // set props
     component.props = merge({
-      placeholder: component.title,
+      placeholder: component.label,
     }, component.props || {});
     // 是否支持多语言
     if ((component as Component.MultiLanComp).multiLanguage) {
@@ -46,6 +60,11 @@ export function initComponent(component: Component.Comp) {
   // which is Component.Col
   if (component.type === 'col') {
     initComponent((component as Component.Col).component);
+  }
+
+  // init slot
+  if (isBasicComponent(component) && !(component as Component.Base).slot) {
+    (component as Component.Base).slot = {};
   }
 }
 
@@ -157,5 +176,21 @@ export const CellRender = {
     return ctx.props.render(h, ctx.props.scope);
   }
 };
+
+export const internalComps = [
+  'text',
+  'select',
+  'checkbox',
+  'radio',
+  'switch',
+  'slider',
+  'form',
+  'list',
+  'upload',
+  'markdown',
+  'custom',
+  'row',
+  'col',
+];
 
 export const COMP_PREFIX = "vsr";

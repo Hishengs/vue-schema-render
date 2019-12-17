@@ -11,6 +11,7 @@ import {
   Option,
   Slider,
   DatePicker,
+  Progress,
   Form,
   FormItem,
   Icon,
@@ -20,6 +21,8 @@ import {
   Divider,
   Loading,
   Message,
+  Tooltip,
+  Alert,
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -35,6 +38,9 @@ Vue.use(Select);
 Vue.use(Option);
 Vue.use(Slider);
 Vue.use(DatePicker);
+Vue.use(Progress);
+Vue.use(Tooltip);
+Vue.use(Alert);
 Vue.use(Form);
 Vue.use(FormItem);
 

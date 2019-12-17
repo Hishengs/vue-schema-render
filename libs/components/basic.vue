@@ -1,5 +1,6 @@
 <template>
-  <span class="vsr_component_basic">
+  <div class="vsr_component_basic">
+    <slot name="component-prepend"></slot>
     <!-- 文本框 -->
     <template v-if="['text', 'textarea'].includes(component.type)">
       <el-input
@@ -96,7 +97,24 @@
       :component="component"
       @change="onChange(component)"
     ></vsr-markdown>
-  </span>
+    <!-- tip -->
+    <el-alert
+      v-if="component.tip"
+      :title="component.tip"
+      type="info"
+      show-icon
+      :closable="false"
+      >
+    </el-alert>
+    <!-- <el-alert
+      title="在这里放一个提示看看"
+      type="info"
+      show-icon
+      :closable="false"
+      >
+    </el-alert> -->
+    <slot name="component-append"></slot>
+  </div>
 </template>
 
 <script>
@@ -128,7 +146,6 @@ export default {
     genData () {
       return this.component.value;
     },
-    validate () {},
   }
 };
 </script>
@@ -137,7 +154,7 @@ export default {
 .vsr_component_basic {
   .el-input,
   .el-select {
-    // width: 300px;
+    // max-width: 300px;
   }
   .el-textarea {
     // max-width: 500px;
@@ -151,6 +168,10 @@ export default {
     input {
       border-color: #eee !important;
     }
+  }
+  .el-alert {
+    margin-top: 10px;
+    line-height: normal;
   }
 }
 </style>

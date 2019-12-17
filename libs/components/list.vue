@@ -15,24 +15,24 @@
                 <div slot="header" class="header draggable-handle">
                   <span class="title">
                     {{ `# ${i + 1}` }}
-                    {{ comp.title ? comp.title : "" }}
+                    {{ comp.label ? comp.label : "" }}
                   </span>
                   <div class="actions">
                     <el-button
                       class="el-icon-arrow-up"
-                      size="small"
+                      size="mini"
                       @click="up(i)"
                       :disabled="i === 0"
                     ></el-button>
                     <el-button
                       class="el-icon-arrow-down"
-                      size="small"
+                      size="mini"
                       @click="down(i)"
                       :disabled="i === components.length - 1"
                     ></el-button>
                     <el-button
                       class="el-icon-delete"
-                      size="small"
+                      size="mini"
                       type="danger"
                       @click="remove(i)"
                     ></el-button>
@@ -199,8 +199,11 @@ export default {
     box-shadow: none;
     margin: 10px 0;
     .el-card__header {
-      padding: 12px 16px;
+      padding: 8px 15px;
       background-color: #eff2f7;
+    }
+    .el-card__body {
+      padding: 10px 15px;
     }
     .draggable-handle {
       cursor: move;
@@ -210,7 +213,7 @@ export default {
       position: relative;
       .title {
         font-weight: bold;
-        font-size: 18px;
+        font-size: 16px;
       }
       .actions {
         position: absolute;
