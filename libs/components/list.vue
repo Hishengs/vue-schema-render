@@ -55,11 +55,13 @@
       @click="add()"
       class="add-btn el-icon-plus"
     ></el-button>
+    <div class="validate-error" v-if="hasError">{{ errorMsg }}</div>
   </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable';
+import AsyncValidator from 'async-validator';
 import baseMixin from "./base.mixin.js";
 import { COMP_PREFIX, initComponent, isBasicComponent, getUID } from "../utils.ts";
 
@@ -72,7 +74,9 @@ export default {
   },
   data() {
     return {
-      components: []
+      components: [],
+      hasError: false,
+      errorMsg: ''
     };
   },
   computed: {
@@ -167,7 +171,8 @@ export default {
       return data;
     },
     async validate () {
-      let hasError = false;
+      this.hasError = false;
+      this.errorMsg = '';
       if (this.components.length) {
         const { key, rules = [] } = this.components[0];
         if (rules.length) {
@@ -175,12 +180,27 @@ export default {
             const [refComp] = this.$refs[comp._uid];
             const valid = await refComp.validate();
             if (!valid) {
-              hasError = true;
+              this.hasError = true;
             }
           }
         }
       }
-      return !hasError;
+      if (!this.hasError) {
+        const { key, value, rules = [] } = this.component;
+        console.log('>>> list.validate', this.component);
+        if (rules.length) {
+          const validator = new AsyncValidator({
+            [key]: rules
+          });
+          await validator.validate({
+            [key]: value
+          }).catch(({ errors, fields }) => {
+            this.hasError = true;
+            this.errorMsg = errors[0].message;
+          });
+        }
+      }
+      return !this.hasError;
     }
   }
 };
@@ -229,6 +249,12 @@ export default {
   .add-btn {
     margin: 0 auto;
     width: 100px;
+  }
+  .validate-error {
+    font-size: 13px;
+    margin-top: 5px;
+    color: #F56C6C;
+    line-height: 1.5;
   }
 }
 </style>

@@ -8,7 +8,10 @@
     >
       <template v-for="component in component.components">
         <el-form-item
-          :class="component.type"
+          :class="{
+            [component.type]: true,
+            'is-required': isRequired(component)
+          }"
           :key="component.key"
           :prop="component.key"
           v-if="component.visible"
@@ -88,16 +91,22 @@ export default {
     },
     // 表单校验
     async validate() {
-      let valid = true;
+      let hasError = false;
       for (const comp of this.component.components) {
-        console.log('>>> form.validate', comp);
+        // console.log('>>> form.validate', comp);
         const { _uid, type, key, visible } = comp;
+        if (!visible) continue;
         const [refComp] = this.$refs[_uid];
-        valid = await refComp.validate();
-        console.log('>>> form.validate: valid', valid);
-        if (!valid) break;
+        const valid = await refComp.validate();
+        // console.log('>>> form.validate: valid', valid);
+        if (!valid) {
+          hasError = true;
+        };
       }
-      return valid;
+      return !hasError;
+    },
+    isRequired (comp) {
+      return (comp.rules || []).some(rule => rule.required);
     }
   }
 };

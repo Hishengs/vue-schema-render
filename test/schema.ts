@@ -51,10 +51,16 @@ function getDragableList (key: string): Component.Comp {
           change (val: string) {
             console.log('监听到了：', val);
           }
-        }
+        },
+        rules: [
+          { required: true, message: INVALID_MSG, trigger: 'blur' }
+        ]
       };
     },
-    maxHeight: '500px'
+    maxHeight: '500px',
+    rules: [
+      { type: 'array', required: true, min: 1, message: '请至少添加一项' }
+    ]
   };
 }
 
@@ -72,7 +78,10 @@ const formComp: Component.Comp = {
       visible: true,
       props: {
         disabled: true
-      }
+      },
+      rules: [
+        { required: true, message: INVALID_MSG, trigger: 'blur' }
+      ]
     },
     // color tone
     {
@@ -546,7 +555,10 @@ const schema: Schema = {
       label: "Mobile Short Text",
       key: "mobile_short_text",
       value: "",
-      multiLanguage: true
+      multiLanguage: true,
+      rules: [
+        { required: true, message: INVALID_MSG, trigger: 'blur' }
+      ]
     },
     // Mobile Short Text
     {

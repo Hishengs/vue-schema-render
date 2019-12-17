@@ -1,5 +1,5 @@
 <template>
-  <div class="vsr-dispatcher" :class="{
+  <div class="vsr_component_dispatcher" :class="{
     'is-sub-form': component.type === 'form',
     'has-error': hasError
   }">
@@ -140,7 +140,7 @@ export default {
 </script>
 
 <style lang="scss">
-.vsr-dispatcher {
+.vsr_component_dispatcher {
   &.is-sub-form {
     border: 1px solid #eee;
     padding: 0 20px;
@@ -152,7 +152,7 @@ export default {
     line-height: 1.5;
   }
   &.has-error {
-    .el-input > input {
+    > .vsr_component_basic > .el-input > input {
       border-color: #f5222d;
     }
   }

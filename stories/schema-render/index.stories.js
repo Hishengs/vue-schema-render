@@ -1,10 +1,13 @@
 import Base from './base/index.vue';
+import baseNote from './base/note.md';
 import Form from './form/index.vue';
 import List from './list/index.vue';
 import Nest from './nest/index.vue';
 import nestNote from './nest/note.md';
 import Layout from './layout/index.vue';
 import layoutNote from './layout/note.md';
+import Validate from './validate/index.vue';
+import validateNote from './validate/note.md';
 import PropsAndEvent from './props-event/index.vue';
 import propsAndEventNote from './props-event/note.md';
 import Relative from './relative/index.vue';
@@ -27,6 +30,9 @@ export const base = () => ({
 
 base.story = {
   name: '基础组件',
+  parameters: {
+    notes: baseNote
+  }
 };
 
 // ===== 表单组件 =====
@@ -75,6 +81,18 @@ export const layout = () => ({
 layout.story = {
   name: '自定义布局',
   parameters: { notes: layoutNote },
+};
+
+// ===== 表单验证 =====
+export const validate = () => ({
+  render (h) {
+    return <Validate></Validate>;
+  }
+});
+
+validate.story = {
+  name: '表单验证',
+  parameters: { notes: validateNote },
 };
 
 // ===== Props and Event =====
