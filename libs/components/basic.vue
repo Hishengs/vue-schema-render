@@ -138,7 +138,7 @@ export default {
     if (this.component.on) {
       const keys = Object.keys(this.component.on);
       for (const key of keys) {
-        this.$refs.component.$on(key, this.component.on[key]);
+        this.$refs.component.$on(key, this.component.on[key].bind(this.component));
       }
     }
   },

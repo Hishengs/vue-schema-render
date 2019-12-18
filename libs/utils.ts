@@ -6,22 +6,71 @@ export function getUID () {
   return Date.now().toString().slice(7) + '_' + Math.random().toString().slice(2, 8);
 }
 
-export function initComponent(component: Component.Comp, vm?: Vue) {
-  if (vm && !('_vm' in component)) {
-    Object.defineProperty(component, '_vm', {
-      value: vm,
-      configurable: false,
-      enumerable: false,
-    });
+function setProperty (obj: Object, key: string, value: any) {
+  Object.defineProperty(obj, key, {
+    value,
+    configurable: false,
+    enumerable: false,
+  });
+}
+
+function hasDunplicateKey (comp: Component.Comp, parent: Component.FormComp): boolean {
+  let targetCompCount: number = 0;
+
+  const targetComp: Array<Component.Base> | Component.Base = ['row', 'col'].includes(comp.type)
+    ? comp.type === 'row'
+      ? (comp as Component.Row).cols.map(cp => cp.component)
+      : (comp as Component.Col).component
+    : comp as Component.Base;
+
+  if (Array.isArray(targetComp)) {
+    return targetComp.some(cp => hasDunplicateKey(cp, parent));
   }
+
+  for (const sub of parent.components) {
+    if (['row', 'col'].includes(sub.type)) {
+      const comps: Array<Component.Base> = sub.type === 'row'
+        ? (sub as Component.Row).cols.map(cp => cp.component)
+        : [(sub as Component.Col).component];
+      const keys = comps.map((cp: Component.Base) => cp.key);
+      for (const key of keys) {
+        if (key === targetComp.key) {
+          targetCompCount++;
+        }
+      }
+    } else {
+      if (targetComp.key === (sub as Component.Base).key) {
+        targetCompCount++;
+      }
+    }
+  }
+
+  if (targetCompCount > 1) {
+    console.warn(`存在重复 key: ${targetComp.key} 的子组件`, targetComp, parent);
+  }
+  return targetCompCount > 1;
+}
+
+export function initComponent(component: Component.Comp, parent?: Component.Comp, vm?: Vue) {
+  if ('_uid' in component) return;
   // set a unique id
-  if (!('_uid' in component)) {
-    Object.defineProperty(component, '_uid', {
-      value: `${component.type}_${getUID()}`,
-      configurable: false,
-      enumerable: false,
-    });
+  setProperty(component, '_uid', `${component.type}_${getUID()}`);
+
+  if (parent) {
+    let _parent: Component.Comp = parent;
+    if (_parent.type === 'col') {
+      // locate to Form
+      _parent = _parent._parent!._parent!;
+    }
+    setProperty(component, '_parent', _parent);
   }
+
+  if (vm && !('_vm' in component)) {
+    setProperty(component, '_vm', vm);
+  }
+
+  const { type } = component;
+
   // which is Component.Base
   if ('key' in component) {
     // set default value
@@ -30,11 +79,6 @@ export function initComponent(component: Component.Comp, vm?: Vue) {
     component.props = merge({
       placeholder: component.label,
     }, component.props || {});
-    // 是否支持多语言
-    if ((component as Component.MultiLanComp).multiLanguage) {
-      // 参考语言的值
-      component._refValue = "";
-    }
     // is options a Function
     // @ts-ignore
     if (typeof component.options === "function") {
@@ -51,20 +95,30 @@ export function initComponent(component: Component.Comp, vm?: Vue) {
   // visible
   component.visible = component.visible === undefined ? true : component.visible;
 
-  // which is Component.Row
-  if ('cols' in component) {
-    component.cols.forEach((col: Component.Comp) => {
-      initComponent(col);
-    });
-  }
-  // which is Component.Col
-  if (component.type === 'col') {
-    initComponent((component as Component.Col).component);
-  }
-
   // init slot
   if (isBasicComponent(component) && !(component as Component.Base).slot) {
     (component as Component.Base).slot = {};
+  }
+
+  // init sub components
+  if (type === 'form') {
+    for (const comp of (component as Component.FormComp).components) {
+      if (!hasDunplicateKey(comp, component as Component.FormComp)) {
+        initComponent(comp, component);
+      }
+    }
+  } else if (type === 'row') {
+    for (const comp of (component as Component.Row).cols) {
+      if (comp.type !== 'col') {
+        console.error(`Row 组件包含的子组件只能是 Col`, component, comp);
+        continue;
+      }
+      initComponent(comp, component);
+    }
+  } else if (type === 'col') {
+    if (!component._parent || component._parent.type !== 'row') {
+      console.error(`Col 组件只能作为 Row 组件的子组件使用`, component);
+    } else initComponent((component as Component.Col).component, component);
   }
 }
 

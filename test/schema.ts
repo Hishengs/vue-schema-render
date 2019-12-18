@@ -133,7 +133,7 @@ const schema: Schema = {
             console.log('>>> on.input', val);
           },
           change (val: any) {
-            console.log('>>> on.change', val);
+            console.log('>>> on.change', val, this);
           }
         },
         rules: [
@@ -205,7 +205,12 @@ const schema: Schema = {
       value: "",
       tip: '在这里放一个提示看看',
       multiLanguage: true,
-      rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
+      rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }],
+      on: {
+        change (val: any) {
+          console.log('>>> on.change', val, this);
+        }
+      }
     },
     formComp,
     // show guide
@@ -808,7 +813,7 @@ const schema: Schema = {
     }
   ],
   onChange({ component }: any) {
-    console.log("onComponentChange", component, component.key);
+    // console.log("onComponentChange", component, component.key);
 
     function onCommonVisibleControl(comp: any, relativeComp: any) {
       relativeComp.visible = comp.value;

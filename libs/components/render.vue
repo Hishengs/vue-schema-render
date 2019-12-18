@@ -1,7 +1,7 @@
 <template>
   <div class="vsr_component_schema-render">
     <vsr-form
-      :component="schema"
+      :component="form"
       :label-width="labelWidth"
       :label-position="labelPosition"
       :inline-form="inlineForm"
@@ -38,6 +38,16 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  data () {
+    return {
+      form: null
+    };
+  },
+  created () {
+    this.form = Object.assign({
+      type: 'form'
+    }, this.schema);
   },
   methods: {
     validate() {

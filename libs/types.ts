@@ -36,6 +36,7 @@ export namespace Component {
   interface Common {
     _vm?: Vue;
     _uid?: string;
+    _parent?: Comp,
     type: CompType | string;
     visible?: Boolean;
     dragable?: Boolean;
@@ -47,7 +48,7 @@ export namespace Component {
   };
 
   export interface Col extends Common {
-    component: Component.Comp;
+    component: Component.Base;
     span?: number;
   };
 

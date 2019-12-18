@@ -55,9 +55,10 @@ export default {
     }
   },
   created() {
+    initComponent(this.component, null, this);
     // init components
     for (const component of this.component.components) {
-      initComponent(component);
+      initComponent(component, this.component);
     }
     this.initData();
   },

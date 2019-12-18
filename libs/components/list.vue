@@ -99,7 +99,7 @@ export default {
   methods: {
     getNewComponent() {
       const comp = this.component.component();
-      initComponent(comp);
+      initComponent(comp, this.component);
       return comp;
     },
     initData() {
