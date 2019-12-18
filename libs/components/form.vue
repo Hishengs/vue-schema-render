@@ -5,6 +5,7 @@
       :label-width="component.labelWidth || '100px'"
       :label-position="component.labelPosition || 'top'"
       :inline="inlineForm"
+      v-model="component.props"
     >
       <template v-for="component in component.components">
         <el-form-item
@@ -91,19 +92,31 @@ export default {
     },
     // 表单校验
     async validate() {
-      let hasError = false;
+      let errs = [];
+      let flds = {};
+
       for (const comp of this.component.components) {
-        // console.log('>>> form.validate', comp);
         const { _uid, type, key, visible } = comp;
         if (!visible) continue;
         const [refComp] = this.$refs[_uid];
-        const valid = await refComp.validate();
-        // console.log('>>> form.validate: valid', valid);
-        if (!valid) {
-          hasError = true;
-        };
+        await refComp.validate()
+          .catch(({ errors, fields }) => {
+            // console.info('>>> form.validate: catch', { errors, fields });
+            errs = [...errs, ...errors];
+            if (type === 'row') {
+              flds = {
+                ...flds,
+                ...fields
+              };
+            } else flds[key] = fields;
+          });
+        // console.info('>>> form.validate', { comp, errs, flds });
       }
-      return !hasError;
+
+      return errs.length ? Promise.reject({
+        errors: errs,
+        fields: flds
+      }) : Promise.resolve();
     },
     isRequired (comp) {
       return (comp.rules || []).some(rule => rule.required);

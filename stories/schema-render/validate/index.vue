@@ -35,12 +35,19 @@ export default {
   },
   methods: {
     async genData () {
-      const valid = await this.$refs.schemaRender.validate();
-      if (valid) {
-        const data = await this.$refs.schemaRender.genData();
-        // console.log('>>> genData', data);
-        action('生成数据')(data);
-      } else this.$message.error('请检查你的输入');
+      await this.$refs.schemaRender.validate()
+        .then(async () => {
+          const data = await this.$refs.schemaRender.genData();
+          action('生成数据')(data);
+        })
+        .catch(({ errors, fields }) => {
+          this.$message.error('请检查你的表单项');
+          console.warn('请检查你的表单项', { errors, fields });
+          const firstErrorEl = errors[0].$el;
+          firstErrorEl.scrollIntoView({
+            behavior: 'smooth',
+          });
+        });
     }
   }
 };

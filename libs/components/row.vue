@@ -1,6 +1,6 @@
 <template>
   <div class="vsr_component_row">
-    <el-row :gutter="20">
+    <el-row :gutter="component.gutter">
       <vsr-col
         v-for="(col, i) in component.cols"
         :key="i"
@@ -52,16 +52,23 @@ export default {
       return data;
     },
     async validate () {
-      // console.log('>>> row.validate', this.component.cols);
-      let invalid = false;
+      let errs = [];
+      let flds = {};
+
       for (const colComp of this.component.cols) {
         const [refColComp] = this.$refs[colComp._uid];
-        const isValid = await refColComp.validate();
-        if (!isValid) {
-          invalid = true;
+        try {
+          await refColComp.validate();
+        } catch ({ errors, fields }) {
+          errs = [...errs, ...errors];
+          flds[colComp.component.key] = fields;
         }
       }
-      return !invalid; 
+
+      return errs.length ? Promise.reject({
+        errors: errs,
+        fields: flds
+      }) : Promise.resolve();
     }
   }
 };

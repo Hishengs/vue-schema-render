@@ -4,10 +4,11 @@ import { COMP_PREFIX, internalComps } from '@/utils';
 import { Component } from '@/types';
 
 export const layout = {
-  Row (cols: Array<Component.Col>) {
+  Row (cols: Array<Component.Col>, gutter: number = 20) {
     return {
       type: 'row',
       cols,
+      gutter,
     } as Component.Row;
   },
   Col (component: Component.Comp, span?: number) {
@@ -21,10 +22,10 @@ export const layout = {
 
 // 支持添加自定义组件
 export const registeredCustomComps: {
-  [key: string]: Vue
+  [key: string]: Function | Object
 } = {};
 
-export function addComponent (name: string, comp: Vue) {
+export function addComponent (name: string, comp: Function | Object) {
   if (registeredCustomComps[name]) {
     console.warn(`已存在同名自定义组件：${name}，无需重复添加`);
     return;

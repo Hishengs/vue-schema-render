@@ -1,5 +1,8 @@
+import { addComponent } from 'vue-schema-render';
 import localTimePicker from "./local-time-picker.vue";
 import FormModal from './form-modal.vue';
+
+addComponent('form-modal', FormModal);
 
 export default {
   components: [
@@ -11,11 +14,18 @@ export default {
       component: localTimePicker,
     },
     {
-      type: "custom",
+      type: "form-modal",
       label: "弹窗表单",
       key: "formModal",
       value: null,
-      component: FormModal,
+      // component: FormModal,
+    },
+    {
+      type: "form-modal",
+      label: "弹窗表单2",
+      key: "formModal2",
+      value: null,
+      // component: FormModal,
     },
   ]
 };

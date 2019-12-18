@@ -17,13 +17,6 @@
       @change="onChange"
       ref="comp"
     ></vsr-list>
-    <!-- custom -->
-    <vsr-custom
-      v-else-if="component.type === 'custom'"
-      :component="component"
-      @change="onChange"
-      ref="comp"
-    ></vsr-custom>
     <!-- row -->
     <vsr-row
       v-else-if="component.type === 'row'"
@@ -41,6 +34,17 @@
       <slot-render slot="component-prepend" :render="component.slot['component-prepend']"></slot-render>
       <slot-render slot="component-append" :render="component.slot['component-append']"></slot-render>
     </vsr-basic>
+    <!-- custom -->
+    <vsr-custom
+      v-else-if="component.type === 'custom'"
+      :component="component"
+      @change="onChange"
+      ref="comp"
+    ></vsr-custom>
+    <!-- else -->
+    <template v-else>
+      <component :is="`${COMP_PREFIX}-${component.type}`" ref="comp"></component>
+    </template>
     <div class="validate-error" v-if="showError">{{ errorMsg }}</div>
   </div>
 </template>
@@ -83,6 +87,7 @@ export default {
   mixins: [baseMixin],
   data () {
     return {
+      COMP_PREFIX,
       hasError: false,
       errorMsg: '军机大臣，俗称“大军机”，又称“枢臣”，是军机处的长官。',
     };
@@ -103,7 +108,8 @@ export default {
     async validate () {
       this.hasError = false;
       this.errorMsg = '';
-      // console.log('>>> dispatcher.validate', this.component);
+      let errs, flds;
+      
       if (isBasicComponent(this.component)) {
         const { key, rules = [], value } = this.component;
         if (rules.length) {
@@ -113,17 +119,30 @@ export default {
           await validator.validate({
             [key]: value
           }).catch(({ errors, fields }) => {
-            this.hasError = true;
-            // console.log('hasError', { errors, fields });
-            this.errorMsg = errors[0].message;
+            errs = errors;
+            flds = fields[key];
           });
         }
       } else {
-        const valid = await this.$refs.comp.validate();
-        this.hasError = !valid;
+        await this.$refs.comp.validate()
+          .catch(({ errors, fields }) => {
+            errs = errors;
+            flds = fields;
+          });
       }
-      // console.log('>>> dispatcher.validate: hasError', this.hasError);
-      return !this.hasError;
+
+      if (errs) {
+        this.hasError = true;
+        this.errorMsg = errs[0].message;
+        errs.forEach(err => {
+          err.$el = this.$refs.comp.$el;
+        });
+      }
+
+      return errs ? Promise.reject({
+        errors: errs,
+        fields: flds
+      }) : Promise.resolve();
     },
     setTriggerValidate () {
       if (isBasicComponent(this.component)) {
@@ -131,7 +150,11 @@ export default {
         const rulesHasTrigger = (this.component.rules || []).filter(rule => rule.trigger !== undefined);
         for (const rule of rulesHasTrigger) {
           // TODO: 这种调用方式不优雅
-          this.$refs.comp.$refs.component.$on(rule.trigger, this.validate);
+          this.$refs.comp.$refs.component.$on(rule.trigger, () => {
+            this.validate().catch(({ errors, fields }) => {
+              // console.warn(`validate failed[${rule.trigger}]`, { errors, fields });
+            });
+          });
         }
       }
     }

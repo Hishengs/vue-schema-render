@@ -6,7 +6,7 @@
  */
 import { Schema, Component } from '@/types';
 import localTimePicker from "./local-time-picker.vue";
-import { layout } from '@/index';
+import { layout, addComponent } from '@/index';
 
 import {
   regularActivitySchema,
@@ -64,6 +64,15 @@ function getDragableList (key: string): Component.Comp {
   };
 }
 
+const formMdal = {
+  name: 'form-modal',
+  render (h: Function) {
+    return h('el-button', {}, 'FormModal');
+  }
+};
+
+addComponent(formMdal.name, formMdal);
+
 const formComp: Component.Comp = {
   type: 'form',
   label: '嵌套子表单',
@@ -97,11 +106,20 @@ const formComp: Component.Comp = {
         { label: "Solid Black", value: "solidBlack" }
       ]
     },
-  ]
+  ],
+  props: {
+    'label-position': 'left'
+  }
 };
 
 const schema: Schema = {
   components: [
+    {
+      type: 'form-modal',
+      label: 'form-modal',
+      key: 'form-modal',
+      value: '',
+    },
     layout.Row([
       layout.Col({
         type: 'text',

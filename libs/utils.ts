@@ -69,7 +69,17 @@ export function initComponent(component: Component.Comp, vm?: Vue) {
 }
 
 export function isBasicComponent(component: Component.Comp): boolean {
-  return !["form", "list", "custom"].includes(component.type) && !isLayoutComponent(component);
+  return [
+    'text',
+    'select',
+    'checkbox',
+    'radio',
+    'switch',
+    'slider',
+    'upload',
+    'markdown',
+  ].includes(component.type);
+  // return !["form", "list", "custom"].includes(component.type) && !isLayoutComponent(component);
 }
 
 export function isLayoutComponent(component: Component.Comp): boolean {

@@ -34,3 +34,4 @@ A Form Render Based on JSON Schema for Vue
 - [x] 支持 component tip
 - [ ] 支持添加内置组件
 - [ ] 支持组件 slot
+- [ ] 是否保留 onChange

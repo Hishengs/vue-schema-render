@@ -20,7 +20,7 @@ export default {
     {
       type: 'slider',
       label: '滑块',
-      key: 'progress',
+      key: 'slider',
       value: 20,
     },
     {

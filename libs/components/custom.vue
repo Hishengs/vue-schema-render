@@ -48,22 +48,20 @@ export default {
   },
   methods: {
     async genData() {
-      try {
-        return await this.customComp.genData();
-      } catch (err) {
-        console.warn('自定义组件必须定义 genData 方法以便获取组件数据：', err);
+      if (!this.customComp.genData) {
+        console.warn('自定义组件必须定义 genData 方法以便获取组件数据：', this.customComp);
         return null;
+      } else {
+        return await this.customComp.genData();
       }
     },
-    async validate() {
-      try {
-        this.component.value = await this.genData();
-        return await this.customComp.validate();
-      } catch (err) {
-        console.warn('自定义组件必须定义 validate 方法以便进行数据校验：', err);
-        return false;
+    validate() {
+      if (!this.customComp.validate) {
+        console.warn('自定义组件必须定义 validate 方法以便进行数据校验：', this.customComp);
+        return Promise.resolve();
+      } else {
+        return this.customComp.validate();
       }
-      
     },
   },
 };

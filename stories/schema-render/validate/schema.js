@@ -102,6 +102,9 @@ export default {
                       label: '文本框',
                       key: 'text',
                       value: '',
+                      rules: [
+                        { type: 'string', required: true, message: '此字段不能为空', trigger: 'blur' }
+                      ]
                     },
                     {
                       type: 'slider',
@@ -112,7 +115,10 @@ export default {
                   ]
                 };
               },
-              maxHeight: '500px'
+              maxHeight: '500px',
+              rules: [
+                { required: true, type: 'array', message: '请至少添加一个列表项' }
+              ]
             },
           ]
         }

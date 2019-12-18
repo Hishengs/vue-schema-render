@@ -40,8 +40,8 @@ export default {
     }
   },
   methods: {
-    async validate() {
-      return await this.$refs.comp.validate();
+    validate() {
+      return this.$refs.comp.validate();
     },
     async genData() {
       return await this.$refs.comp.genData();

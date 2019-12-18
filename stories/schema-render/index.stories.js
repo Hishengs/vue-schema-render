@@ -1,3 +1,4 @@
+import { withKnobs, text, boolean } from '@storybook/addon-knobs';
 import Base from './base/index.vue';
 import baseNote from './base/note.md';
 import Form from './form/index.vue';

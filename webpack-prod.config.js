@@ -3,7 +3,7 @@
 const merge = require('lodash/merge');
 const baseConfig = require('./webpack-base.config.js');
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const prodConfig = merge(baseConfig, {
   mode: 'production',
@@ -28,7 +28,7 @@ const prodConfig = merge(baseConfig, {
 
 prodConfig.plugins = [
   ...prodConfig.plugins,
-  new BundleAnalyzerPlugin(),
+  // new BundleAnalyzerPlugin(),
   new webpack.optimize.LimitChunkCountPlugin({
     maxChunks: 1
   }),

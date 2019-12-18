@@ -36,13 +36,14 @@ export namespace Component {
   interface Common {
     _vm?: Vue;
     _uid?: string;
-    type: CompType;
+    type: CompType | string;
     visible?: Boolean;
     dragable?: Boolean;
   };
 
   export interface Row extends Common {
     cols: Array<Col>;
+    gutter?: number
   };
 
   export interface Col extends Common {

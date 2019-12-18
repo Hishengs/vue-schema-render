@@ -55,7 +55,6 @@
       @click="add()"
       class="add-btn el-icon-plus"
     ></el-button>
-    <div class="validate-error" v-if="hasError">{{ errorMsg }}</div>
   </div>
 </template>
 
@@ -75,8 +74,6 @@ export default {
   data() {
     return {
       components: [],
-      hasError: false,
-      errorMsg: ''
     };
   },
   computed: {
@@ -171,23 +168,27 @@ export default {
       return data;
     },
     async validate () {
-      this.hasError = false;
-      this.errorMsg = '';
+      let errs = [];
+      let flds = [];
+
+      // 先验证列表项
       if (this.components.length) {
-        const { key, rules = [] } = this.components[0];
-        if (rules.length) {
+        const [subComponent] = this.components;
+        const { key, rules = [] } = subComponent;
+        if (rules.length || !isBasicComponent(subComponent)) {
           for (const comp of this.components) {
             const [refComp] = this.$refs[comp._uid];
-            const valid = await refComp.validate();
-            if (!valid) {
-              this.hasError = true;
-            }
+            await refComp.validate()
+              .catch(({ errors, fields }) => {
+                errs = [...errs, ...errors];
+                flds.push(fields);
+              });
           }
         }
       }
-      if (!this.hasError) {
+      // 列表项没问题再验证列表组件本身
+      if (!errs.length) {
         const { key, value, rules = [] } = this.component;
-        console.log('>>> list.validate', this.component);
         if (rules.length) {
           const validator = new AsyncValidator({
             [key]: rules
@@ -195,12 +196,16 @@ export default {
           await validator.validate({
             [key]: value
           }).catch(({ errors, fields }) => {
-            this.hasError = true;
-            this.errorMsg = errors[0].message;
+            errs = [...errs, ...errors];
+            flds = fields;
           });
         }
       }
-      return !this.hasError;
+
+      return errs.length ? Promise.reject({
+        errors: errs,
+        fields: flds
+      }) : Promise.resolve();
     }
   }
 };
@@ -249,12 +254,6 @@ export default {
   .add-btn {
     margin: 0 auto;
     width: 100px;
-  }
-  .validate-error {
-    font-size: 13px;
-    margin-top: 5px;
-    color: #F56C6C;
-    line-height: 1.5;
   }
 }
 </style>
