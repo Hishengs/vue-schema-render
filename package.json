@@ -16,8 +16,11 @@
   ],
   "typings": "libs/types.ts",
   "scripts": {
-    "dev": "webpack-dev-server --config webpack-dev.config.js",
-    "build:prod": "webpack --config webpack-prod.config.js",
+    "dev": "webpack-dev-server --config build/webpack-dev.config.js",
+    "build:prod": "webpack --config build/webpack-prod.config.js",
+    "build:external": "webpack --config build/webpack-external.config.js",
+    "build-ele": "node build/build-element.js",
+    "dist": "npm run build-ele && npm run build:prod && npm run build:external",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },

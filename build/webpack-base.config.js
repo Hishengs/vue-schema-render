@@ -3,13 +3,13 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-const cloudinary = path.join(__dirname, '/libs/cloudinary-v2.0.min.js');
+const cloudinary = path.join(process.cwd(), './libs/cloudinary-v2.0.min.js');
 
 module.exports = {
   mode: 'none',
   devtool: 'inline-source-map',
   entry: {
-    app: ['./libs/index.ts']
+    app: [path.resolve(process.cwd(), './libs/index.ts')]
   },
   output: {
     path: path.resolve(process.cwd(), './dist'),
@@ -19,7 +19,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.vue', '.ts', '.tsx', '.json'],
     alias: {
       cloudinary,
-      '@': path.join(__dirname, '/libs')
+      '@': path.join(process.cwd(), './libs')
     },
     modules: ['node_modules']
   },

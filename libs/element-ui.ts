@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import {
+/* import {
   Button,
   Input,
   Radio,
@@ -53,4 +53,9 @@ Vue.use(Divider);
 Vue.use(Loading.directive);
 
 Vue.prototype.$loading = Loading.service;
-Vue.prototype.$message = Message;
+Vue.prototype.$message = Message; */
+
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI);

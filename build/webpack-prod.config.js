@@ -1,5 +1,3 @@
-// const fs = require('fs');
-// const path = require('path');
 const merge = require('lodash/merge');
 const baseConfig = require('./webpack-base.config.js');
 const webpack = require('webpack');
@@ -19,8 +17,9 @@ const prodConfig = merge(baseConfig, {
     children: false
   },
   externals: {
-    'element-ui': 'element-ui',
     vue: 'vue',
+    'element-ui': './element-ui',
+    'element-ui/lib/theme-chalk/index.css': './element-ui/theme-chalk/index.css',
   },
   optimization: {
     minimize: false,
@@ -34,7 +33,5 @@ prodConfig.plugins = [
     maxChunks: 1
   }),
 ];
-
-// fs.writeFileSync(path.join(__dirname, './webpack-prod.json'), JSON.stringify(prodConfig, null, 2));
 
 module.exports = prodConfig;
