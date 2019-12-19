@@ -89,7 +89,7 @@ export default {
     return {
       COMP_PREFIX,
       hasError: false,
-      errorMsg: '军机大臣，俗称“大军机”，又称“枢臣”，是军机处的长官。',
+      errorMsg: '',
     };
   },
   computed: {

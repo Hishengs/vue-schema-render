@@ -18,6 +18,19 @@ export namespace Component {
     | Row
     | Col;
 
+  export type UIComp =
+    | Text
+    | Select
+    | Checkbox
+    | Radio
+    | FormComp
+    | ListComp
+    | Custom;
+
+  export type LayoutComp = 
+    | Row
+    | Col;
+
   export type CompType =
     | 'text'
     | 'select'
@@ -36,7 +49,8 @@ export namespace Component {
   interface Common {
     _vm?: Vue;
     _uid?: string;
-    _parent?: Comp,
+    _parent?: Comp;
+    _children?: Comp[];
     type: CompType | string;
     visible?: Boolean;
     dragable?: Boolean;

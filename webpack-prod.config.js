@@ -19,6 +19,7 @@ const prodConfig = merge(baseConfig, {
     children: false
   },
   externals: {
+    'element-ui': 'element-ui',
     vue: 'vue',
   },
   optimization: {

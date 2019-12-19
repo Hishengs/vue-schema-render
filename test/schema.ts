@@ -6,7 +6,7 @@
  */
 import { Schema, Component } from '@/types';
 import localTimePicker from "./local-time-picker.vue";
-import { layout, addComponent } from '@/index';
+import { layout, addComponent, getUnLayoutParentComp } from '@/index';
 
 import {
   regularActivitySchema,
@@ -218,7 +218,27 @@ const schema: Schema = {
       type: "switch",
       label: "Show Guide",
       key: "show_guide",
-      value: false
+      value: false,
+      on: {
+        change (show: boolean) {
+          const parent = getUnLayoutParentComp(this as any);
+          const relativeKeys = [
+            "default_open",
+            "guide_description",
+            "see_how_step1",
+            "see_how_step2",
+            "see_how_step3",
+            "step1_icon",
+            "step2_icon",
+            "step3_icon"
+          ];
+          parent && parent._children!.forEach((comp: Component.Comp) => {
+            if ('key' in comp && relativeKeys.includes(comp.key)) {
+              comp.visible = show;
+            }
+          });
+        }
+      }
     },
     // default open
     {
@@ -820,7 +840,7 @@ const schema: Schema = {
     }
     // 处理组件之间的关联关系
     const keyRelativeControls: any = {
-      show_guide: [
+      /* show_guide: [
         [
           "default_open",
           "guide_description",
@@ -832,7 +852,7 @@ const schema: Schema = {
           "step3_icon"
         ],
         onCommonVisibleControl
-      ],
+      ], */
       enable_countdown_clock: [
         [
           "countdown_clock_start_date",

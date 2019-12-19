@@ -88,14 +88,18 @@
     <!-- upload 上传 -->
     <vsr-upload
       v-if="component.type === 'upload'"
+      ref="component"
       :component="component"
       @change="onChange(component)"
+      v-bind="component.props"
     ></vsr-upload>
     <!-- markdown -->
     <vsr-markdown
       v-if="component.type === 'markdown'"
+      ref="component"
       :component="component"
       @change="onChange(component)"
+      v-bind="component.props"
     ></vsr-markdown>
     <!-- tip -->
     <el-alert
@@ -121,7 +125,7 @@
 import upload from "./upload.vue";
 import markdown from "./markdown.vue";
 import baseMixin from "./base.mixin.js";
-import { COMP_PREFIX } from "../utils.ts";
+import { COMP_PREFIX, setComponentVM } from "../utils.ts";
 
 export default {
   name: `${COMP_PREFIX}-basic`,
@@ -130,6 +134,9 @@ export default {
     /* eslint-disable vue/no-unused-components */
     [upload.name]: upload,
     [markdown.name]: markdown
+  },
+  created () {
+    setComponentVM(this.component, this);
   },
   mounted() {
     // manually trigger change for first time

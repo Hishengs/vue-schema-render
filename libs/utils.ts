@@ -51,18 +51,32 @@ function hasDunplicateKey (comp: Component.Comp, parent: Component.FormComp): bo
   return targetCompCount > 1;
 }
 
+function setCompParent (comp: Component.Comp, parent: Component.Comp) {
+  if (comp._parent) return;
+  setProperty(comp, '_parent', parent);
+  parent._children && parent._children.push(comp);
+}
+
+export function getUnLayoutParentComp (comp: Component.UIComp): Component.UIComp | undefined {
+  let parent: Component.Comp | undefined = comp._parent;
+  while (parent && parent.type !== 'form') {
+    parent = parent._parent;
+  }
+  return parent as Component.UIComp;
+}
+
+export function setComponentVM (comp: Component.Comp, vm: Vue) {
+  if (comp._vm) return;
+  setProperty(comp, '_vm', vm);
+}
+
 export function initComponent(component: Component.Comp, parent?: Component.Comp, vm?: Vue) {
   if ('_uid' in component) return;
   // set a unique id
   setProperty(component, '_uid', `${component.type}_${getUID()}`);
 
   if (parent) {
-    let _parent: Component.Comp = parent;
-    if (_parent.type === 'col') {
-      // locate to Form
-      _parent = _parent._parent!._parent!;
-    }
-    setProperty(component, '_parent', _parent);
+    setCompParent(component, parent);
   }
 
   if (vm && !('_vm' in component)) {
@@ -102,12 +116,14 @@ export function initComponent(component: Component.Comp, parent?: Component.Comp
 
   // init sub components
   if (type === 'form') {
+    component._children = [];
     for (const comp of (component as Component.FormComp).components) {
       if (!hasDunplicateKey(comp, component as Component.FormComp)) {
         initComponent(comp, component);
       }
     }
   } else if (type === 'row') {
+    component._children = [];
     for (const comp of (component as Component.Row).cols) {
       if (comp.type !== 'col') {
         console.error(`Row 组件包含的子组件只能是 Col`, component, comp);
