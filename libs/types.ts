@@ -33,6 +33,7 @@ export namespace Component {
 
   export type CompType =
     | 'text'
+    | 'textarea'
     | 'select'
     | 'checkbox'
     | 'radio'
@@ -40,14 +41,12 @@ export namespace Component {
     | 'slider'
     | 'form'
     | 'list'
-    | 'upload'
-    | 'markdown'
     | 'custom'
     | 'row'
     | 'col';
 
   interface Common {
-    _vm?: Vue;
+    _vm?: Vue.Component;
     _uid?: string;
     _parent?: Comp;
     _children?: Comp[];
@@ -71,7 +70,7 @@ export namespace Component {
     labelTooltip?: string;
     key: string;
     value?: any;
-    _refValue?: any;
+    refValue?: any;
     rules?: Array<any>;
     props?: any;
     tip?: string;
@@ -84,16 +83,16 @@ export namespace Component {
     },
   };
 
-  export interface MultiLanComp extends Base {
+  export interface i18nComp extends Base {
     multiLanguage?: boolean;
   };
 
-  export interface TextCommon extends MultiLanComp {
-    placeholder?: string;
+  export interface TextCommon extends i18nComp {
+    i18n?: boolean;
   };
 
   export interface Text extends TextCommon {
-    placeholder?: string;
+    //
   };
 
   export interface Option {
@@ -133,8 +132,6 @@ export type LayoutComp = Component.Row | Component.Col;
 export interface Schema {
   title?: string;
   components: Array<Component.Comp>;
-  value?: any;
-  _refValue?: any;
   onChange?: Event.onChange;
 };
 

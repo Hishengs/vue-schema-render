@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import './element-ui';
 import { COMP_PREFIX, internalComps } from '@/utils';
 export { getUnLayoutParentComp } from '@/utils';
 import { Component } from '@/types';

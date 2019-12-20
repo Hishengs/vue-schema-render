@@ -1,5 +1,6 @@
 <template>
   <div class="vsr_component_basic">
+    <!-- slot: prepend -->
     <slot name="component-prepend"></slot>
     <!-- 文本框 -->
     <template v-if="['text', 'textarea'].includes(component.type)">
@@ -15,9 +16,9 @@
         class="reference"
         :placeholder="`${component.props.placeholder} ( Reference Language )`"
         title="reference, read only"
-        :value="component._refValue"
+        :value="component.refValue"
         :type="component.type"
-        v-if="component.multiLanguage"
+        v-if="component.i18n"
         readonly
       ></el-input>
     </template>
@@ -43,6 +44,8 @@
       ref="component"
       v-model="component.value"
       @change="onChange(component, /* nextTick */ true)"
+      on-text=""
+      off-text=""
       v-bind="component.props"
     ></el-switch>
     <!-- 单选框 -->
@@ -77,7 +80,7 @@
         {{ item.label !== undefined ? item.label : item }}
       </el-checkbox>
     </el-checkbox-group>
-    <!-- slider -->
+    <!-- 滑块 -->
     <el-slider
       v-if="component.type === 'slider'"
       ref="component"
@@ -85,22 +88,6 @@
       @change="onChange(component, /* nextTick */ true)"
       v-bind="component.props"
     ></el-slider>
-    <!-- upload 上传 -->
-    <vsr-upload
-      v-if="component.type === 'upload'"
-      ref="component"
-      :component="component"
-      @change="onChange(component)"
-      v-bind="component.props"
-    ></vsr-upload>
-    <!-- markdown -->
-    <vsr-markdown
-      v-if="component.type === 'markdown'"
-      ref="component"
-      :component="component"
-      @change="onChange(component)"
-      v-bind="component.props"
-    ></vsr-markdown>
     <!-- tip -->
     <el-alert
       v-if="component.tip"
@@ -110,31 +97,18 @@
       :closable="false"
       >
     </el-alert>
-    <!-- <el-alert
-      title="在这里放一个提示看看"
-      type="info"
-      show-icon
-      :closable="false"
-      >
-    </el-alert> -->
+    <!-- slot: append -->
     <slot name="component-append"></slot>
   </div>
 </template>
 
 <script>
-import upload from "./upload.vue";
-import markdown from "./markdown.vue";
 import baseMixin from "./base.mixin.js";
 import { COMP_PREFIX, setComponentVM } from "../utils.ts";
 
 export default {
   name: `${COMP_PREFIX}-basic`,
   mixins: [baseMixin],
-  components: {
-    /* eslint-disable vue/no-unused-components */
-    [upload.name]: upload,
-    [markdown.name]: markdown
-  },
   created () {
     setComponentVM(this.component, this);
   },
@@ -145,7 +119,10 @@ export default {
     if (this.component.on) {
       const keys = Object.keys(this.component.on);
       for (const key of keys) {
-        this.$refs.component.$on(key, this.component.on[key].bind(this.component));
+        const fn = this.component.on[key];
+        if (fn && typeof fn === 'function') {
+          this.$refs.component.$on(key, fn.bind(this.component));
+        }
       }
     }
   },

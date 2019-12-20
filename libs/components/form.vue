@@ -14,6 +14,7 @@
             'is-required': isRequired(component)
           }"
           :key="component.key"
+          :label="component.label"
           :prop="component.key"
           v-if="component.visible"
         >
@@ -49,6 +50,7 @@ export default {
     [`${COMP_PREFIX}-dispatcher`]: () => import('./dispatcher.vue')
   },
   props: {
+    i18n: Boolean,
     inlineForm: {
       type: Boolean,
       default: false
@@ -65,12 +67,12 @@ export default {
   methods: {
     // set data of current component
     initData() {
-      const { value, _refValue, components } = this.component;
+      const { value, refValue, components } = this.component;
       if (!value) return;
       for (const comp of components) {
         comp.value = value[comp.key] === undefined ? comp.value : value[comp.key];
-        if (_refValue) {
-          comp._refValue = _refValue[comp.key];
+        if (refValue) {
+          comp.refValue = refValue[comp.key];
         }
       }
     },

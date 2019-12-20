@@ -9,7 +9,7 @@ module.exports = {
   mode: 'none',
   devtool: 'inline-source-map',
   entry: {
-    app: [path.resolve(process.cwd(), './libs/index.ts')]
+    app: [path.resolve(process.cwd(), './libs/entry.ts')]
   },
   output: {
     path: path.resolve(process.cwd(), './dist'),

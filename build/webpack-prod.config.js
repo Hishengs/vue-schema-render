@@ -7,7 +7,7 @@ const prodConfig = merge(baseConfig, {
   mode: 'production',
   devtool: 'source-map',
   output: {
-    library: 'SchemaRender',
+    library: 'vue-schema-render',
     libraryTarget: 'commonjs2'
   },
   performance: {

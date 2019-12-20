@@ -3,6 +3,7 @@
     <el-form-item
       v-if="component.component.visible"
       :class="component.component.type"
+      :label="component.component.label"
     >
       <span slot="label" v-if="component.component.label">
         {{ component.component.label }}

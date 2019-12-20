@@ -43,7 +43,12 @@
     ></vsr-custom>
     <!-- else -->
     <template v-else>
-      <component :is="`${COMP_PREFIX}-${component.type}`" ref="comp"></component>
+      <component
+        :is="`${COMP_PREFIX}-${component.type}`"
+        :component="component"
+        @change="onChange"
+        ref="comp"
+      ></component>
     </template>
     <div class="validate-error" v-if="showError">{{ errorMsg }}</div>
   </div>
@@ -175,8 +180,15 @@ export default {
     line-height: 1.5;
   }
   &.has-error {
-    > .vsr_component_basic > .el-input > input {
-      border-color: #f5222d;
+    > .vsr_component_basic {
+      > .el-input {
+        > input {
+          border-color: #f5222d;
+        }
+      }
+      > .el-select > .el-input > input {
+        border-color: #f5222d;
+      }
     }
   }
 }

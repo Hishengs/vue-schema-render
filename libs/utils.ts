@@ -14,10 +14,11 @@ function setProperty (obj: Object, key: string, value: any) {
   });
 }
 
+// check if has dunplicate key in Form
 function hasDunplicateKey (comp: Component.Comp, parent: Component.FormComp): boolean {
   let targetCompCount: number = 0;
 
-  const targetComp: Array<Component.Base> | Component.Base = ['row', 'col'].includes(comp.type)
+  const targetComp: Array<Component.Base> | Component.Base = isLayoutComponent(comp)
     ? comp.type === 'row'
       ? (comp as Component.Row).cols.map(cp => cp.component)
       : (comp as Component.Col).component
@@ -28,7 +29,8 @@ function hasDunplicateKey (comp: Component.Comp, parent: Component.FormComp): bo
   }
 
   for (const sub of parent.components) {
-    if (['row', 'col'].includes(sub.type)) {
+    if (targetCompCount > 1) break;
+    if (isLayoutComponent(sub)) {
       const comps: Array<Component.Base> = sub.type === 'row'
         ? (sub as Component.Row).cols.map(cp => cp.component)
         : [(sub as Component.Col).component];
@@ -141,15 +143,13 @@ export function initComponent(component: Component.Comp, parent?: Component.Comp
 export function isBasicComponent(component: Component.Comp): boolean {
   return [
     'text',
+    'textarea',
     'select',
     'checkbox',
     'radio',
     'switch',
     'slider',
-    'upload',
-    'markdown',
   ].includes(component.type);
-  // return !["form", "list", "custom"].includes(component.type) && !isLayoutComponent(component);
 }
 
 export function isLayoutComponent(component: Component.Comp): boolean {
@@ -209,42 +209,6 @@ export function deepAssign(obj: any, source: any) {
   return obj;
 }
 
-const DEFAULT_OPTIONS = {
-  pages: {
-    list: {
-      /* filter: {
-        schema: Function
-      },
-      pagination: {
-        pageSize: Number,
-      },
-      columns: Function */
-    },
-    create: {
-      // columns: Function
-    },
-    edit: {
-      // beforeRender: Function
-    }
-  }
-};
-
-export function mergeCMSOptions(options = {}) {
-  return merge({}, DEFAULT_OPTIONS, options);
-}
-
-export const LAN_STATUS = {
-  DRAFT: 0,
-  PUBLISH: 1,
-  UNPUBLISH: 2
-};
-
-export const LAN_STATUS_LABEL = {
-  [LAN_STATUS.DRAFT]: "草稿",
-  [LAN_STATUS.PUBLISH]: "已发布",
-  [LAN_STATUS.UNPUBLISH]: "已取消发布"
-};
-
 export const CellRender = {
   name: "cell-render",
   functional: true,
@@ -266,8 +230,6 @@ export const internalComps = [
   'slider',
   'form',
   'list',
-  'upload',
-  'markdown',
   'custom',
   'row',
   'col',

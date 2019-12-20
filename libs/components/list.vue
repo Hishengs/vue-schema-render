@@ -36,9 +36,15 @@
                       type="danger"
                       @click="remove(i)"
                     ></el-button>
+                    <el-button
+                      :class="comp.expanded ? 'el-icon-plus' : 'el-icon-minus'"
+                      size="mini"
+                      @click="comp.expanded = !comp.expanded"
+                    ></el-button>
                   </div>
                 </div>
                 <vsr-dispatcher
+                  v-show="comp.expanded"
                   :ref="comp._uid"
                   :component="comp"
                   @change="onChange"
@@ -81,6 +87,7 @@ export default {
       return this.component.maxHeight ? {
         maxHeight: this.component.maxHeight,
         overflowY: 'auto',
+        paddingRight: '12px'
       } : {};
     }
   },
@@ -100,16 +107,17 @@ export default {
     getNewComponent() {
       const comp = this.component.component();
       initComponent(comp, this.component);
+      comp.expanded = true;
       return comp;
     },
     initData() {
-      const { value, _refValue } = this.component;
+      const { value, refValue } = this.component;
       if (!value) return;
       for (const [index, val] of Object.entries(value)) {
         const comp = this.getNewComponent();
         comp.value = val;
-        if (_refValue) {
-          comp._refValue = _refValue[index];
+        if (refValue) {
+          comp.refValue = refValue[index];
         }
         this.add(comp);
       }

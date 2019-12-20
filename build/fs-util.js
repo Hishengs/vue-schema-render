@@ -8,7 +8,7 @@ const mkdirDeep = (distPath) => {
     const splitedDistPath = distPath.split(path.sep);
     splitedDistPath.reduce((res, dir, index) => {
       const dirPath = index ? res + '/' + dir : dir;
-      if(!fs.existsSync(dirPath)){
+      if(dirPath && !fs.existsSync(dirPath)){
         fs.mkdirSync(dirPath);
       }
       return dirPath;
