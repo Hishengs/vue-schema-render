@@ -1,6 +1,6 @@
 {
   "name": "vue-schema-render",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Form Render Based on JSON Schema for Vue",
   "author": "hishengs@gmail.com",
   "keywords": [
@@ -22,7 +22,8 @@
     "build-ele": "node build/build-element.js",
     "dist": "npm run build-ele && npm run build:prod && npm run build:external",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o showcases"
+    "build-storybook": "build-storybook -o public",
+    "build": "npm run dist && npm run build-storybook"
   },
   "dependencies": {
     "async-validator": "^3.2.3",

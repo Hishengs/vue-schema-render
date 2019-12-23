@@ -3,3 +3,4 @@ dist
 .storybook/webpack-config.json
 webpack-prod.json
 showcases
+public
