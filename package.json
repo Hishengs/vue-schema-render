@@ -22,7 +22,7 @@
     "build-ele": "node build/build-element.js",
     "dist": "npm run build-ele && npm run build:prod && npm run build:external",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook -o showcases"
   },
   "dependencies": {
     "async-validator": "^3.2.3",
