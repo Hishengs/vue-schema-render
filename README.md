@@ -18,6 +18,60 @@ A Form Render Based on JSON Schema for Vue
 `npm install -S vue-schema-render`
 
 
+## 使用
+
+入口文件 `index.js`
+
+```js
+// vue-schema-render 依赖 vue, element-ui，必须先引入
+import Vue from 'vue';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import App from './app.vue';
+
+Vue.use(ElementUI);
+
+new Vue({
+  el: '#app',
+  render: h => h(App),
+});
+```
+
+`app.vue`
+
+```html
+<template>
+  <schema-render
+    :schema="schema"
+    ref="schemaRender"
+  >
+  </schema-render>
+</template>
+
+<script>
+import { SchemaRender } from 'vue-schema-render';
+import schema from './schema.js'; // 组件描述文件
+
+export default {
+  components: {
+    SchemaRender,
+  },
+  data () {
+    return {
+      schema,
+    };
+  },
+  methods: {
+    async genData () {
+      // 获取表单数据
+      const data = await this.$refs.schemaRender.genData();
+    }
+  }
+};
+</script>
+```
+
+
 ## 预览
 
 DEMO: [click here](https://vue-schema-render.hisheng.now.sh/)
@@ -29,7 +83,6 @@ DEMO: [click here](https://vue-schema-render.hisheng.now.sh/)
 
 - [x] 支持更自由的布局
 - [x] 支持列表组件项拖拽
-- [ ] ElementUI 按需引入
 - [x] 监听自定义事件
 - [x] 表单填写进度
 - [x] 支持 label tooltip

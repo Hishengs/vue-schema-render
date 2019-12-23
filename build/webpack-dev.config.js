@@ -8,6 +8,7 @@ const template = path.join(process.cwd(), './test/index.html');
 
 const devConfig = merge(baseConfig, {
   mode: 'development',
+  devtool: 'inline-source-map',
   entry: {
     app: path.join(process.cwd(), './test/index.ts')
   },
