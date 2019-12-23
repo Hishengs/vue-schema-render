@@ -20,7 +20,7 @@ A Form Render Based on JSON Schema for Vue
 
 ## 预览
 
-DEMO: [click here](http://www.hisheng.net/works/vue-schema-render/index.html)
+DEMO: [click here](https://vue-schema-render.hisheng.now.sh/)
 
 ![](./demo.png)
 
