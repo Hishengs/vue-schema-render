@@ -2,10 +2,6 @@
   <div class="vsr_component_schema-render">
     <vsr-form
       :component="form"
-      :label-width="labelWidth"
-      :label-position="labelPosition"
-      :inline-form="inlineForm"
-      :i18n="i18n"
       ref="comp"
     ></vsr-form>
   </div>
@@ -25,23 +21,10 @@ export default {
       type: Object,
       required: true
     },
+    // 当前语言的数据
     data: Object,
+    // 参考语言的数据
     refData: Object,
-    labelWidth: {
-      type: String,
-      default: "176px"
-    },
-    labelPosition: {
-      type: String,
-      validator(type) {
-        return ["left", "right", "top"].includes(type);
-      },
-      default: "right"
-    },
-    inlineForm: {
-      type: Boolean,
-      default: false
-    }
   },
   data () {
     return {
@@ -61,32 +44,11 @@ export default {
     }
   },
   methods: {
-    setData (data, components) {
-      if (!data) return;
-      for (const comp of components) {
-        comp.value = data[comp.key];
-        
-        if (comp.type === 'form') {
-          this.setRefData(refData[comp.key], comp.components);
-        }
-      }
-    },
-    setRefData (refData, components) {
-      if (!refData) return;
-      for (const comp of components) {
-        if (comp.i18n) {
-          comp.refValue = refData[comp.key];
-        }
-        if (comp.type === 'form') {
-          this.setRefData(refData[comp.key], comp.components);
-        }
-      }
-    },
     validate() {
       return this.$refs.comp.validate();
     },
-    async genData() {
-      return await this.$refs.comp.genData();
+    genData() {
+      return this.$refs.comp.genData();
     }
   }
 };

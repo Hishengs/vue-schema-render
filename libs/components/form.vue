@@ -2,31 +2,27 @@
   <div class="vsr_component_form">
     <el-form
       ref="form"
-      :label-width="component.labelWidth || '100px'"
-      :label-position="component.labelPosition || 'top'"
-      :inline="inlineForm"
-      v-model="component.props"
+      :label-width="component.labelWidth || defaultLabelWidth"
+      :label-position="component.labelPosition || defaultLabelPos"
     >
-      <template v-for="component in component.components">
+      <template v-for="comp in component.components">
         <el-form-item
           :class="{
-            [component.type]: true,
-            'is-required': isRequired(component)
+            'is-required': isRequired(comp)
           }"
-          :key="component.key"
-          :label="component.label"
-          :prop="component.key"
-          v-if="component.visible"
+          :key="comp.key"
+          :prop="comp.key"
+          v-if="!comp.hidden"
         >
-          <span slot="label" v-if="component.label">
-            {{ component.label }}
-            <el-tooltip effect="dark" :content="component.labelTooltip" placement="right" v-if="component.labelTooltip">
+          <span slot="label" v-if="comp.label">
+            {{ comp.label }}
+            <el-tooltip effect="dark" :content="comp.labelTooltip" placement="right" v-if="comp.labelTooltip">
               <el-button type="text" icon="el-icon-info" size="medium"></el-button>
             </el-tooltip>
           </span>
           <vsr-dispatcher
-            :component="component"
-            :ref="component._uid"
+            :component="comp"
+            :ref="comp._uid"
             @change="onChange"
           >
           </vsr-dispatcher>
@@ -37,7 +33,6 @@
 </template>
 
 <script>
-import _merge from 'lodash/merge';
 import baseMixin from "./base.mixin.js";
 import { COMP_PREFIX, initComponent, isBasicComponent } from "../utils.ts";
 
@@ -49,19 +44,14 @@ export default {
     // https://vuejs.org/v2/guide/components-edge-cases.html#Circular-References-Between-Components
     [`${COMP_PREFIX}-dispatcher`]: () => import('./dispatcher.vue')
   },
-  props: {
-    i18n: Boolean,
-    inlineForm: {
-      type: Boolean,
-      default: false
-    }
+  data () {
+    return {
+      defaultLabelWidth: '100px',
+      defaultLabelPos: 'top'
+    };
   },
   created() {
     initComponent(this.component, null, this);
-    // init components
-    for (const component of this.component.components) {
-      initComponent(component, this.component);
-    }
     this.initData();
   },
   methods: {
@@ -70,7 +60,9 @@ export default {
       const { value, refValue, components } = this.component;
       if (!value) return;
       for (const comp of components) {
-        comp.value = value[comp.key] === undefined ? comp.value : value[comp.key];
+        if (value[comp.key] !== undefined) {
+          comp.value = value[comp.key];
+        }
         if (refValue) {
           comp.refValue = refValue[comp.key];
         }
@@ -80,8 +72,7 @@ export default {
     async genData () {
       let data = {};
       for (const comp of this.component.components) {
-        const { _uid, type, key, visible } = comp;
-        if (!visible) continue;
+        const { _uid, type, key } = comp;
         const [refComp] = this.$refs[_uid];
         const compData = await refComp.genData();
         if (type === 'row') {
@@ -99,8 +90,8 @@ export default {
       let flds = {};
 
       for (const comp of this.component.components) {
-        const { _uid, type, key, visible } = comp;
-        if (!visible) continue;
+        const { _uid, type, key, hidden } = comp;
+        if (hidden) continue;
         const [refComp] = this.$refs[_uid];
         await refComp.validate()
           .catch(({ errors, fields }) => {
@@ -149,19 +140,5 @@ export default {
   .el-form-item.is-required > .el-form-item__label:before {
     content: "*";
   }
-}
-</style>
-
-<style lang="scss">
-.vsr_component_form {
-  /* .el-form {
-    .el-form-item.text,
-    .el-form-item.select,
-    .el-form-item.checkbox,
-    .el-form-item.radio,
-    .el-form-item.switch {
-      max-width: 300px;
-    }
-  } */
 }
 </style>

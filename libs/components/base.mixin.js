@@ -13,22 +13,26 @@ export default {
       COMP_PREFIX
     };
   },
+  computed: {
+    isDisabled() {
+      const comp = this.component;
+      return typeof comp.disabled === 'function' ? comp.disabled() : comp.disabled;
+    }
+  },
   methods: {
-    _onChange(component) {
-      if (this.component.onChange) {
-        this.component.onChange({
-          component
-        });
-      }
-      this.$emit("change", component);
+    onChange(nextTick = false) {
+      this.emit('change', nextTick);
     },
-    onChange(component, nextTick = false) {
+    emit (event, nextTick = false) {
+      const call = () => {
+        const { on, onChange } = this.component;
+        if (on && on[event]) on[event].call(this, { component: this.component });
+        if (event === 'change' && onChange) onChange.call(this, { component: this.component });
+        this.$emit(event, this.component);
+      };
       if (nextTick) {
-        // emit at next tick, make sure value has changed.
-        this.$nextTick(() => {
-          this._onChange(component);
-        });
-      } else this._onChange(component);
+        this.$nextTick(call);
+      } else call();
     }
   }
 };

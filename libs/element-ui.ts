@@ -19,6 +19,8 @@ import {
   Message,
   Tooltip,
   Alert,
+  Loading,
+  Divider
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -40,5 +42,7 @@ Vue.use(Icon);
 Vue.use(Row);
 Vue.use(Col);
 Vue.use(Card);
+Vue.use(Loading);
+Vue.use(Divider);
 
 Vue.prototype.$message = Message;

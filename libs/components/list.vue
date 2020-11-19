@@ -59,14 +59,17 @@
     <el-button
       type="primary"
       @click="add()"
-      class="add-btn el-icon-plus"
-    ></el-button>
+      size="small"
+    >
+      新增列表项
+    </el-button>
   </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable';
 import AsyncValidator from 'async-validator';
+import _cloneDeep from 'lodash/cloneDeep';
 import baseMixin from "./base.mixin.js";
 import { COMP_PREFIX, initComponent, isBasicComponent, getUID } from "../utils.ts";
 
@@ -104,10 +107,16 @@ export default {
     this.initData();
   },
   methods: {
-    getNewComponent() {
-      const comp = this.component.component();
+    getNewComponent(fromUser = false) {
+      let comp;
+      if (typeof this.component.component === 'function') {
+        comp = this.component.component();
+      } else comp = _cloneDeep(this.component.component);
       initComponent(comp, this.component);
       comp.expanded = true;
+      if (fromUser) {
+        this.scrollToComp(comp);
+      }
       return comp;
     },
     initData() {
@@ -123,18 +132,23 @@ export default {
       }
     },
     add(comp) {
-      const component = comp || this.getNewComponent();
+      const component = comp || this.getNewComponent(true);
       this.components.push(component);
-      // 自动滑到底部
-      this.$nextTick(() => {
-        this.$refs.listContainer && this.$refs.listContainer.scrollTo({
-          top: this.$refs.listContainer.scrollHeight,
+    },
+    scrollToComp (comp) {
+      setTimeout(() => {
+        const el = document.querySelector(`#${comp._uid}`);
+        el && el.scrollIntoView({
           behavior: 'smooth'
         });
-      });
+      }, 50);
     },
     remove(index) {
+      const confirm = window.confirm('Are you sure to delete this item ?');
+      if (!confirm) return;
       this.components.splice(index, 1);
+      // manually trigger @change
+      this.onChange();
     },
     move(index, offset) {
       const item = this.components[index];
@@ -144,6 +158,8 @@ export default {
       // fix array change problem of Vue
       // this.$forceUpdate();
       this.components = this.components.slice(0);
+      // manually trigger @change
+      this.onChange();
     },
     up(index) {
       this.move(index, -1);

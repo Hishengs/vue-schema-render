@@ -1,7 +1,7 @@
 <template>
   <el-col class="vsr_component_col" :span="component.span || span">
     <el-form-item
-      v-if="component.component.visible"
+      v-if="!component.component.hidden"
       :class="component.component.type"
       :label="component.component.label"
     >

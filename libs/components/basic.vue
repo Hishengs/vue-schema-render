@@ -7,9 +7,11 @@
       <el-input
         ref="component"
         v-model="component.value"
-        @change="onChange(component)"
+        @change="onChange()"
         :type="component.type"
+        :placeholder="component.label"
         v-bind="component.props"
+        :disabled="isDisabled"
       ></el-input>
       <!-- 参考语言 -->
       <el-input
@@ -27,8 +29,9 @@
       v-if="component.type === 'select'"
       ref="component"
       v-model="component.value"
-      @change="onChange(component, /* nextTick */ true)"
+      @change="onChange(/* nextTick */ true)"
       v-bind="component.props"
+      :disabled="isDisabled"
     >
       <el-option
         v-for="(item, i) in component.options"
@@ -43,18 +46,20 @@
       v-if="component.type === 'switch'"
       ref="component"
       v-model="component.value"
-      @change="onChange(component, /* nextTick */ true)"
+      @change="onChange(/* nextTick */ true)"
       on-text=""
       off-text=""
       v-bind="component.props"
+      :disabled="isDisabled"
     ></el-switch>
     <!-- 单选框 -->
     <el-radio-group
       v-if="component.type === 'radio'"
       ref="component"
       v-model="component.value"
-      @change="onChange(component, /* nextTick */ true)"
+      @change="onChange(/* nextTick */ true)"
       v-bind="component.props"
+      :disabled="isDisabled"
     >
       <el-radio
         :label="item.value !== undefined ? item.value : item"
@@ -69,8 +74,9 @@
       v-if="component.type === 'checkbox'"
       ref="component"
       v-model="component.value"
-      @change="onChange(component, /* nextTick */ true)"
+      @change="onChange(/* nextTick */ true)"
       v-bind="component.props"
+      :disabled="isDisabled"
     >
       <el-checkbox
         :label="item.value !== undefined ? item.value : item"
@@ -85,8 +91,9 @@
       v-if="component.type === 'slider'"
       ref="component"
       v-model="component.value"
-      @change="onChange(component, /* nextTick */ true)"
+      @change="onChange(/* nextTick */ true)"
       v-bind="component.props"
+      :disabled="isDisabled"
     ></el-slider>
     <!-- tip -->
     <el-alert
@@ -114,9 +121,9 @@ export default {
   },
   mounted() {
     // manually trigger change for first time
-    this.onChange(this.component, true);
-    // 绑定自定义监听事件
-    if (this.component.on) {
+    this.onChange(true);
+    // TODO: 绑定自定义监听事件
+    /* if (this.component.on) {
       const keys = Object.keys(this.component.on);
       for (const key of keys) {
         const fn = this.component.on[key];
@@ -124,8 +131,11 @@ export default {
           this.$refs.component.$on(key, fn.bind(this.component));
         }
       }
-    }
+    } */
   },
+  /* beforeDestroy () {
+    this.$refs.component && this.$refs.component.$off();
+  }, */
   methods: {
     genData () {
       return this.component.value;

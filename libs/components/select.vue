@@ -9,6 +9,7 @@
       :loading="component.props.loading"
       v-model="component.value"
       :placeholder="component.props.placeholder"
+      :disabled="isDisabled"
       @change="onChange(component, /* nextTick */ true)"
       @visible-change="onVisibleChange"
     >

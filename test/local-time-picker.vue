@@ -180,7 +180,7 @@ export default {
       // console.log(this.component.value);
     },
     getValue() {
-      return this.formatTime(this.form.time);
+      return this.form.time ? this.formatTime(this.form.time) : undefined;
     },
     formatTime(time) {
       function padZero(t) {

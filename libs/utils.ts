@@ -91,25 +91,12 @@ export function initComponent(component: Component.Comp, parent?: Component.Comp
   if ('key' in component) {
     // set default value
     component.value = component.value === undefined ? null : component.value;
-    // set props
-    component.props = merge({
-      placeholder: component.label,
-    }, component.props || {});
-    // is options a Function
-    // @ts-ignore
-    if (typeof component.options === "function") {
-      // @ts-ignore
-      component.options = component.options();
-    }
     // bind context to the event
     if (component.onChange) {
       // 确保 onChange 执行时的上下文是 component 本身
       component.onChange = component.onChange.bind(component);
     }
   }
-
-  // visible
-  component.visible = component.visible === undefined ? true : component.visible;
 
   // init slot
   if (isBasicComponent(component) && !(component as Component.Base).slot) {

@@ -1,8 +1,11 @@
 <template>
-  <div class="vsr_component_dispatcher" :class="{
-    'is-sub-form': component.type === 'form',
-    'has-error': hasError
-  }">
+  <div
+    class="vsr_component_dispatcher"
+    :class="{
+      'is-sub-form': component.type === 'form',
+      'has-error': hasError
+    }"
+  >
     <!-- form -->
     <vsr-form
       v-if="component.type === 'form'"
@@ -99,7 +102,7 @@ export default {
   },
   computed: {
     showError () {
-      return this.hasError && !['row', 'form'].includes(this.component.type);
+      return this.hasError && !!this.errorMsg && !['row', 'form'].includes(this.component.type);
     }
   },
   mounted () {
@@ -114,7 +117,7 @@ export default {
       this.hasError = false;
       this.errorMsg = '';
       let errs, flds;
-      
+
       if (isBasicComponent(this.component)) {
         const { key, rules = [], value } = this.component;
         if (rules.length) {
@@ -138,7 +141,9 @@ export default {
 
       if (errs) {
         this.hasError = true;
-        this.errorMsg = errs[0].message;
+        if (errs.length === 1) {
+          this.errorMsg = errs[0].message;
+        }
         errs.forEach(err => {
           err.$el = this.$refs.comp.$el;
         });
