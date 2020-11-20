@@ -88,6 +88,7 @@ export default {
     async validate() {
       let errs = [];
       let flds = {};
+      let firstErrorEl;
 
       for (const comp of this.component.components) {
         const { _uid, type, key, hidden } = comp;
@@ -95,6 +96,7 @@ export default {
         const [refComp] = this.$refs[_uid];
         await refComp.validate()
           .catch(({ errors, fields }) => {
+            if (!firstErrorEl) firstErrorEl = refComp.$el;
             // console.info('>>> form.validate: catch', { errors, fields });
             errs = [...errs, ...errors];
             if (type === 'row') {
@@ -107,10 +109,17 @@ export default {
         // console.info('>>> form.validate', { comp, errs, flds });
       }
 
-      return errs.length ? Promise.reject({
-        errors: errs,
-        fields: flds
-      }) : Promise.resolve();
+      if (errs.length) {
+        if (firstErrorEl) {
+          firstErrorEl.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+        return Promise.reject({
+          errors: errs,
+          fields: flds
+        });
+      } else return Promise.resolve();
     },
     isRequired (comp) {
       return (comp.rules || []).some(rule => rule.required);

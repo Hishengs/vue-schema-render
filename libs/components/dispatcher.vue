@@ -34,8 +34,8 @@
       @change="onChange"
       ref="comp"
     >
-      <slot-render slot="component-prepend" :render="component.slot['component-prepend']"></slot-render>
-      <slot-render slot="component-append" :render="component.slot['component-append']"></slot-render>
+      <slot-render slot="component-prepend" :render="(component.slot || {})['component-prepend']"></slot-render>
+      <slot-render slot="component-append" :render="(component.slot || {})['component-append']"></slot-render>
     </vsr-basic>
     <!-- custom -->
     <vsr-custom

@@ -19,32 +19,33 @@
                   </span>
                   <div class="actions">
                     <el-button
-                      class="el-icon-arrow-up"
+                      class="el-icon-top"
                       size="mini"
+                      :disabled="i === 0 || isDisabled"
                       @click="up(i)"
-                      :disabled="i === 0"
                     ></el-button>
                     <el-button
-                      class="el-icon-arrow-down"
+                      class="el-icon-bottom"
                       size="mini"
+                      :disabled="i === components.length - 1 || isDisabled"
                       @click="down(i)"
-                      :disabled="i === components.length - 1"
                     ></el-button>
                     <el-button
                       class="el-icon-delete"
                       size="mini"
                       type="danger"
+                      :disabled="isDisabled"
                       @click="remove(i)"
                     ></el-button>
                     <el-button
-                      :class="comp.expanded ? 'el-icon-plus' : 'el-icon-minus'"
+                      :class="comp.collapsed ? 'el-icon-arrow-right' : 'el-icon-arrow-down'"
                       size="mini"
-                      @click="comp.expanded = !comp.expanded"
+                      @click="comp.collapsed = !comp.collapsed"
                     ></el-button>
                   </div>
                 </div>
                 <vsr-dispatcher
-                  v-show="comp.expanded"
+                  v-show="!comp.collapsed"
                   :ref="comp._uid"
                   :component="comp"
                   @change="onChange"
@@ -58,8 +59,9 @@
     </div>
     <el-button
       type="primary"
-      @click="add()"
       size="small"
+      :disabled="isDisabled"
+      @click="add()"
     >
       新增列表项
     </el-button>
@@ -113,7 +115,6 @@ export default {
         comp = this.component.component();
       } else comp = _cloneDeep(this.component.component);
       initComponent(comp, this.component);
-      comp.expanded = true;
       if (fromUser) {
         this.scrollToComp(comp);
       }

@@ -4,3 +4,4 @@ dist
 webpack-prod.json
 showcases
 public
+storybook-static

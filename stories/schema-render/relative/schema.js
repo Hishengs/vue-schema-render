@@ -16,7 +16,7 @@ export default {
       label: "Default Open",
       key: "default_open",
       value: false,
-      visible: false
+      hidden: true
     },
     // Guide Description
     {
@@ -24,7 +24,7 @@ export default {
       label: "Guide Description",
       key: "guide_description",
       value: "",
-      visible: false,
+      hidden: true,
       multiLanguage: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
@@ -34,7 +34,7 @@ export default {
       label: "See How Step1",
       key: "see_how_step1",
       value: "",
-      visible: false,
+      hidden: true,
       multiLanguage: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
@@ -44,7 +44,7 @@ export default {
       label: "See How Step2",
       key: "see_how_step2",
       value: "",
-      visible: false,
+      hidden: true,
       multiLanguage: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
@@ -54,14 +54,15 @@ export default {
       label: "See How Step3",
       key: "see_how_step3",
       value: "",
-      visible: false,
+      hidden: true,
       multiLanguage: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
   ],
   onChange ({ component }) {
+    console.log('>>> onChange', component);
     function onCommonVisibleControl(comp, relativeComp) {
-      relativeComp.visible = comp.value;
+      relativeComp.hidden = !comp.value;
     }
 
     const keyRelativeControls = {

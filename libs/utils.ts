@@ -79,6 +79,7 @@ export function initComponent(component: Component.Comp, parent?: Component.Comp
 
   if (parent) {
     setCompParent(component, parent);
+    setProperty(component, '_root', parent._root || parent);
   }
 
   if (vm && !('_vm' in component)) {
@@ -92,10 +93,10 @@ export function initComponent(component: Component.Comp, parent?: Component.Comp
     // set default value
     component.value = component.value === undefined ? null : component.value;
     // bind context to the event
-    if (component.onChange) {
+    /* if (component.onChange) {
       // 确保 onChange 执行时的上下文是 component 本身
       component.onChange = component.onChange.bind(component);
-    }
+    } */
   }
 
   // init slot
@@ -136,6 +137,8 @@ export function isBasicComponent(component: Component.Comp): boolean {
     'radio',
     'switch',
     'slider',
+    'upload',
+    'markdown'
   ].includes(component.type);
 }
 

@@ -7,31 +7,32 @@
       <el-input
         ref="component"
         v-model="component.value"
-        @change="onChange()"
         :type="component.type"
         :placeholder="component.label"
-        v-bind="component.props"
         :disabled="isDisabled"
+        :rows="5"
+        v-bind="component.props"
+        @change="onChange()"
       ></el-input>
       <!-- 参考语言 -->
       <el-input
-        class="reference"
-        :placeholder="`${component.props.placeholder} ( Reference Language )`"
-        title="reference, read only"
-        :value="component.refValue"
-        :type="component.type"
         v-if="component.i18n"
+        class="reference"
+        title="reference, read only"
+        :type="component.type"
+        :placeholder="`${component.label} ( Reference Language )`"
+        :value="component.refValue"
         readonly
       ></el-input>
     </template>
     <!-- 下拉框 -->
     <el-select
-      v-if="component.type === 'select'"
       ref="component"
+      v-if="component.type === 'select'"
       v-model="component.value"
-      @change="onChange(/* nextTick */ true)"
-      v-bind="component.props"
       :disabled="isDisabled"
+      v-bind="component.props"
+      @change="onChange(/* nextTick */ true)"
     >
       <el-option
         v-for="(item, i) in component.options"
@@ -43,27 +44,27 @@
     </el-select>
     <!-- 开关 -->
     <el-switch
-      v-if="component.type === 'switch'"
       ref="component"
+      v-if="component.type === 'switch'"
       v-model="component.value"
-      @change="onChange(/* nextTick */ true)"
       on-text=""
       off-text=""
-      v-bind="component.props"
       :disabled="isDisabled"
+      v-bind="component.props"
+      @change="onChange(/* nextTick */ true)"
     ></el-switch>
     <!-- 单选框 -->
     <el-radio-group
-      v-if="component.type === 'radio'"
       ref="component"
+      v-if="component.type === 'radio'"
       v-model="component.value"
-      @change="onChange(/* nextTick */ true)"
-      v-bind="component.props"
       :disabled="isDisabled"
+      v-bind="component.props"
+      @change="onChange(/* nextTick */ true)"
     >
       <el-radio
-        :label="item.value !== undefined ? item.value : item"
         v-for="(item, i) in component.options"
+        :label="item.value !== undefined ? item.value : item"
         :key="i"
       >
         {{ item.label !== undefined ? item.label : item }}
@@ -71,16 +72,16 @@
     </el-radio-group>
     <!-- 多选框 -->
     <el-checkbox-group
-      v-if="component.type === 'checkbox'"
       ref="component"
+      v-if="component.type === 'checkbox'"
       v-model="component.value"
-      @change="onChange(/* nextTick */ true)"
-      v-bind="component.props"
       :disabled="isDisabled"
+      v-bind="component.props"
+      @change="onChange(/* nextTick */ true)"
     >
       <el-checkbox
-        :label="item.value !== undefined ? item.value : item"
         v-for="(item, i) in component.options"
+        :label="item.value !== undefined ? item.value : item"
         :key="i"
       >
         {{ item.label !== undefined ? item.label : item }}
@@ -88,13 +89,27 @@
     </el-checkbox-group>
     <!-- 滑块 -->
     <el-slider
-      v-if="component.type === 'slider'"
       ref="component"
+      v-if="component.type === 'slider'"
       v-model="component.value"
-      @change="onChange(/* nextTick */ true)"
-      v-bind="component.props"
       :disabled="isDisabled"
+      v-bind="component.props"
+      @change="onChange(/* nextTick */ true)"
     ></el-slider>
+    <!-- upload -->
+    <vsr-upload
+      v-if="component.type === 'upload'"
+      :component="component"
+      v-bind="component.props"
+      @change="onChange()"
+    ></vsr-upload>
+    <!-- markdown -->
+    <vsr-markdown
+      v-if="component.type === 'markdown'"
+      :component="component"
+      v-bind="component.props"
+      @change="onChange()"
+    ></vsr-markdown>
     <!-- tip -->
     <el-alert
       v-if="component.tip"
@@ -111,31 +126,27 @@
 
 <script>
 import baseMixin from "./base.mixin.js";
+import upload from "./upload.vue";
+import markdown from "./markdown.vue";
 import { COMP_PREFIX, setComponentVM } from "../utils.ts";
+
+console.log(upload.name)
 
 export default {
   name: `${COMP_PREFIX}-basic`,
   mixins: [baseMixin],
+  components: {
+    /* eslint-disable vue/no-unused-components */
+    [upload.name]: upload,
+    [markdown.name]: markdown
+  },
   created () {
     setComponentVM(this.component, this);
   },
   mounted() {
     // manually trigger change for first time
     this.onChange(true);
-    // TODO: 绑定自定义监听事件
-    /* if (this.component.on) {
-      const keys = Object.keys(this.component.on);
-      for (const key of keys) {
-        const fn = this.component.on[key];
-        if (fn && typeof fn === 'function') {
-          this.$refs.component.$on(key, fn.bind(this.component));
-        }
-      }
-    } */
   },
-  /* beforeDestroy () {
-    this.$refs.component && this.$refs.component.$off();
-  }, */
   methods: {
     genData () {
       return this.component.value;

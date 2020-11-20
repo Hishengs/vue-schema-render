@@ -27,7 +27,7 @@ export namespace Component {
     | ListComp
     | Custom;
 
-  export type LayoutComp = 
+  export type LayoutComp =
     | Row
     | Col;
 
@@ -48,6 +48,7 @@ export namespace Component {
   interface Common {
     _vm?: Vue.Component;
     _uid?: string;
+    _root?: Comp;
     _parent?: Comp;
     _children?: Comp[];
     type: CompType | string;

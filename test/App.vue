@@ -52,10 +52,10 @@ export default {
         .catch(({ errors, fields }) => {
           this.$message.error('请检查你的表单项');
           console.warn('请检查你的表单项', { errors, fields });
-          const firstErrorEl = errors[0].$el;
+          /* const firstErrorEl = errors[0].$el;
           firstErrorEl.scrollIntoView({
             behavior: 'smooth'
-          });
+          }); */
         });
     }
   }

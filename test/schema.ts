@@ -1,10 +1,11 @@
-import localTimePicker from "./local-time-picker.vue";
+import localDatePicker from "./local-date-picker.vue";
 
 export default {
+  // labelPosition: 'right',
   components: [
     {
       type: "text",
-      label: "一级标题",
+      label: "输入框",
       labelTooltip: '刘墉（1720年-1805年1月24日/25日 [1]  ），字崇如，号石庵，出生于山东诸城。清朝政治家、书法家。大学士刘统勋长子。',
       key: "title",
       rules: [{ required: true, message: "一级标题必填", trigger: "blur" }],
@@ -12,23 +13,71 @@ export default {
       tip: '在这里放一个提示看看'
     },
     {
-      type: 'select',
-      label: '性别',
-      key: 'sex',
-      value: 'unknown',
-      options: ['male', 'female', 'unknown'],
-      slot: {
-        'component-prepend' (h: any) {
-          return h('div', 'component-prepend');
-        }
-      },
+      label: "文本输入框",
+      type: "textarea",
+      key: "textarea",
+      value: "",
     },
     {
-      label: "出发时间",
-      type: "custom",
-      key: "time",
-      component: localTimePicker,
+      type: 'select',
+      label: '下拉选择',
+      key: 'select',
+      value: 'unknown',
+      options: ['male', 'female', 'unknown']
+    },
+    {
+      type: 'switch',
+      label: '开关',
+      key: 'switch',
+      value: false,
+      onChange (this: any, { component, findComponent }: any) {
+        const comp = findComponent('title');
+        if (component.value) {
+          comp.value = '成功选中！';
+        } else comp.value = '没有选中！';
+      }
+    },
+    {
+      type: 'radio',
+      label: '单选框',
+      key: 'radio',
+      options: ['选择A', '选择B', '选择C'],
+      value: '选择A'
+    },
+    {
+      type: 'checkbox',
+      label: '复选框',
+      key: 'checkbox',
+      options: ['选择A', '选择B', '选择C'],
+      value: ['选择A'],
+      rules: [{ type: 'array', range: { min: 1 }, required: true, message: "至少选择一个", trigger: "change" }],
+    },
+    {
+      type: 'slider',
+      label: '滑块选择',
+      key: 'slider',
+      value: 0
+    },
+    {
+      label: "证件照",
+      type: "upload",
+      key: "image",
       value: ""
+    },
+    {
+      label: "短视频",
+      type: "upload",
+      key: "video",
+      value: "",
+      resourceType: "video"
+    },
+    {
+      label: "自定义组件",
+      type: "custom",
+      key: "date",
+      component: localDatePicker,
+      value: "",
+      rules: [{ type: 'date', required: true, message: "请填写日期", trigger: "blur" }],
     },
     {
       label: "文章列表",
