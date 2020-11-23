@@ -14,23 +14,24 @@
       <vsr-dispatcher
         ref="comp"
         :component="component.component"
-        @change="onChange"
       ></vsr-dispatcher>
     </el-form-item>
   </el-col>
 </template>
 
 <script>
-import baseMixin from "./base.mixin";
 import { COMP_PREFIX } from "../utils";
 
 export default {
   name: `${COMP_PREFIX}-col`,
-  mixins: [baseMixin],
   components: {
     [`${COMP_PREFIX}-dispatcher`]: () => import('./dispatcher.vue')
   },
   props: {
+    component: {
+      type: Object,
+      required: true
+    },
     span: Number,
   },
   methods: {

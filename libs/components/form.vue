@@ -22,8 +22,7 @@
           </span>
           <vsr-dispatcher
             :component="comp"
-            :ref="comp._uid"
-            @change="onChange"
+            :ref="comp._vsr_uid"
           >
           </vsr-dispatcher>
         </el-form-item>
@@ -34,7 +33,7 @@
 
 <script>
 import baseMixin from "./base.mixin.js";
-import { COMP_PREFIX, initComponent, isBasicComponent } from "../utils.ts";
+import { COMP_PREFIX, initComponent, isBasicComponent, setComponentVM } from "../utils.ts";
 
 export default {
   name: `${COMP_PREFIX}-form`,
@@ -51,7 +50,8 @@ export default {
     };
   },
   created() {
-    initComponent(this.component, null, this);
+    initComponent(this.component, null);
+    setComponentVM(this.component, this);
     this.initData();
   },
   methods: {
@@ -72,8 +72,8 @@ export default {
     async genData () {
       let data = {};
       for (const comp of this.component.components) {
-        const { _uid, type, key } = comp;
-        const [refComp] = this.$refs[_uid];
+        const { _vsr_uid, type, key } = comp;
+        const [refComp] = this.$refs[_vsr_uid];
         const compData = await refComp.genData();
         if (type === 'row') {
           data = {
@@ -91,9 +91,9 @@ export default {
       let firstErrorEl;
 
       for (const comp of this.component.components) {
-        const { _uid, type, key, hidden } = comp;
+        const { _vsr_uid, type, key, hidden } = comp;
         if (hidden) continue;
-        const [refComp] = this.$refs[_uid];
+        const [refComp] = this.$refs[_vsr_uid];
         await refComp.validate()
           .catch(({ errors, fields }) => {
             if (!firstErrorEl) firstErrorEl = refComp.$el;

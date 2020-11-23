@@ -10,7 +10,7 @@
       v-model="component.value"
       :placeholder="component.props.placeholder"
       :disabled="isDisabled"
-      @change="onChange(component, /* nextTick */ true)"
+      @change="onChange(/* nextTick */ true)"
       @visible-change="onVisibleChange"
     >
       <el-option

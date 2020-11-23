@@ -6,21 +6,18 @@
         :key="i"
         :component="col"
         :span="span"
-        @change="onChange"
-        :ref="col._uid"
+        :ref="col._vsr_uid"
       ></vsr-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import baseMixin from "./base.mixin";
 import { COMP_PREFIX } from "../utils";
 import Col from './col.vue';
 
 export default {
   name: `${COMP_PREFIX}-row`,
-  mixins: [baseMixin],
   components: {
     [Col.name]: Col,
   },
@@ -46,7 +43,7 @@ export default {
     async genData () {
       const data = {};
       for (const colComp of this.component.cols) {
-        const [refColComp] = this.$refs[colComp._uid];
+        const [refColComp] = this.$refs[colComp._vsr_uid];
         data[colComp.component.key] = await refColComp.genData();
       }
       return data;
@@ -56,7 +53,7 @@ export default {
       let flds = {};
 
       for (const colComp of this.component.cols) {
-        const [refColComp] = this.$refs[colComp._uid];
+        const [refColComp] = this.$refs[colComp._vsr_uid];
         try {
           await refColComp.validate();
         } catch ({ errors, fields }) {

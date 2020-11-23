@@ -10,28 +10,24 @@
     <vsr-form
       v-if="component.type === 'form'"
       :component="component"
-      @change="onChange"
       ref="comp"
     ></vsr-form>
     <!-- list -->
     <vsr-list
       v-else-if="component.type === 'list'"
       :component="component"
-      @change="onChange"
       ref="comp"
     ></vsr-list>
     <!-- row -->
     <vsr-row
       v-else-if="component.type === 'row'"
       :component="component"
-      @change="onChange"
       ref="comp"
     ></vsr-row>
     <!-- basic components -->
     <vsr-basic
       v-else-if="isBasicComponent(component)"
       :component="component"
-      @change="onChange"
       ref="comp"
     >
       <slot-render slot="component-prepend" :render="(component.slot || {})['component-prepend']"></slot-render>
@@ -41,7 +37,6 @@
     <vsr-custom
       v-else-if="component.type === 'custom'"
       :component="component"
-      @change="onChange"
       ref="comp"
     ></vsr-custom>
     <!-- else -->
@@ -64,7 +59,6 @@ import basic from "./basic.vue";
 import list from "./list.vue";
 import form from "./form.vue";
 import custom from "./custom.vue";
-import baseMixin from "./base.mixin.js";
 import { COMP_PREFIX, isBasicComponent, isLayoutComponent } from "../utils.ts";
 
 const SlotRender = {
@@ -92,7 +86,12 @@ export default {
     [custom.name]: custom,
     [SlotRender.name]: SlotRender,
   },
-  mixins: [baseMixin],
+  props: {
+    component: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       COMP_PREFIX,

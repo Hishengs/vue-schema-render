@@ -30,11 +30,16 @@ export default {
       label: '开关',
       key: 'switch',
       value: false,
-      onChange (this: any, { component, findComponent }: any) {
+      /* onChange (this: any, { component, findComponent }: any) {
         const comp = findComponent('title');
         if (component.value) {
           comp.value = '成功选中！';
         } else comp.value = '没有选中！';
+      } */
+      on: {
+        change () {
+          console.log('>> switch.on.change', arguments[0]);
+        }
       }
     },
     {
@@ -95,7 +100,12 @@ export default {
               value: "",
               rules: [
                 { required: true, message: "文章标题必填", trigger: "blur" }
-              ]
+              ],
+              on: {
+                change () {
+                  console.log('>> essay-title.on.change', arguments[0]);
+                }
+              }
             },
             {
               label: "文章摘要",
@@ -125,7 +135,12 @@ export default {
               ],
               value: "_blank"
             }
-          ]
+          ],
+          on: {
+            change () {
+              console.log('>> essay-list.on.change', arguments[0]);
+            }
+          }
         }
       },
       rules: [
@@ -135,6 +150,11 @@ export default {
   ],
   rules: {
     title: [{ required: true, message: "一级标题必填", trigger: "blur" }],
+  },
+  on: {
+    change () {
+      console.log('>> on.change', arguments[0]);
+    }
   }
 };
 

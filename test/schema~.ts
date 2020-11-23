@@ -232,7 +232,7 @@ const schema: Schema = {
             "step2_icon",
             "step3_icon"
           ];
-          parent && parent._children!.forEach((comp: Component.Comp) => {
+          parent && parent._vsr_children!.forEach((comp: Component.Comp) => {
             if ('key' in comp && relativeKeys.includes(comp.key)) {
               comp.visible = show;
             }

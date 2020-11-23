@@ -7,8 +7,8 @@
           <el-form
             v-for="(comp, i) in components"
             label-width="0px"
-            :id="comp._uid"
-            :key="comp._uid"
+            :id="comp._vsr_uid"
+            :key="comp._vsr_uid"
           >
             <el-form-item label="">
               <el-card>
@@ -46,9 +46,8 @@
                 </div>
                 <vsr-dispatcher
                   v-show="!comp.collapsed"
-                  :ref="comp._uid"
+                  :ref="comp._vsr_uid"
                   :component="comp"
-                  @change="onChange"
                 >
                 </vsr-dispatcher>
               </el-card>
@@ -73,7 +72,7 @@ import draggable from 'vuedraggable';
 import AsyncValidator from 'async-validator';
 import _cloneDeep from 'lodash/cloneDeep';
 import baseMixin from "./base.mixin.js";
-import { COMP_PREFIX, initComponent, isBasicComponent, getUID } from "../utils.ts";
+import { COMP_PREFIX, initComponent, isBasicComponent, getUID, setComponentVM } from "../utils.ts";
 
 export default {
   name: `${COMP_PREFIX}-list`,
@@ -105,6 +104,7 @@ export default {
     }
   },
   created() {
+    setComponentVM(this.component, this);
     // init data
     this.initData();
   },
@@ -115,6 +115,9 @@ export default {
         comp = this.component.component();
       } else comp = _cloneDeep(this.component.component);
       initComponent(comp, this.component);
+      if (comp.collapsed === undefined) {
+        comp.collapsed = false;
+      }
       if (fromUser) {
         this.scrollToComp(comp);
       }
@@ -138,7 +141,7 @@ export default {
     },
     scrollToComp (comp) {
       setTimeout(() => {
-        const el = document.querySelector(`#${comp._uid}`);
+        const el = document.querySelector(`#${comp._vsr_uid}`);
         el && el.scrollIntoView({
           behavior: 'smooth'
         });
@@ -180,7 +183,7 @@ export default {
       // should keep the order when list item swap
       const refComponents = this.components
         .map(comp => {
-          const [refComp] = this.$refs[comp._uid];
+          const [refComp] = this.$refs[comp._vsr_uid];
           return refComp;
         })
         .filter(ref => ref !== undefined);
@@ -202,7 +205,7 @@ export default {
         const { key, rules = [] } = subComponent;
         if (rules.length || !isBasicComponent(subComponent)) {
           for (const comp of this.components) {
-            const [refComp] = this.$refs[comp._uid];
+            const [refComp] = this.$refs[comp._vsr_uid];
             await refComp.validate()
               .catch(({ errors, fields }) => {
                 errs = [...errs, ...errors];

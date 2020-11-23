@@ -54,36 +54,32 @@ function hasDunplicateKey (comp: Component.Comp, parent: Component.FormComp): bo
 }
 
 function setCompParent (comp: Component.Comp, parent: Component.Comp) {
-  if (comp._parent) return;
-  setProperty(comp, '_parent', parent);
-  parent._children && parent._children.push(comp);
+  if (comp._vsr_parent) return;
+  setProperty(comp, '_vsr_parent', parent);
+  parent._vsr_children && parent._vsr_children.push(comp);
 }
 
 export function getUnLayoutParentComp (comp: Component.UIComp): Component.UIComp | undefined {
-  let parent: Component.Comp | undefined = comp._parent;
+  let parent: Component.Comp | undefined = comp._vsr_parent;
   while (parent && parent.type !== 'form') {
-    parent = parent._parent;
+    parent = parent._vsr_parent;
   }
   return parent as Component.UIComp;
 }
 
 export function setComponentVM (comp: Component.Comp, vm: Vue) {
-  if (comp._vm) return;
-  setProperty(comp, '_vm', vm);
+  if (comp._vsr_vm) return;
+  setProperty(comp, '_vsr_vm', vm);
 }
 
-export function initComponent(component: Component.Comp, parent?: Component.Comp, vm?: Vue) {
-  if ('_uid' in component) return;
+export function initComponent(component: Component.Comp, parent?: Component.Comp) {
+  if ('_vsr_uid' in component) return;
   // set a unique id
-  setProperty(component, '_uid', `${component.type}_${getUID()}`);
+  setProperty(component, '_vsr_uid', `${component.type}_${getUID()}`);
 
   if (parent) {
     setCompParent(component, parent);
-    setProperty(component, '_root', parent._root || parent);
-  }
-
-  if (vm && !('_vm' in component)) {
-    setProperty(component, '_vm', vm);
+    setProperty(component, '_vsr_root', parent._vsr_root || parent);
   }
 
   const { type } = component;
@@ -92,28 +88,18 @@ export function initComponent(component: Component.Comp, parent?: Component.Comp
   if ('key' in component) {
     // set default value
     component.value = component.value === undefined ? null : component.value;
-    // bind context to the event
-    /* if (component.onChange) {
-      // 确保 onChange 执行时的上下文是 component 本身
-      component.onChange = component.onChange.bind(component);
-    } */
-  }
-
-  // init slot
-  if (isBasicComponent(component) && !(component as Component.Base).slot) {
-    (component as Component.Base).slot = {};
   }
 
   // init sub components
   if (type === 'form') {
-    component._children = [];
+    component._vsr_children = [];
     for (const comp of (component as Component.FormComp).components) {
       if (!hasDunplicateKey(comp, component as Component.FormComp)) {
         initComponent(comp, component);
       }
     }
   } else if (type === 'row') {
-    component._children = [];
+    component._vsr_children = [];
     for (const comp of (component as Component.Row).cols) {
       if (comp.type !== 'col') {
         console.error(`Row 组件包含的子组件只能是 Col`, component, comp);
@@ -122,7 +108,7 @@ export function initComponent(component: Component.Comp, parent?: Component.Comp
       initComponent(comp, component);
     }
   } else if (type === 'col') {
-    if (!component._parent || component._parent.type !== 'row') {
+    if (!component._vsr_parent || component._vsr_parent.type !== 'row') {
       console.error(`Col 组件只能作为 Row 组件的子组件使用`, component);
     } else initComponent((component as Component.Col).component, component);
   }

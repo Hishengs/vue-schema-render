@@ -12,11 +12,14 @@
 <script>
 import AsyncValidator from 'async-validator';
 import baseMixin from "./base.mixin.js";
-import { COMP_PREFIX } from "../utils.ts";
+import { COMP_PREFIX, setComponentVM } from "../utils.ts";
 
 export default {
   name: `${COMP_PREFIX}-custom`,
   mixins: [baseMixin],
+  created () {
+    setComponentVM(this.component, this);
+  },
   methods: {
     async genData() {
       if (!this.$refs.custom.genData) {

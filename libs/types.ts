@@ -46,11 +46,11 @@ export namespace Component {
     | 'col';
 
   interface Common {
-    _vm?: Vue.Component;
-    _uid?: string;
-    _root?: Comp;
-    _parent?: Comp;
-    _children?: Comp[];
+    _vsr_vm?: Vue.Component;
+    _vsr_uid?: string;
+    _vsr_root?: Comp;
+    _vsr_parent?: Comp;
+    _vsr_children?: Comp[];
     type: CompType | string;
     visible?: Boolean;
     dragable?: Boolean;
