@@ -1,28 +1,26 @@
 export namespace Event {
-  export interface onChange {
+  export interface callback {
     (params: {
-      component: Component.Comp
+      target: Component.UIComp,
+      currentTarget: Component.UIComp,
+      findComponent: Function
     }): void;
   };
 };
 
 export namespace Component {
   export type Comp =
-    | Text
-    | Select
-    | Checkbox
-    | Radio
-    | FormComp
-    | ListComp
-    | Custom
-    | Row
-    | Col;
+    | UIComp
+    | LayoutComp;
 
   export type UIComp =
     | Text
     | Select
     | Checkbox
     | Radio
+    | Switch
+    | Upload
+    | Markdown
     | FormComp
     | ListComp
     | Custom;
@@ -38,7 +36,8 @@ export namespace Component {
     | 'checkbox'
     | 'radio'
     | 'switch'
-    | 'slider'
+    | 'upload'
+    | 'markdown'
     | 'form'
     | 'list'
     | 'custom'
@@ -51,9 +50,8 @@ export namespace Component {
     _vsr_root?: Comp;
     _vsr_parent?: Comp;
     _vsr_children?: Comp[];
-    type: CompType | string;
-    visible?: Boolean;
-    dragable?: Boolean;
+    type: CompType;
+    show?: Boolean;
   };
 
   export interface Row extends Common {
@@ -62,7 +60,7 @@ export namespace Component {
   };
 
   export interface Col extends Common {
-    component: Component.Base;
+    component: UIComp | Row;
     span?: number;
   };
 
@@ -70,48 +68,64 @@ export namespace Component {
     label: string;
     labelTooltip?: string;
     key: string;
-    value?: any;
+    value: any;
     refValue?: any;
     rules?: Array<any>;
-    props?: any;
+    props?: {
+      [key: string]: any
+    };
     tip?: string;
-    onChange?: Event.onChange;
+    onChange?: Event.callback;
     on?: {
-      [key: string]: Function;
+      [key: string]: Event.callback;
     },
     slot?: {
-      [key: string]: Function;
+      'component-prepend': Function;
+      'component-append': Function;
     },
-  };
-
-  export interface i18nComp extends Base {
-    multiLanguage?: boolean;
-  };
-
-  export interface TextCommon extends i18nComp {
     i18n?: boolean;
   };
 
-  export interface Text extends TextCommon {
+  export interface Text extends Base {
     //
   };
 
-  export interface Option {
+  interface Option {
     label: string;
     value: any;
     [propName: string]: any
   };
 
-  export interface Select extends Base {
-    options: Function | Array<Option>;
+  interface WithOptions {
+    options: (() => Option[]) | Array<Option>;
+  }
+
+  export interface Select extends Base, WithOptions {
+    //
   };
 
-  export interface Checkbox extends Base {
-    options: Function | Array<Option>;
+  export interface Checkbox extends Base, WithOptions {
+    //
   };
 
-  export interface Radio extends Base {
-    options: Function | Array<Option>;
+  export interface Radio extends Base, WithOptions {
+    //
+  };
+
+  export interface Switch extends Base {
+    //
+  };
+
+  export interface Upload extends Base {
+    cloudinary?: {
+      [key: string]: any;
+    }
+  };
+
+  export interface Markdown extends Base {
+    cloudinary?: {
+      [key: string]: any;
+    }
   };
 
   export interface FormComp extends Base {
@@ -124,57 +138,15 @@ export namespace Component {
   };
 
   export interface Custom extends Base {
-    component: any;
+    component: Vue.Component;
   };
 };
-
-export type LayoutComp = Component.Row | Component.Col;
 
 export interface Schema {
-  title?: string;
-  components: Array<Component.Comp>;
-  onChange?: Event.onChange;
-};
+  components: Component.Comp[],
+  onChange?: Event.callback;
+  on?: {
+    [key: string]: Event.callback;
+  },
+}
 
-export interface RenderOptions {
-  locale?: string;
-  pages: {
-    list: {
-      filter: {
-        schema?: Schema;
-        immediateFilter: boolean;
-      };
-      columns?: Array<any> | Function;
-      beforeRender?: Function;
-    };
-    create: {
-      schema?: Schema;
-      beforeRender?: Function;
-    };
-    edit: {
-      beforeRender?: Function;
-    };
-  };
-};
-
-export enum ConfigLanStatus {
-  UNADD = -1,
-  DRAFT = 0,
-  PUBLISH = 1,
-  UNPUBLISH = 2,
-};
-
-export interface Config {
-  id: number;
-  module: string;   // topic
-  platform: string;
-  title: string;
-  creator: string;  // create_user
-  createAt: Date;   // create_time
-  modifier: string;   // edit_user
-  modifyAt: Date;   // last_modify_time
-  urlKey: string;   // url_key
-  link: string;
-  publishedLanguages?: string;
-  selectedLanStatus: ConfigLanStatus; // select_language_status
-};

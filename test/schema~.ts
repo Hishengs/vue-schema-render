@@ -35,7 +35,7 @@ const checkDate = {
   trigger: "change"
 };
 
-function getDragableList (key: string): Component.Comp {
+function getDragableList (key: string): Component.UIComp {
   return {
     type: 'list',
     label: '列表组件',
@@ -84,7 +84,7 @@ const formComp: Component.Comp = {
       label: "Promo Code",
       key: "promo_code",
       value: "",
-      visible: true,
+      show: true,
       props: {
         disabled: true
       },
@@ -109,16 +109,18 @@ const formComp: Component.Comp = {
   ],
   props: {
     'label-position': 'left'
-  }
+  },
+  value: {}
 };
 
 const schema: Schema = {
   components: [
     {
-      type: 'form-modal',
+      type: 'custom',
       label: 'form-modal',
       key: 'form-modal',
       value: '',
+      component: formMdal
     },
     layout.Row([
       layout.Col({
@@ -127,7 +129,7 @@ const schema: Schema = {
         labelTooltip: '刘墉（1720年-1805年1月24日/25日 [1]  ），字崇如，号石庵，出生于山东诸城。清朝政治家、书法家。大学士刘统勋长子。',
         key: 'text1',
         value: 'This is Text',
-        multiLanguage: true,
+        i18n: true,
         on: {
           input (val: any) {
             console.log('>>> on.input', val);
@@ -145,7 +147,7 @@ const schema: Schema = {
         label: '单行文本2',
         key: 'text2',
         value: 'This is Text2',
-        multiLanguage: true,
+        i18n: true,
         slot: {
           'component-prepend' (h: Function) {
             return h('el-button', {
@@ -172,10 +174,10 @@ const schema: Schema = {
     ]),
     layout.Row([
       layout.Col({
-        type: 'slider',
-        label: 'Slider1',
-        key: 'slider1',
-        value: 20,
+        type: 'text',
+        label: '单行文本2',
+        key: 'text2',
+        value: '',
       }, 10),
       layout.Col({
         type: 'text',
@@ -193,18 +195,12 @@ const schema: Schema = {
       layout.Col(getDragableList('list2'), 10),
     ]),
     {
-      type: 'slider',
-      label: 'Slider2',
-      key: 'slider2',
-      value: 20,
-    },
-    {
       type: "text",
       label: "Page Title",
       key: "page_title",
       value: "",
       tip: '在这里放一个提示看看',
-      multiLanguage: true,
+      i18n: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }],
       on: {
         change (val: any) {
@@ -220,7 +216,7 @@ const schema: Schema = {
       key: "show_guide",
       value: false,
       on: {
-        change (show: boolean) {
+        change ({ target }) {
           const parent = getUnLayoutParentComp(this as any);
           const relativeKeys = [
             "default_open",
@@ -234,7 +230,7 @@ const schema: Schema = {
           ];
           parent && parent._vsr_children!.forEach((comp: Component.Comp) => {
             if ('key' in comp && relativeKeys.includes(comp.key)) {
-              comp.visible = show;
+              comp.show = target.value;
             }
           });
         }
@@ -246,7 +242,7 @@ const schema: Schema = {
       label: "Default Open",
       key: "default_open",
       value: false,
-      visible: false
+      show: false
     },
     // Guide Description
     {
@@ -254,8 +250,8 @@ const schema: Schema = {
       label: "Guide Description",
       key: "guide_description",
       value: "",
-      visible: false,
-      multiLanguage: true,
+      show: false,
+      i18n: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
     // see how step1
@@ -264,8 +260,8 @@ const schema: Schema = {
       label: "See How Step1",
       key: "see_how_step1",
       value: "",
-      visible: false,
-      multiLanguage: true,
+      show: false,
+      i18n: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
     // see how step2
@@ -274,8 +270,8 @@ const schema: Schema = {
       label: "See How Step2",
       key: "see_how_step2",
       value: "",
-      visible: false,
-      multiLanguage: true,
+      show: false,
+      i18n: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
     // see how step3
@@ -284,8 +280,8 @@ const schema: Schema = {
       label: "See How Step3",
       key: "see_how_step3",
       value: "",
-      visible: false,
-      multiLanguage: true,
+      show: false,
+      i18n: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
     // step 1 icon
@@ -294,7 +290,7 @@ const schema: Schema = {
       label: "Step1 Icon (110 * 110)",
       key: "step1_icon",
       value: "",
-      visible: false
+      show: false
     },
     // step 2 icon
     {
@@ -302,7 +298,7 @@ const schema: Schema = {
       label: "Step2 Icon (110 * 110)",
       key: "step2_icon",
       value: "",
-      visible: false
+      show: false
     },
     // step 3 icon
     {
@@ -310,7 +306,7 @@ const schema: Schema = {
       label: "Step3 Icon (110 * 110)",
       key: "step3_icon",
       value: "",
-      visible: false
+      show: false
     },
     // show price tag
     {
@@ -333,7 +329,7 @@ const schema: Schema = {
       key: "countdown_clock_start_date",
       value: null,
       component: localTimePicker,
-      visible: false,
+      show: false,
       rules: [checkDate]
     },
     // countdown clock end date
@@ -343,7 +339,7 @@ const schema: Schema = {
       key: "countdown_clock_end_date",
       value: null,
       component: localTimePicker,
-      visible: false,
+      show: false,
       rules: [checkDate]
     },
     // slogan
@@ -352,8 +348,8 @@ const schema: Schema = {
       label: "Slogan",
       key: "slogan",
       value: "",
-      visible: false,
-      multiLanguage: true
+      show: false,
+      i18n: true
     },
     // show hide clock
     {
@@ -371,7 +367,7 @@ const schema: Schema = {
         }
       ],
       value: null,
-      visible: false,
+      show: false,
       rules: [
         {
           type: "boolean",
@@ -397,7 +393,7 @@ const schema: Schema = {
         }
       ],
       value: null,
-      visible: false,
+      show: false,
       rules: [
         {
           type: "boolean",
@@ -413,7 +409,7 @@ const schema: Schema = {
       label: "Mobile Countdown End Banner (1000 * 1000)",
       key: "mobile_countdown_end_banner",
       value: "",
-      visible: false
+      show: false
     },
     // show menu bar
     {
@@ -442,7 +438,7 @@ const schema: Schema = {
       label: "Banner Video",
       key: "banner_video",
       value: "",
-      visible: false,
+      show: false,
       rules: [{ required: true, message: INVALID_MSG, trigger: "change" }],
       props: {
         type: "video"
@@ -468,7 +464,7 @@ const schema: Schema = {
       label: "Mobile Section Banner (1000 * 428)",
       key: "mobile_section_banner",
       value: "",
-      visible: false,
+      show: false,
       rules: [{ required: true, message: INVALID_MSG, trigger: "change" }]
     },
     // Section Banner Url
@@ -477,8 +473,8 @@ const schema: Schema = {
       label: "Section Banner Url",
       key: "section_banner_url",
       value: "",
-      visible: false,
-      multiLanguage: true,
+      show: false,
+      i18n: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
     // show bottom banner
@@ -494,7 +490,7 @@ const schema: Schema = {
       label: "Mobile Bottom Banner (1000 * 428)",
       key: "mobile_bottom_banner",
       value: "",
-      visible: false,
+      show: false,
       rules: [{ required: true, message: INVALID_MSG, trigger: "change" }]
     },
     // Bottom Banner Url
@@ -503,8 +499,8 @@ const schema: Schema = {
       label: "Bottom Banner Url",
       key: "bottom_banner_url",
       value: "",
-      visible: false,
-      multiLanguage: true,
+      show: false,
+      i18n: true,
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
     // show logo
@@ -520,7 +516,7 @@ const schema: Schema = {
       label: "Mobile Logo (510 * 66)",
       key: "mobile_logo",
       value: "",
-      visible: false,
+      show: false,
       rules: [{ required: true, message: INVALID_MSG, trigger: "change" }]
     },
     // show terms and conditions
@@ -536,7 +532,7 @@ const schema: Schema = {
       label: "Terms And Conditions",
       key: "terms_and_conditions",
       value: "",
-      visible: false,
+      show: false,
       rules: [{ required: true, message: INVALID_MSG, trigger: "change" }]
     },
     // banner type
@@ -562,7 +558,7 @@ const schema: Schema = {
           label: "Banner(1000 * 666)",
           key: "banner",
           value: "",
-          multiLanguage: true,
+          i18n: true,
           rules: [
             {
               type: "string",
@@ -590,7 +586,7 @@ const schema: Schema = {
       key: "whole_page_banner",
       value: "",
       rules: [{ required: true, message: INVALID_MSG }],
-      visible: false
+      show: false
     },
     // Mobile Short Text
     {
@@ -598,7 +594,7 @@ const schema: Schema = {
       label: "Mobile Short Text",
       key: "mobile_short_text",
       value: "",
-      multiLanguage: true,
+      i18n: true,
       rules: [
         { required: true, message: INVALID_MSG, trigger: 'blur' }
       ]
@@ -609,7 +605,7 @@ const schema: Schema = {
       label: "Mobile Short Text Promocode",
       key: "mobile_short_text_promo_code",
       value: "",
-      multiLanguage: true
+      i18n: true
     },
     // Section List
     {
@@ -626,7 +622,7 @@ const schema: Schema = {
               label: "Title",
               key: "title",
               value: "",
-              multiLanguage: true,
+              i18n: true,
               rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
             },
             {
@@ -634,7 +630,7 @@ const schema: Schema = {
               label: "Subtitle",
               key: "sub_title",
               value: "",
-              multiLanguage: true
+              i18n: true
             },
             {
               type: "text",
@@ -696,7 +692,7 @@ const schema: Schema = {
                   trigger: "change"
                 }
               ],
-              visible: true
+              show: true
             },
             // smallActivityDisplay
             {
@@ -716,7 +712,7 @@ const schema: Schema = {
                   trigger: "change"
                 }
               ],
-              visible: false
+              show: false
             },
             // subSectionActivityDisplay
             {
@@ -735,7 +731,7 @@ const schema: Schema = {
                   trigger: "change"
                 }
               ],
-              visible: false
+              show: false
             },
             // articleAndActivityDisplay
             {
@@ -754,7 +750,7 @@ const schema: Schema = {
                   trigger: "change"
                 }
               ],
-              visible: false
+              show: false
             },
             // smallArticleDisplay
             {
@@ -773,7 +769,7 @@ const schema: Schema = {
                   trigger: "change"
                 }
               ],
-              visible: false
+              show: false
             },
             // smallPhotoDisplay
             {
@@ -792,7 +788,7 @@ const schema: Schema = {
                   trigger: "change"
                 }
               ],
-              visible: false
+              show: false
             },
             // discountCodeRedemptionBox
             {
@@ -811,7 +807,7 @@ const schema: Schema = {
                   trigger: "change"
                 }
               ],
-              visible: false
+              show: false
             }
           ],
           onChange({ component }: any) {
@@ -822,7 +818,7 @@ const schema: Schema = {
               this.label = selectedOption ? selectedOption.label : this.label;
               for (const comp of this.components) {
                 if (comp.type === "array") {
-                  comp.visible = (comp.key === component.value);
+                  comp.show = (comp.key === component.value);
                 }
               }
             }
@@ -832,11 +828,11 @@ const schema: Schema = {
       value: null
     }
   ],
-  onChange({ component }: any) {
+  onChange({ target }: any) {
     // console.log("onComponentChange", component, component.key);
 
     function onCommonVisibleControl(comp: any, relativeComp: any) {
-      relativeComp.visible = comp.value;
+      relativeComp.show = comp.value;
     }
     // 处理组件之间的关联关系
     const keyRelativeControls: any = {
@@ -868,8 +864,8 @@ const schema: Schema = {
         ["regular_banner", "whole_page_banner"],
         (comp: any, relativeComp: any) => {
           if (comp.value === relativeComp.key) {
-            relativeComp.visible = true;
-          } else relativeComp.visible = false;
+            relativeComp.show = true;
+          } else relativeComp.show = false;
         }
       ],
       show_video_on_banner: [["banner_video"], onCommonVisibleControl],
@@ -888,11 +884,11 @@ const schema: Schema = {
       ]
     };
 
-    if (keyRelativeControls[component.key]) {
-      const [relativeKeys, callback] = keyRelativeControls[component.key];
+    if (keyRelativeControls[target.key]) {
+      const [relativeKeys, callback] = keyRelativeControls[target.key];
       this.components.forEach((comp: any) => {
         if (relativeKeys.includes(comp.key)) {
-          callback(component, comp);
+          callback(target, comp);
         }
       });
     }

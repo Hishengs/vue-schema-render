@@ -49,6 +49,25 @@ export default {
     },
     genData() {
       return this.$refs.comp.genData();
+    },
+    async genLanData () {
+      function getLanData (objData, schema) {
+        const lanData = {};
+        const { components } = schema;
+        for (const key of Object.keys(objData)) {
+          const comp = components.find(cp => cp.key === key);
+          if (comp && comp.i18n) {
+            if (comp.type === 'form') {
+              lanData[key] = getLanData(objData[key], comp);
+            } else {
+              lanData[key] = objData[key];
+            }
+          }
+        }
+        return lanData;
+      }
+      const data = await this.genData();
+      return getLanData(data, this.schema);
     }
   }
 };

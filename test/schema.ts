@@ -10,7 +10,8 @@ export default {
       key: "title",
       rules: [{ required: true, message: "一级标题必填", trigger: "blur" }],
       value: "",
-      tip: '在这里放一个提示看看'
+      tip: '在这里放一个提示看看',
+      i18n: true
     },
     {
       label: "文本输入框",
@@ -56,12 +57,6 @@ export default {
       options: ['选择A', '选择B', '选择C'],
       value: ['选择A'],
       rules: [{ type: 'array', range: { min: 1 }, required: true, message: "至少选择一个", trigger: "change" }],
-    },
-    {
-      type: 'slider',
-      label: '滑块选择',
-      key: 'slider',
-      value: 0
     },
     {
       label: "证件照",

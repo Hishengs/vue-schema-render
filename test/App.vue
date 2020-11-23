@@ -16,6 +16,7 @@
     <el-divider></el-divider>
     <el-button @click="validate">校验数据</el-button>
     <el-button type="primary" @click="genData">生成数据</el-button>
+    <el-button type="primary" @click="genLanData">生成语言相关数据</el-button>
   </div>
 </template>
 
@@ -43,6 +44,10 @@ export default {
     async genData () {
       const data = await this.$refs.schemaRender.genData();
       console.log('>>> genData', data);
+    },
+    async genLanData () {
+      const data = await this.$refs.schemaRender.genLanData();
+      console.log('>>> genLanData', data);
     },
     async validate () {
       await this.$refs.schemaRender.validate()

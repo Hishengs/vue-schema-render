@@ -18,11 +18,11 @@ function setProperty (obj: Object, key: string, value: any) {
 function hasDunplicateKey (comp: Component.Comp, parent: Component.FormComp): boolean {
   let targetCompCount: number = 0;
 
-  const targetComp: Array<Component.Base> | Component.Base = isLayoutComponent(comp)
+  const targetComp: Array<Component.UIComp> | Component.UIComp = isLayoutComponent(comp)
     ? comp.type === 'row'
-      ? (comp as Component.Row).cols.map(cp => cp.component)
-      : (comp as Component.Col).component
-    : comp as Component.Base;
+      ? (comp as Component.Row).cols.map(cp => cp.component as Component.UIComp)
+      : (comp as Component.Col).component as Component.UIComp
+    : comp as Component.UIComp;
 
   if (Array.isArray(targetComp)) {
     return targetComp.some(cp => hasDunplicateKey(cp, parent));
@@ -31,10 +31,10 @@ function hasDunplicateKey (comp: Component.Comp, parent: Component.FormComp): bo
   for (const sub of parent.components) {
     if (targetCompCount > 1) break;
     if (isLayoutComponent(sub)) {
-      const comps: Array<Component.Base> = sub.type === 'row'
-        ? (sub as Component.Row).cols.map(cp => cp.component)
-        : [(sub as Component.Col).component];
-      const keys = comps.map((cp: Component.Base) => cp.key);
+      const comps: Array<Component.UIComp> = sub.type === 'row'
+        ? (sub as Component.Row).cols.map(cp => cp.component as Component.UIComp)
+        : [(sub as Component.Col).component as Component.UIComp];
+      const keys = comps.map((cp: Component.UIComp) => cp.key);
       for (const key of keys) {
         if (key === targetComp.key) {
           targetCompCount++;
@@ -88,6 +88,7 @@ export function initComponent(component: Component.Comp, parent?: Component.Comp
   if ('key' in component) {
     // set default value
     component.value = component.value === undefined ? null : component.value;
+    component.show = component.show === undefined ? true : component.show;
   }
 
   // init sub components

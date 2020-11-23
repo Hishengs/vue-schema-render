@@ -5,20 +5,20 @@ export { getUnLayoutParentComp } from '@/utils';
 import { Component } from '@/types';
 
 export const layout = {
-  Row (cols: Array<Component.Col>, gutter: number = 20) {
+  Row (cols: Array<Component.Col>, gutter: number = 20): Component.Row {
     return {
       type: 'row',
       cols,
       gutter,
-    } as Component.Row;
+    };
   },
-  Col (component: Component.Comp, span?: number) {
+  Col (component: Component.UIComp | Component.Row, span?: number): Component.Col {
     return {
       type: 'col',
       component,
       span,
-    } as Component.Col;
-  },
+    };
+  }
 };
 
 // 支持添加自定义组件
