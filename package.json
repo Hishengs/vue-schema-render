@@ -23,18 +23,21 @@
     "dist": "npm run build:common && npm run build:umd",
     "storybook": "start-storybook -p 7666 --no-dll",
     "build-storybook": "build-storybook --no-dll",
-    "build": "npm run dist && npm run build-storybook"
+    "build": "npm run dist && npm run build-storybook",
+    "docs": "vuepress dev ./docs --open"
   },
   "dependencies": {
     "async-validator": "^3.2.3",
+    "draggable": "^4.2.0",
     "lodash": "^4.17.15",
     "simplemde": "^1.11.2",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.3.0",
-    "vuedraggable": "^2.23.2"
+    "vuedraggable": "^2.23.2",
+    "vuepress": "^1.7.1"
   },
   "peerDependencies": {
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "element-ui": "^2.13.0"
   },
   "devDependencies": {
@@ -43,7 +46,7 @@
     "@babel/plugin-transform-async-to-generator": "^7.7.4",
     "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/preset-env": "^7.7.6",
-    "@babel/runtime": "^7.7.6",
+    "@babel/runtime": "^7.11.2",
     "@storybook/addon-actions": "^6.0.28",
     "@storybook/addon-docs": "^6.0.28",
     "@storybook/addon-essentials": "^6.0.28",
@@ -64,7 +67,7 @@
     "cache-loader": "^4.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.3.2",
-    "element-ui": "^2.13.0",
+    "element-ui": "^2.14.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "file-loader": "^5.0.2",
@@ -80,10 +83,10 @@
     "ts-loader": "^6.2.1",
     "typescript": "~3.5.3",
     "url-loader": "^3.0.0",
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "vue-loader": "^15.7.2",
     "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.6.11",
+    "vue-template-compiler": "^2.6.12",
     "webpack": "^4.41.2",
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.10",
