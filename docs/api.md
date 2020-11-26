@@ -137,3 +137,9 @@ type CompType =
 ### component
 
 `list` 组件支持此配置项，用于指定列表项使用的组件
+
+## 事件
+
+### change
+
+所有内置组件均支持此事件
