@@ -30,6 +30,7 @@
     "async-validator": "^3.2.3",
     "draggable": "^4.2.0",
     "lodash": "^4.17.15",
+    "nanoid": "^3.1.18",
     "simplemde": "^1.11.2",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.3.0",

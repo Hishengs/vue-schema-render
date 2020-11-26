@@ -19,3 +19,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.schema-generator-wrapper {
+  height: 100%;
+  .schema-generator {
+    //
+  }
+}
+</style>

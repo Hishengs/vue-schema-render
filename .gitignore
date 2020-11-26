@@ -5,3 +5,4 @@ webpack-prod.json
 showcases
 public
 storybook-static
+**/.DS_Store

@@ -12,16 +12,22 @@
         label="默认值"
         prop="value"
       >
-        <el-input v-model="editComp.value" placeholder="默认值"></el-input>
+        <el-switch
+          v-model="editComp.value"
+          v-if="editComp.type === 'switch'"
+        ></el-switch>
+        <el-input v-model="model" placeholder="默认值" v-else></el-input>
       </el-form-item>
       <el-form-item
-        v-if="['text', 'textarea', 'select'].includes(editComp.type)"
+        v-if="
+          ['text', 'textarea', 'select', 'markdown'].includes(editComp.type)
+        "
         label="占位提示"
         prop="placeholder"
       >
         <el-input
           v-model="editComp.placeholder"
-          placeholder="字段名"
+          placeholder="占位提示"
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -66,7 +72,7 @@
           </el-button>
         </div>
       </el-form-item>
-      <el-form-item label="是否禁用">
+      <el-form-item label="是否禁用" v-if="editComp.type !== 'form'">
         <el-switch v-model="editComp.disabled"></el-switch>
       </el-form-item>
       <el-form-item label="是否必填">
@@ -80,7 +86,7 @@
         size="small"
         style="margin-top: 10px; width: 100%;"
       >
-        复制该组件
+        复制该组件 Schema
       </el-button>
     </div>
   </div>
@@ -94,6 +100,7 @@ export default {
     empty: Boolean
   },
   data() {
+    // const { type } = this.editComp;
     return {
       rules: {
         label: [
@@ -115,6 +122,22 @@ export default {
       },
       isRequired: false
     };
+  },
+  computed: {
+    model: {
+      get() {
+        const { type, value } = this.editComp;
+        if (type === "checkbox") {
+          return value.join(",");
+        } else return value;
+      },
+      set(val) {
+        const { type } = this.editComp;
+        if (type === "checkbox") {
+          this.editComp.value = val.split(",");
+        } else return (this.editComp.value = val);
+      }
+    }
   },
   watch: {
     isRequired(val) {

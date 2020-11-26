@@ -1,17 +1,21 @@
 <template>
   <div class="schema-generator">
     <div class="schema-generator-left">
-      <CompList></CompList>
+      <CompList :schema="curSchema" :active-comp="editComp"></CompList>
     </div>
     <div class="schema-generator-main">
       <div class="schema-generator-main-header">
         <el-button type="primary" size="small" @click="showSchema = true">
           查看生成的 Schema
         </el-button>
-        <el-button type="primary" size="small">表单预览</el-button>
-        <el-button type="primary" size="small">清空</el-button>
+        <el-button type="primary" size="small" @click="showPreview = true">
+          表单预览
+        </el-button>
+        <el-button type="primary" size="small" @click="setEmpty">
+          清空
+        </el-button>
       </div>
-      <p class="info-text">从左侧选择组件拖动到下方</p>
+      <!-- <p class="info-text">从左侧选择组件拖动到下方</p> -->
       <SchemaTree
         :form="curSchema"
         @edit="onEdit"
@@ -22,6 +26,7 @@
       <p class="info-text" v-if="!editComp">从左侧选择组件点击配置</p>
       <SchemaEdit :edit-comp="editComp" :empty="!isEmpty"></SchemaEdit>
     </div>
+    <!-- 查看 schema -->
     <el-dialog title="Schema" :visible.sync="showSchema" width="40%" top="8vh">
       <div class="schema-source">
         <pre><code>{{ JSON.stringify(this.curSchema, null, 2) }}</code></pre>
@@ -30,6 +35,10 @@
         复制
       </el-button>
     </el-dialog>
+    <!-- 预览 -->
+    <el-dialog title="Schema" :visible.sync="showPreview" width="60%" top="8vh">
+      <!-- <SchemaRender :schema="curSchema" v-if="showPreview"></SchemaRender> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -37,13 +46,15 @@
 import CompList from "./comp-list.vue";
 import SchemaTree from "./schema-tree/index.vue";
 import SchemaEdit from "./schema-edit.vue";
+// import SchemaRender from "../components/render.vue";
 
 export default {
   name: "schema-generator",
   components: {
     CompList,
     SchemaTree,
-    SchemaEdit
+    SchemaEdit,
+    // SchemaRender
   },
   data() {
     return {
@@ -51,7 +62,8 @@ export default {
         components: []
       },
       editComp: null,
-      showSchema: false
+      showSchema: false,
+      showPreview: false
     };
   },
   computed: {
@@ -69,6 +81,9 @@ export default {
   methods: {
     onEdit(comp) {
       this.editComp = comp;
+    },
+    setEmpty() {
+      this.curSchema.components = [];
     }
   }
 };
