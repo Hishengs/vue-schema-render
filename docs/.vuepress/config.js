@@ -7,7 +7,7 @@ module.exports = {
       { text: 'API 文档', link: '/api' },
       { text: '深入', link: '/furthermore' },
       { text: 'Schema 生成器', link: '/schema-generator' },
-      { text: 'github', link: 'https://github.com/hishengs/vue-schema-render' },
+      { text: 'Github', link: 'https://github.com/hishengs/vue-schema-render' },
     ],
     sidebar: [
       ['/', '简介'],

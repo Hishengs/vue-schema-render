@@ -95,5 +95,15 @@ Vue.use(SchemRender);
 模板
 
 ```html
-<vue-schema-render :schema="schema"></vue-schema-render>
+<vue-schema-render :schema="schema" :data="formData"></vue-schema-render>
 ```
+
+## 功能特点
+
+- 结合产品原型和 [Schema 生成器](./schema-generator) 快速构建 schema
+- 根据 schema 自动渲染表单
+- 通过表单快速校验、获取数据
+- 支持自定义表单组件
+- 支持无限表单嵌套
+- 灵活的事件机制和组件联动
+- 支持自定义的校验规则

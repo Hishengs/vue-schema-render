@@ -60,6 +60,23 @@ type CompType =
 
 > `Rule` 是符合 [`async-validator`](https://github.com/yiminghe/async-validator) 的校验规则
 
+### Component 原型
+
+所有的 Component 进入 `vue-schema-render` 后会自动继承如下原型：
+
+```ts
+interface ComponentProto {
+  getRoot: () => Schema;
+  getParent: () => Component;
+  getPrevSibling: () => Component;
+  getNextSibling: () => Component;
+  hide: () => void;
+  show: () => void;
+};
+```
+
+> 通过这些内置方法，可以很方便实现表单组件的关联交互操作
+
 ## 通用配置项
 
 ### type
@@ -102,9 +119,12 @@ type CompType =
 
 是否禁用
 
-### show
+### hidden
 
-是否显示
+是否隐藏
+
+> 隐藏仅仅是 `display: none`，且跳过校验，但最终生成数据仍在
+
 
 ### rules
 
@@ -140,6 +160,68 @@ type CompType =
 
 ## 事件
 
+所有事件均支持以下接口定义：
+```ts
+interface EventCallback {
+  (e: SchemaEvent): void;
+};
+
+interface SchemaEvent {
+  target: Component;                 // 事件发生的组件
+  currentTarget: Component;          // 事件绑定的组件
+  findComponent: Function;           // 全局寻找组件的方法
+  stopPropagation: Function;         // 阻止事件冒泡
+};
+```
+
+> 事件支持冒泡，所以如果在 `form` 监听事件时，其底下的组件事件均会被监听到
+
 ### change
 
-所有内置组件均支持此事件
+所有内置组件均支持此事件，自定义组件需自行 `$emit` 出 `change` 事件
+
+```js
+{
+  title: "是否自动轮播",
+  type: "switch",
+  key: "autoplay",
+  value: true,
+  on: {
+    change ({ target, currentTarget }) {
+      console.log(target === currentTarget); // true
+      console.log(target.title); // "是否自动轮播"
+    }
+  }
+}
+```
+
+> 更多事件计划开放中...
+
+## API
+
+### registerComponent
+
+注册一个自定义组件
+
+如：
+```js
+import { registerComponent } from 'vue-schema-render';
+import CitySelector from './city-selector.vue';
+
+registerComponent('city-selector', CitySelector);
+```
+
+## 组件 Props
+
+`vue-schema-render` 组件支持以下 props:
+
+| Prop        | 说明           | 默认值  |
+|:------------- |:-------------|:-----|
+| schema      | Schema | - |
+| data      | 初始表单数据 | - |
+
+> 初始表单数据，如果给了，将递归覆盖 schema 中 component 的 value 初始值
+
+```html
+<vue-schema-render :schema="schema" :data="formData"></vue-schema-render>
+```
