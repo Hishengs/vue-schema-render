@@ -69,7 +69,6 @@ export namespace Component {
     labelTooltip?: string;
     key: string;
     value: any;
-    refValue?: any;
     rules?: Array<any>;
     props?: {
       [key: string]: any
@@ -135,6 +134,8 @@ export namespace Component {
   export interface ListComp extends Base {
     component: Function;
     maxHeight?: string;
+    min?: number;
+    max?: number;
   };
 
   export interface Custom extends Base {

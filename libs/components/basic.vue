@@ -14,16 +14,6 @@
         v-bind="component.props"
         @change="onChange()"
       ></el-input>
-      <!-- 参考语言 -->
-      <el-input
-        v-if="component.i18n"
-        class="reference"
-        title="reference, read only"
-        :type="component.type"
-        :placeholder="`${component.label} ( Reference Language )`"
-        :value="component.refValue"
-        readonly
-      ></el-input>
     </template>
     <!-- 下拉框 -->
     <el-select

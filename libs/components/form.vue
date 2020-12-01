@@ -57,14 +57,11 @@ export default {
   methods: {
     // set data of current component
     initData() {
-      const { value, refValue, components } = this.component;
+      const { value, components } = this.component;
       if (!value) return;
       for (const comp of components) {
         if (value[comp.key] !== undefined) {
           comp.value = value[comp.key];
-        }
-        if (refValue) {
-          comp.refValue = refValue[comp.key];
         }
       }
     },
@@ -82,6 +79,7 @@ export default {
           };
         } else data[key] = compData;
       }
+      this.component.value = data;
       return data;
     },
     // 表单校验
@@ -93,7 +91,7 @@ export default {
       for (const comp of this.component.components) {
         const { _vsr_uid, type, key, hidden } = comp;
         if (hidden) continue;
-        const [refComp] = this.$refs[_vsr_uid];
+        const [refComp] = this.$refs[_vsr_uid]; 
         await refComp.validate()
           .catch(({ errors, fields }) => {
             if (!firstErrorEl) firstErrorEl = refComp.$el;

@@ -52,7 +52,7 @@ export default {
     async validate () {
       await this.$refs.schemaRender.validate()
         .then(() => {
-          //
+          console.log('验证成功');
         })
         .catch(({ errors, fields }) => {
           this.$message.error('请检查你的表单项');

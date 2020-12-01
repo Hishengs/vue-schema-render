@@ -139,8 +139,10 @@ export default {
         }
       },
       rules: [
-        { required: true, type: 'array', range: { min: 1 }, message: '至少添加一篇文章' }
-      ]
+        { type: 'array', range: { min: 2 }, message: '至少添加一篇文章' }
+      ],
+      min: 2,
+      max: 3
     }
   ],
   rules: {

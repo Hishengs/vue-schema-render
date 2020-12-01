@@ -1,11 +1,11 @@
 <template>
   <div class="vsr_component_list">
-    <div v-if="components.length" :style="scrollAreaStyle" ref="listContainer">
-      <draggable v-model="components" handle=".draggable-handle">
+    <div v-if="items.length" :style="scrollAreaStyle" ref="listContainer">
+      <draggable v-model="items" handle=".draggable-handle">
         <transition-group>
           <!-- 一个列表项一个表单（方便验证） -->
           <el-form
-            v-for="(comp, i) in components"
+            v-for="(comp, i) in items"
             label-width="0px"
             :id="comp._vsr_uid"
             :key="comp._vsr_uid"
@@ -27,7 +27,7 @@
                     <el-button
                       class="el-icon-bottom"
                       size="mini"
-                      :disabled="i === components.length - 1 || isDisabled"
+                      :disabled="i === items.length - 1 || isDisabled"
                       @click="down(i)"
                     ></el-button>
                     <el-button
@@ -59,7 +59,7 @@
     <el-button
       type="primary"
       size="small"
-      :disabled="isDisabled"
+      :disabled="isDisabled || !addable"
       @click="add()"
     >
       新增列表项
@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      components: [],
+      items: [],
     };
   },
   computed: {
@@ -93,10 +93,39 @@ export default {
         overflowY: 'auto',
         paddingRight: '12px'
       } : {};
+    },
+    addable () {
+      const { max = Infinity } = this.component;
+      return this.items.length < max;
+    },
+    cRules () {
+      const { rules = [], min, max } = this.component;
+      const rs = [...rules];
+      if (min) {
+        rs.push({
+          type: 'array',
+          // range: { min },
+          validator (rules, value) {
+            return Array.isArray(value) && value.length >= min;
+          },
+          message: `至少添加${min}个列表项`
+        });
+      }
+      if (max) {
+        rs.push({
+          type: 'array',
+          // range: { max },
+          validator (rules, value) {
+            return Array.isArray(value) && value.length <= max;
+          },
+          message: `最多添加${max}个列表项`
+        });
+      }
+      return rs;
     }
   },
   watch: {
-    async components(newVal, oldVal) {
+    async items(newVal, oldVal) {
       // Do not sync data at once
       setTimeout(async () => {
         await this.syncData();
@@ -124,20 +153,17 @@ export default {
       return comp;
     },
     initData() {
-      const { value, refValue } = this.component;
+      const { value } = this.component;
       if (!value) return;
       for (const [index, val] of Object.entries(value)) {
         const comp = this.getNewComponent();
         comp.value = val;
-        if (refValue) {
-          comp.refValue = refValue[index];
-        }
         this.add(comp);
       }
     },
     add(comp) {
       const component = comp || this.getNewComponent(true);
-      this.components.push(component);
+      this.items.push(component);
     },
     scrollToComp (comp) {
       setTimeout(() => {
@@ -150,18 +176,18 @@ export default {
     remove(index) {
       const confirm = window.confirm('Are you sure to delete this item ?');
       if (!confirm) return;
-      this.components.splice(index, 1);
+      this.items.splice(index, 1);
       // manually trigger @change
       this.onChange();
     },
     move(index, offset) {
-      const item = this.components[index];
-      const other = this.components[index + offset];
-      this.components[index] = other;
-      this.components[index + offset] = item;
+      const item = this.items[index];
+      const other = this.items[index + offset];
+      this.items[index] = other;
+      this.items[index + offset] = item;
       // fix array change problem of Vue
       // this.$forceUpdate();
-      this.components = this.components.slice(0);
+      this.items = this.items.slice(0);
       // manually trigger @change
       this.onChange();
     },
@@ -181,7 +207,7 @@ export default {
       const data = [];
       // fix: bug 1009692
       // should keep the order when list item swap
-      const refComponents = this.components
+      const refComponents = this.items
         .map(comp => {
           const [refComp] = this.$refs[comp._vsr_uid];
           return refComp;
@@ -193,6 +219,8 @@ export default {
         data.push(compData);
       }
 
+      this.component.value = data;
+
       return data;
     },
     async validate () {
@@ -200,11 +228,11 @@ export default {
       let flds = [];
 
       // 先验证列表项
-      if (this.components.length) {
-        const [subComponent] = this.components;
+      if (this.items.length) {
+        const [subComponent] = this.items;
         const { key, rules = [] } = subComponent;
         if (rules.length || !isBasicComponent(subComponent)) {
-          for (const comp of this.components) {
+          for (const comp of this.items) {
             const [refComp] = this.$refs[comp._vsr_uid];
             await refComp.validate()
               .catch(({ errors, fields }) => {
@@ -216,10 +244,10 @@ export default {
       }
       // 列表项没问题再验证列表组件本身
       if (!errs.length) {
-        const { key, value, rules = [] } = this.component;
-        if (rules.length) {
+        const { key, value } = this.component;
+        if (this.cRules.length) {
           const validator = new AsyncValidator({
-            [key]: rules
+            [key]: this.cRules
           });
           await validator.validate({
             [key]: value
