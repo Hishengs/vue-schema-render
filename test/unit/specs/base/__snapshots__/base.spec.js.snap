@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Base default view 1`] = `
+<div class="vsr_component_schema-render">
+  <div class="vsr_component_form">
+    <form class="el-form el-form--label-top">
+      <div class="el-form-item">
+        <label for="test"
+               class="el-form-item__label"
+        >
+          <span>
+            test
+          </span>
+        </label>
+        <div class="el-form-item__content">
+          <transition-stub name="el-zoom-in-top">
+          </transition-stub>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+`;

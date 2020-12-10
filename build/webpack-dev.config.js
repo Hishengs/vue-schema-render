@@ -4,13 +4,13 @@ const merge = require('lodash/merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const baseConfig = require('./webpack-base.config.js');
 
-const template = path.join(process.cwd(), './test/index.html');
+const template = path.join(process.cwd(), './test/demo/index.html');
 
 const devConfig = merge(baseConfig, {
   mode: 'development',
   devtool: 'inline-source-map',
   entry: {
-    app: path.join(process.cwd(), './test/index.ts')
+    app: path.join(process.cwd(), './test/demo/index.ts')
   },
   output: {
     path: path.resolve(process.cwd(), './dev-dist'),
