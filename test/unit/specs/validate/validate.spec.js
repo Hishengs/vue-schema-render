@@ -8,24 +8,33 @@ const schema = {
       type: 'text',
       label: 'test',
       key: 'test',
-      value: ''
+      value: '',
+      rules: [
+        { required: true, message: 'test is required' }
+      ]
     }
   ]
 };
 
-describe('Base', () => {
+describe('Validate', () => {
   test('default view', async () => {
     const wrapper = mount(Render, {
       propsData: {
         schema,
         data: {
-          test: 'hello'
+          test: ''
         }
       }
     });
     await delay(0);
     const data = await wrapper.vm.genData();
-    expect(data.test).toBe('hello');
+    expect(data.test).toBe('');
+    let hasError = false;
+    await wrapper.vm.validate().catch(({ errors, fields }) => {
+      // console.log({ errors, fields });
+      hasError = true;
+    });
+    expect(hasError).toBe(true);
     expect(wrapper.html()).toMatchSnapshot();
   });
 });

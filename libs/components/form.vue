@@ -108,7 +108,7 @@ export default {
       }
 
       if (errs.length) {
-        if (firstErrorEl) {
+        if (firstErrorEl && firstErrorEl.scrollIntoView) {
           firstErrorEl.scrollIntoView({
             behavior: 'smooth'
           });

@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Base default view 1`] = `
+exports[`Validate default view 1`] = `
 <div class="vsr_component_schema-render">
   <div class="vsr_component_form">
     <form class="el-form el-form--label-top">
-      <div class="el-form-item">
+      <div class="el-form-item is-required">
         <label for="test"
                class="el-form-item__label"
         >
@@ -13,7 +13,7 @@ exports[`Base default view 1`] = `
           </span>
         </label>
         <div class="el-form-item__content">
-          <div class="vsr_component_dispatcher">
+          <div class="vsr_component_dispatcher has-error">
             <div class="vsr_component_basic">
               <div class="el-input">
                 <input type="text"
@@ -23,6 +23,9 @@ exports[`Base default view 1`] = `
                        class="el-input__inner"
                 >
               </div>
+            </div>
+            <div class="validate-error">
+              test is required
             </div>
           </div>
           <transition-stub name="el-zoom-in-top">

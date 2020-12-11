@@ -120,8 +120,6 @@ import upload from "./upload.vue";
 import markdown from "./markdown.vue";
 import { COMP_PREFIX, setComponentVM } from "../utils.ts";
 
-console.log(upload.name)
-
 export default {
   name: `${COMP_PREFIX}-basic`,
   mixins: [baseMixin],

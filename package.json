@@ -17,15 +17,15 @@
   ],
   "typings": "libs/types.ts",
   "scripts": {
-    "dev": "NODE_ENV=development webpack-dev-server --config build/webpack-dev.config.js --open",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack-dev.config.js --open",
     "build:common": "webpack --config build/webpack-prod.config.js",
     "build:umd": "webpack --config build/webpack-umd.config.js",
     "dist": "npm run build:common && npm run build:umd",
     "storybook": "start-storybook -p 7666 --no-dll",
     "build-storybook": "build-storybook --no-dll",
-    "build": "NODE_ENV=production npm run dist && npm run build-storybook",
+    "build": "cross-env NODE_ENV=production npm run dist && npm run build-storybook",
     "docs": "vuepress dev ./docs --open",
-    "test": "NODE_ENV=test jest -i --updateSnapshot"
+    "test": "cross-env NODE_ENV=test jest -i --updateSnapshot"
   },
   "dependencies": {
     "async-validator": "^3.2.3",
@@ -71,6 +71,7 @@
     "babel-preset-vue": "^2.0.2",
     "cache-loader": "^4.1.0",
     "clean-webpack-plugin": "^3.0.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^3.3.2",
     "element-ui": "^2.14.1",
     "eslint": "^5.16.0",
@@ -90,7 +91,7 @@
     "style-loader": "^1.0.1",
     "ts-jest": "^26.4.4",
     "ts-loader": "^6.2.1",
-    "typescript": "~3.5.3",
+    "typescript": "^4.1.2",
     "url-loader": "^3.0.0",
     "vue": "^2.6.12",
     "vue-jest": "^3.0.7",
