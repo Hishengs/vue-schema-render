@@ -91,7 +91,7 @@ export default {
       for (const comp of this.component.components) {
         const { _vsr_uid, type, key, hidden } = comp;
         if (hidden) continue;
-        const [refComp] = this.$refs[_vsr_uid]; 
+        const [refComp] = this.$refs[_vsr_uid];
         await refComp.validate()
           .catch(({ errors, fields }) => {
             if (!firstErrorEl) firstErrorEl = refComp.$el;

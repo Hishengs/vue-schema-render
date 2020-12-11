@@ -29,10 +29,10 @@ export default {
       label: '子表单',
       components: [
         {
-          type: 'slider',
-          label: '滑块',
-          key: 'progress',
-          value: 20,
+          type: 'text',
+          label: '文本 A',
+          key: 'text-a',
+          value: '',
         },
         {
           type: 'radio',

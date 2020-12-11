@@ -7,6 +7,12 @@ export default {
       value: '',
     },
     {
+      type: 'textarea',
+      label: '多行文本框',
+      key: 'textarea',
+      value: '',
+    },
+    {
       type: 'select',
       label: '下拉框',
       key: 'select',
@@ -17,12 +23,12 @@ export default {
       ],
       value: null,
     },
-    {
+    /* {
       type: 'slider',
       label: '滑块',
       key: 'slider',
       value: 20,
-    },
+    }, */
     {
       type: 'radio',
       label: '单选框',

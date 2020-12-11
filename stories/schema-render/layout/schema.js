@@ -5,8 +5,8 @@ export default {
     layout.Row([
       layout.Col({
         type: 'text',
-        label: '文本框(10)',
-        key: 'text',
+        label: '文本框1 (10)',
+        key: 'text1',
         value: '',
       }, 10),
       layout.Col({
@@ -21,10 +21,10 @@ export default {
         value: null,
       }, 6),
       layout.Col({
-        type: 'slider',
-        label: '滑块(8)',
-        key: 'progress',
-        value: 20,
+        type: 'text',
+        label: '文本框2 (8)',
+        key: 'text2',
+        value: '',
       }, 8),
     ]),
     layout.Row([
@@ -64,10 +64,10 @@ export default {
         label: '放一个表单(14)',
         components: [
           {
-            type: 'slider',
-            label: '滑块',
-            key: 'progress',
-            value: 20,
+            type: 'text',
+            label: '文本框',
+            key: 'subForm-text',
+            value: '',
           },
           {
             type: 'radio',
