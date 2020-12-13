@@ -89,4 +89,4 @@ DEMO: [click here](https://vue-schema-render.hisheng.now.sh/)
 - [x] 支持 component tip
 - [ ] 支持添加内置组件
 - [ ] 支持组件 slot
-- [ ] 是否保留 onChange
+- [x] 是否保留 onChange

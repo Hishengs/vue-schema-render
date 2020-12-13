@@ -37,12 +37,6 @@ const schema = {
       value: null,
     },
     {
-      type: 'slider',
-      label: '滑块',
-      key: 'progress',
-      value: 20,
-    },
-    {
       type: 'radio',
       label: '单选框',
       key: 'radio',

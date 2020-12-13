@@ -59,45 +59,4 @@ export default {
       rules: [{ required: true, message: INVALID_MSG, trigger: "blur" }]
     },
   ],
-  onChange ({ component }) {
-    console.log('>>> onChange', component);
-    function onCommonVisibleControl(comp, relativeComp) {
-      relativeComp.hidden = !comp.value;
-    }
-
-    const keyRelativeControls = {
-      show_guide: [
-        [
-          "default_open",
-          "guide_description",
-          "see_how_step1",
-          "see_how_step2",
-          "see_how_step3",
-          "step1_icon",
-          "step2_icon",
-          "step3_icon"
-        ],
-        onCommonVisibleControl
-      ],
-      guide_description: [
-        [
-          'see_how_step1',
-          'see_how_step2',
-          'see_how_step3',
-        ],
-        function (comp, relativeComp) {
-          relativeComp.value = comp.value;
-        }
-      ]
-    };
-
-    if (keyRelativeControls[component.key]) {
-      const [relativeKeys, callback] = keyRelativeControls[component.key];
-      this.components.forEach((comp) => {
-        if (relativeKeys.includes(comp.key)) {
-          callback(component, comp);
-        }
-      });
-    }
-  }
 };

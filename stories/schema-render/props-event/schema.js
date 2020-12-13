@@ -9,9 +9,7 @@ export default {
       label: '文本框',
       key: 'text',
       value: '',
-      props: {
-        placeholder: '自定义 placeholder'
-      },
+      placeholder: '自定义 placeholder',
       on: {
         input (value) {
           logInput(value);
@@ -20,7 +18,7 @@ export default {
     },
     {
       type: 'text',
-      label: '监听 blue',
+      label: '监听 blur',
       key: 'text',
       value: '',
       on: {

@@ -74,7 +74,6 @@ export namespace Component {
       [key: string]: any
     };
     tip?: string;
-    onChange?: Event.callback;
     on?: {
       [key: string]: Event.callback;
     },
@@ -145,7 +144,6 @@ export namespace Component {
 
 export interface Schema {
   components: Component.Comp[],
-  onChange?: Event.callback;
   on?: {
     [key: string]: Event.callback;
   },

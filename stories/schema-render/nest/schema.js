@@ -29,12 +29,6 @@ export default {
       label: '一级子表单',
       components: [
         {
-          type: 'slider',
-          label: '滑块',
-          key: 'progress',
-          value: 20,
-        },
-        {
           type: 'radio',
           label: '单选框',
           key: 'radio',

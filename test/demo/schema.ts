@@ -31,12 +31,6 @@ export default {
       label: '开关',
       key: 'switch',
       value: false,
-      /* onChange (this: any, { component, findComponent }: any) {
-        const comp = findComponent('title');
-        if (component.value) {
-          comp.value = '成功选中！';
-        } else comp.value = '没有选中！';
-      } */
       on: {
         change () {
           console.log('>> switch.on.change', arguments[0]);
