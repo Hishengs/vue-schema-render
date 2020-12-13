@@ -2,7 +2,7 @@
 sidebar: auto
 ---
 
-# Schema API
+# API
 
 schema 是 `vue-schema-render` 约定的一种用于描述表单结构的格式
 
@@ -60,7 +60,7 @@ type CompType =
 
 > `Rule` 是符合 [`async-validator`](https://github.com/yiminghe/async-validator) 的校验规则
 
-### Component 原型
+<!-- ### Component 原型
 
 所有的 Component 进入 `vue-schema-render` 后会自动继承如下原型：
 
@@ -75,7 +75,7 @@ interface ComponentProto {
 };
 ```
 
-> 通过这些内置方法，可以很方便实现表单组件的关联交互操作
+> 通过这些内置方法，可以很方便实现表单组件的关联交互操作 -->
 
 ## 通用配置项
 
@@ -130,7 +130,7 @@ interface ComponentProto {
 
 符合 [`async-validator`](https://github.com/yiminghe/async-validator) 的校验规则
 
-## 组件相关配置项
+## 特定组件相关配置项
 
 ### placeholder
 
@@ -210,6 +210,12 @@ import CitySelector from './city-selector.vue';
 
 registerComponent('city-selector', CitySelector);
 ```
+
+### getRoot
+
+### getParent
+
+### getChildren
 
 ## 组件 Props
 

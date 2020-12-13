@@ -23,12 +23,6 @@ export default {
       ],
       value: null,
     },
-    /* {
-      type: 'slider',
-      label: '滑块',
-      key: 'slider',
-      value: 20,
-    }, */
     {
       type: 'radio',
       label: '单选框',

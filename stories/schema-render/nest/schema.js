@@ -89,10 +89,15 @@ export default {
                       value: '',
                     },
                     {
-                      type: 'slider',
-                      label: '滑块',
-                      key: 'progress',
-                      value: 20,
+                      type: 'select',
+                      label: '下拉框',
+                      key: 'select',
+                      options: [
+                        { label: '清华大学', value: 'qsu' },
+                        { label: '北京大学', value: 'pku' },
+                        { label: '深圳大学', value: 'szu' },
+                      ],
+                      value: null,
                     },
                   ]
                 };

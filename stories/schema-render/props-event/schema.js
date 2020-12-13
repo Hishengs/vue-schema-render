@@ -46,21 +46,6 @@ export default {
           logInput(value);
         }
       }
-    },
-    {
-      type: 'slider',
-      label: '有间断点的 slider',
-      key: 'slider',
-      value: 20,
-      props: {
-        step: 10,
-        'show-stops': true
-      },
-      on: {
-        change (value) {
-          logInput(value);
-        }
-      }
-    },
+    }
   ]
 };
