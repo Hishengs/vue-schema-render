@@ -90,9 +90,8 @@ export default {
       key: "displayUserName",
       value: true,
       on: {
-        change ({ target }) {
-          const root = target.getRoot();
-          root.components[1].show = false;
+        change ({ target, root }) {
+          root.components[1].hidden = true;
         }
       }
     },

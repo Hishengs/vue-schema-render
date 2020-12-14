@@ -4,11 +4,11 @@ sidebar: auto
 
 # API
 
+## Schema
+
 schema 是 `vue-schema-render` 约定的一种用于描述表单结构的格式
 
 > 当然，你已经无需手动去写 schema，可使用 [Schema 生成器](./schema-generator) 快速生成你的 schema
-
-## Schema
 
 一个典型的 schema 定义如下：
 
@@ -30,17 +30,71 @@ interface Schema {
 }
 ```
 
+## SchemaRender
+
+`schema-render` 是 `vue-schema-render` 暴露出的一个 Vue 组件，用于将 schema 渲染成表单
+
+| Prop        | 说明           | 类型  | 默认值  |
+|:------------- |:-------------|:-----|:-----|
+| schema      | 表单的 schema 定义 | Object | - |
+| data      | 表单的初始数据 | Object | - |
+
+> 初始表单数据，如果给了，将递归覆盖 schema 中 component 的 value 初始值
+
+使用 `schema` 渲染表单：
+
+```vue
+<template>
+  <schema-render :schema="schema" :data="formData"></schema-render>
+</template>
+
+<script>
+import { SchemaRender } from 'vue-schema-render';
+
+const schema = {
+  components: [
+    {
+      type: 'text',
+      label: '用户名',
+      key: 'userName',
+      value: ''
+    },
+    ... // 其他表单项定义
+  ]
+};
+
+const formData = {
+  userName: 'Hisheng'
+};
+
+export default {
+  components: {
+    SchemaRender
+  },
+  data () {
+    return {
+      schema,
+      formData
+    };
+  }
+};
+</script>
+```
+
 ## Component
+
+表单项组件定义：
+
 ```ts
 interface Component {
   type: CompType;
   label: string;
-  labelTooptip?: string;
+  labelTooltip?: string;
   key: string;
   value: any;
   tip?: string;
   disabled?: boolean;
-  show?: boolean;
+  hidden?: boolean;
   rules?: Array<Rule>;
 }
 
@@ -60,24 +114,20 @@ type CompType =
 
 > `Rule` 是符合 [`async-validator`](https://github.com/yiminghe/async-validator) 的校验规则
 
-<!-- ### Component 原型
-
-所有的 Component 进入 `vue-schema-render` 后会自动继承如下原型：
-
-```ts
-interface ComponentProto {
-  getRoot: () => Schema;
-  getParent: () => Component;
-  getPrevSibling: () => Component;
-  getNextSibling: () => Component;
-  hide: () => void;
-  show: () => void;
-};
-```
-
-> 通过这些内置方法，可以很方便实现表单组件的关联交互操作 -->
-
 ## 通用配置项
+
+| 配置项        | 说明           | 可选值  | 默认值  |
+|:------------- |:-------------|:-----|:-----|
+| type      | 声明组件类型 | - | - |
+| label      | 表单项标题 | - | - |
+| labelTooltip | 表单项标题提示文字 | - | - |
+| key | 表单项键名 | - | - |
+| value | 表单项绑定值 | - | - |
+| tip | 表单项提示信息 | - | - |
+| disabled | 是否禁用 | - | false |
+| hidden | 是否隐藏 | - | false |
+| remove | 是否移除 | 隐藏表单项且在最终生成的数据中移除 | false |
+| rules | [`async-validator`](https://github.com/yiminghe/async-validator) 的校验规则 | - | - |
 
 ### type
 
@@ -131,6 +181,16 @@ interface ComponentProto {
 符合 [`async-validator`](https://github.com/yiminghe/async-validator) 的校验规则
 
 ## 特定组件相关配置项
+
+| 配置项        | 说明           | 默认值  | 支持的组件  |
+|:------------- |:-------------|:-----|:-----|
+| placeholder | 占位符 | - | text, textarea, select, markdown |
+| options | 可选项 | - | select, checkbox, radio |
+| minlength | 最小文字长度 | - | text, textarea |
+| maxlength | 最大文字长度 | - | text, textarea |
+| cloudinaryOptions | 上传组件，markdown 图片 cloudinary 配置 | - | upload, markdown |
+| components | 表单包含的表单项组件 | - | form |
+| component | 列表所使用的组件 | - | list |
 
 ### placeholder
 
@@ -211,23 +271,3 @@ import CitySelector from './city-selector.vue';
 registerComponent('city-selector', CitySelector);
 ```
 
-### getRoot
-
-### getParent
-
-### getChildren
-
-## 组件 Props
-
-`vue-schema-render` 组件支持以下 props:
-
-| Prop        | 说明           | 默认值  |
-|:------------- |:-------------|:-----|
-| schema      | Schema | - |
-| data      | 初始表单数据 | - |
-
-> 初始表单数据，如果给了，将递归覆盖 schema 中 component 的 value 初始值
-
-```html
-<vue-schema-render :schema="schema" :data="formData"></vue-schema-render>
-```
