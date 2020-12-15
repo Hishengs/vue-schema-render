@@ -13,9 +13,9 @@
   "main": "dist/vue-schema-render.common.js",
   "files": [
     "dist",
-    "libs"
+    "src"
   ],
-  "typings": "libs/types.ts",
+  "typings": "src/types.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack-dev.config.js --open",
     "build:common": "webpack --config build/webpack-prod.config.js",

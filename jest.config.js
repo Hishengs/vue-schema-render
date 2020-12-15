@@ -1,7 +1,7 @@
 module.exports = {
   roots: [
     '<rootDir>/test',
-    '<rootDir>/libs'
+    '<rootDir>/src'
   ],
   moduleFileExtensions: ['js', 'jsx', 'json', 'vue', 'ts', 'tsx'],
   moduleDirectories: [
@@ -15,7 +15,7 @@ module.exports = {
     '^.+\\.ts?$': 'ts-jest',
   },
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/libs/$1",
+    "^@/(.*)$": "<rootDir>/src/$1",
     '^vue$': '<rootDir>/node_modules/vue/dist/vue.common.js'
   },
   transformIgnorePatterns: [

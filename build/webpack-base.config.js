@@ -5,7 +5,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports = {
   mode: 'none',
   entry: {
-    app: [path.resolve(process.cwd(), './libs/index.ts')]
+    app: [path.resolve(process.cwd(), './src/index.ts')]
   },
   output: {
     path: path.resolve(process.cwd(), './dist'),
@@ -14,7 +14,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.vue', '.ts', '.tsx', '.json'],
     alias: {
-      '@': path.join(process.cwd(), './libs')
+      '@': path.join(process.cwd(), './src')
     },
     modules: ['node_modules']
   },

@@ -14,8 +14,8 @@ module.exports = {
   ],
   "webpackFinal": config => {
     // config.resolve.alias['vue-schema-render'] = path.join(__dirname, '../dist/vue-schema-render.common.js');
-    config.resolve.alias['vue-schema-render'] = path.join(__dirname, '../libs/index.ts');
-    config.resolve.alias['@'] = path.join(__dirname, '../libs/');
+    config.resolve.alias['vue-schema-render'] = path.join(__dirname, '../src/index.ts');
+    config.resolve.alias['@'] = path.join(__dirname, '../src/');
 
     const [rule] = config.module.rules;
     // console.log('>>> rule.exclude', rule.exclude);
