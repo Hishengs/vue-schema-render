@@ -229,8 +229,6 @@ interface EventCallback {
 interface SchemaEvent {
   target: Component;                 // 事件发生的组件
   currentTarget: Component;          // 事件绑定的组件
-  findComponent: Function;           // 全局寻找组件的方法
-  stopPropagation: Function;         // 阻止事件冒泡
 };
 ```
 
@@ -259,15 +257,15 @@ interface SchemaEvent {
 
 ## API
 
-### registerComponent
+### addComponent
 
 注册一个自定义组件
 
 如：
 ```js
-import { registerComponent } from 'vue-schema-render';
+import { addComponent } from 'vue-schema-render';
 import CitySelector from './city-selector.vue';
 
-registerComponent('city-selector', CitySelector);
+addComponent('city-selector', CitySelector);
 ```
 

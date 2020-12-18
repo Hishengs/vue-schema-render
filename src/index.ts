@@ -1,7 +1,5 @@
-import Vue from 'vue';
 import './element-ui';
-import { COMP_PREFIX, internalComps } from '@/utils';
-export { getUnLayoutParentComp } from '@/utils';
+import { internalComps, customComps } from '@/utils';
 import { Component } from '@/types';
 
 export const layout = {
@@ -22,12 +20,8 @@ export const layout = {
 };
 
 // 支持添加自定义组件
-export const registeredCustomComps: {
-  [key: string]: Function | Object
-} = {};
-
 export function addComponent (name: string, comp: Function | Object) {
-  if (registeredCustomComps[name]) {
+  if (customComps[name]) {
     console.warn(`已存在同名自定义组件：${name}，无需重复添加`);
     return;
   }
@@ -35,8 +29,9 @@ export function addComponent (name: string, comp: Function | Object) {
     console.warn(`已存在同名内部组件：${name}，不允许覆盖添加`);
     return;
   }
-  Vue.component(`${COMP_PREFIX}-${name}`, comp);
-  registeredCustomComps[name] = comp;
+  customComps[name] = comp;
 }
+
+export { setCloudinaryOptions } from '@/utils';
 
 export { default as SchemaRender } from '@/components/render.vue';

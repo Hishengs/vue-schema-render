@@ -1,7 +1,8 @@
 <template>
   <div class="vsr_component_custom">
     <component
-      :is="component.component"
+      v-if="compDefine"
+      :is="compDefine"
       :component="component"
       @change="onChange"
       ref="custom"
@@ -12,13 +13,21 @@
 <script>
 import AsyncValidator from 'async-validator';
 import baseMixin from "./base.mixin.js";
-import { COMP_PREFIX, setComponentVM } from "../utils.ts";
+import { COMP_PREFIX, setComponentVM, customComps } from "../utils.ts";
 
 export default {
   name: `${COMP_PREFIX}-custom`,
   mixins: [baseMixin],
   created () {
     setComponentVM(this.component, this);
+  },
+  computed: {
+    compDefine () {
+      const { type, component } = this.component;
+      return type === 'custom'
+        ? component
+        : customComps[type]
+    }
   },
   methods: {
     async genData() {

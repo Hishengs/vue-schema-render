@@ -35,7 +35,7 @@
     </vsr-basic>
     <!-- custom -->
     <vsr-custom
-      v-else-if="component.type === 'custom'"
+      v-else-if="component.type === 'custom' || customComps[component.type]"
       :component="component"
       ref="comp"
     ></vsr-custom>
@@ -59,7 +59,7 @@ import basic from "./basic.vue";
 import list from "./list.vue";
 import form from "./form.vue";
 import custom from "./custom.vue";
-import { COMP_PREFIX, isBasicComponent, isLayoutComponent } from "../utils.ts";
+import { COMP_PREFIX, isBasicComponent, isLayoutComponent, customComps } from "../utils.ts";
 
 const SlotRender = {
   name: 'slot-render',
@@ -95,6 +95,7 @@ export default {
   data () {
     return {
       COMP_PREFIX,
+      customComps,
       hasError: false,
       errorMsg: '',
     };

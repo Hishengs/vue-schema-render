@@ -1,5 +1,5 @@
 import { addComponent } from 'vue-schema-render';
-import localTimePicker from "./local-time-picker.vue";
+import phoneNumber from "./phone-number.vue";
 import FormModal from './form-modal.vue';
 
 addComponent('form-modal', FormModal);
@@ -9,23 +9,21 @@ export default {
     {
       type: "custom",
       label: "自定义组件",
-      key: "localTimePicker",
+      key: "phoneNumber",
       value: null,
-      component: localTimePicker,
+      component: phoneNumber,
     },
     {
       type: "form-modal",
       label: "弹窗表单",
       key: "formModal",
-      value: null,
-      // component: FormModal,
+      value: null
     },
     {
       type: "form-modal",
       label: "弹窗表单2",
       key: "formModal2",
-      value: null,
-      // component: FormModal,
+      value: null
     },
   ]
 };

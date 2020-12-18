@@ -31,10 +31,10 @@ export default {
 你还可以注册一个自定义组件，使用时直接指定 type 即可：
 
 ```js
-import { registerComponent } from 'vue-schema-render';
+import { addComponent } from 'vue-schema-render';
 import CitySelector from './city-selector.vue';
 
-registerComponent('city-selector', CitySelector);
+addComponent('city-selector', CitySelector);
 ```
 
 schema

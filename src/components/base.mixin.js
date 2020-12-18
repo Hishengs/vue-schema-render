@@ -40,7 +40,8 @@ export default {
       const args = {
         target: target || this.component, // 事件触发的组件
         currentTarget: this.component,    // 事件绑定的组件
-        findComponent: this.findComponent
+        root: this.component._vsr_root
+        // findComponent: this.findComponent
       };
       const call = () => {
         const { on, onChange, _vsr_parent } = this.component;

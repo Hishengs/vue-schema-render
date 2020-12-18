@@ -3,7 +3,7 @@ export namespace Event {
     (params: {
       target: Component.UIComp,
       currentTarget: Component.UIComp,
-      findComponent: Function
+      // findComponent: Function
     }): void;
   };
 };
@@ -15,6 +15,7 @@ export namespace Component {
 
   export type UIComp =
     | Text
+    | TextArea
     | Select
     | Checkbox
     | Radio
@@ -81,10 +82,21 @@ export namespace Component {
       'component-prepend': Function;
       'component-append': Function;
     },
-    i18n?: boolean;
+    disabled?: boolean;
+    hidden?: boolean;
   };
 
-  export interface Text extends Base {
+  interface TextLike {
+    placeholder?: string;
+    minlength?: number;
+    maxlength?: number;
+  };
+
+  export interface Text extends Base, TextLike {
+    //
+  };
+
+  export interface TextArea extends Base, TextLike {
     //
   };
 
@@ -99,7 +111,7 @@ export namespace Component {
   }
 
   export interface Select extends Base, WithOptions {
-    //
+    placeholder?: string;
   };
 
   export interface Checkbox extends Base, WithOptions {
@@ -115,13 +127,13 @@ export namespace Component {
   };
 
   export interface Upload extends Base {
-    cloudinary?: {
+    cloudinaryOptions?: {
       [key: string]: any;
     }
   };
 
-  export interface Markdown extends Base {
-    cloudinary?: {
+  export interface Markdown extends Base, TextLike {
+    cloudinaryOptions?: {
       [key: string]: any;
     }
   };

@@ -1,5 +1,3 @@
-import merge from 'lodash/merge';
-
 import { Component } from './types';
 
 export function getUID () {
@@ -88,7 +86,7 @@ export function initComponent(component: Component.Comp, parent?: Component.Comp
   if ('key' in component) {
     // set default value
     component.value = component.value === undefined ? null : component.value;
-    component.show = component.show === undefined ? true : component.show;
+    component.hidden = component.hidden === undefined ? false : component.hidden;
   }
 
   // init sub components
@@ -213,3 +211,19 @@ export const internalComps = [
 ];
 
 export const COMP_PREFIX = "vsr";
+
+export const customComps: {
+  [key: string]: Function | Object
+} = {};
+
+export let cloudinaryOptions = {
+  cloud_name: "cloud_name",
+  multiple: false,
+  folder: "cms",
+  tags: [],
+  sources: ["local"]
+};
+// 统一设置 cloudinary
+export function setCloudinaryOptions (opts: Object) {
+  cloudinaryOptions = Object.assign(cloudinaryOptions, opts);
+}
