@@ -1,6 +1,11 @@
 # vue-schema-render
 A Form Render Based on JSON Schema for Vue
 
+[![npm][npm-image]][npm-url]
+
+[npm-image]: https://badge.fury.io/js/vue-schema-render.svg
+[npm-url]: https://www.npmjs.com/package/vue-schema-render
+
 ## Features
 
 - 内置 ElementUI 组件
